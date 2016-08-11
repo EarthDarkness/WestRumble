@@ -27,3 +27,19 @@
 *.exe
 *.out
 *.app
+
+# Visual Studio Project
+*.opensdf
+*.sdf
+*.sln
+*.suo
+*.opendb
+*.vcproj
+*.filters
+*.vcxproj
+
+
+# Library folders
+include/
+lib/
+.vs/
