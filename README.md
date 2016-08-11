@@ -1,8 +1,8 @@
 # WestRumble
-Online multiplayer, multiplatform and turn-based game themed in old west style.
+Jogo multiplayer online, multiplataforma e baseado em turnos. Focando o tema de velho oeste.
 
-Developers:
+Desenvolvedores:
 - Demétrius Nunes Alves
 - Alexandre V. Becker
 
-Digital Games, UNISINOS 
+Jogos Digitais, UNISINOS 
