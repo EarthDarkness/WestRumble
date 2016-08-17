@@ -1,0 +1,19 @@
+16
+white/ready_left0001.png
+white/ready_left0003.png
+white/ready_left0005.png
+white/ready_left0007.png
+white/ready_left0009.png
+white/ready_left0011.png
+white/ready_left0013.png
+white/ready_left0015.png
+white/ready_left0017.png
+white/ready_left0019.png
+white/ready_left0021.png
+white/ready_left0023.png
+white/ready_left0025.png
+white/ready_left0027.png
+white/ready_left0029.png
+white/ready_left0031.png
+ready_left 16 0.2 S
+0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15

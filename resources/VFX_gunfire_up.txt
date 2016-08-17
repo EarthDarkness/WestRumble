@@ -1,0 +1,7 @@
+4
+VFX_gunfire_up_000.png
+VFX_gunfire_up_001.png
+VFX_gunfire_up_002.png
+VFX_gunfire_up_003.png
+gunfire_up 4 0.2 S
+0 1 2 3

@@ -1,0 +1,11 @@
+8
+BMB_H_80_000.png
+BMB_H_80_001.png
+BMB_H_80_002.png
+BMB_H_80_003.png
+BMB_H_80_004.png
+BMB_H_80_005.png
+BMB_H_80_006.png
+BMB_H_80_007.png
+idle 8 0.2 L
+0 1 2 3 4 5 6 7

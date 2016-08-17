@@ -1,0 +1,19 @@
+16
+white/shot_right0001.png
+white/shot_right0003.png
+white/shot_right0005.png
+white/shot_right0007.png
+white/shot_right0009.png
+white/shot_right0011.png
+white/shot_right0013.png
+white/shot_right0015.png
+white/shot_right0017.png
+white/shot_right0019.png
+white/shot_right0021.png
+white/shot_right0023.png
+white/shot_right0025.png
+white/shot_right0027.png
+white/shot_right0029.png
+white/shot_right0031.png
+shot_right 16 0.2 S
+0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15

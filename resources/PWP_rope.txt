@@ -1,0 +1,19 @@
+16
+PWP_rope_000.png
+PWP_rope_001.png
+PWP_rope_002.png
+PWP_rope_003.png
+PWP_rope_004.png
+PWP_rope_005.png
+PWP_rope_006.png
+PWP_rope_007.png
+PWP_rope_008.png
+PWP_rope_009.png
+PWP_rope_010.png
+PWP_rope_011.png
+PWP_rope_012.png
+PWP_rope_013.png
+PWP_rope_014.png
+PWP_rope_015.png
+idle 16 0.2 L
+0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15

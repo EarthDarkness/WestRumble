@@ -1,0 +1,19 @@
+16
+PWP_star_000.png
+PWP_star_001.png
+PWP_star_002.png
+PWP_star_003.png
+PWP_star_004.png
+PWP_star_005.png
+PWP_star_006.png
+PWP_star_007.png
+PWP_star_008.png
+PWP_star_009.png
+PWP_star_010.png
+PWP_star_011.png
+PWP_star_012.png
+PWP_star_013.png
+PWP_star_014.png
+PWP_star_015.png
+idle 16 0.2 L
+0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15

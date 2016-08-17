@@ -1,0 +1,19 @@
+16
+PWP_boot_000.png
+PWP_boot_001.png
+PWP_boot_002.png
+PWP_boot_003.png
+PWP_boot_004.png
+PWP_boot_005.png
+PWP_boot_006.png
+PWP_boot_007.png
+PWP_boot_008.png
+PWP_boot_009.png
+PWP_boot_010.png
+PWP_boot_011.png
+PWP_boot_012.png
+PWP_boot_013.png
+PWP_boot_014.png
+PWP_boot_015.png
+idle 16 0.2 L
+0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15

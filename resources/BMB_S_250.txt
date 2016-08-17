@@ -1,0 +1,11 @@
+8
+BMB_S_250_000.png
+BMB_S_250_001.png
+BMB_S_250_002.png
+BMB_S_250_003.png
+BMB_S_250_004.png
+BMB_S_250_005.png
+BMB_S_250_006.png
+BMB_S_250_007.png
+idle 8 0.2 L
+0 1 2 3 4 5 6 7

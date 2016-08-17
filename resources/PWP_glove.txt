@@ -1,0 +1,19 @@
+16
+PWP_glove_000.png
+PWP_glove_001.png
+PWP_glove_002.png
+PWP_glove_003.png
+PWP_glove_004.png
+PWP_glove_005.png
+PWP_glove_006.png
+PWP_glove_007.png
+PWP_glove_008.png
+PWP_glove_009.png
+PWP_glove_010.png
+PWP_glove_011.png
+PWP_glove_012.png
+PWP_glove_013.png
+PWP_glove_014.png
+PWP_glove_015.png
+idle 16 0.2 L
+0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15

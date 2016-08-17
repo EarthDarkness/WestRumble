@@ -1,0 +1,11 @@
+8
+BMB_T_180_000.png
+BMB_T_180_001.png
+BMB_T_180_002.png
+BMB_T_180_003.png
+BMB_T_180_004.png
+BMB_T_180_005.png
+BMB_T_180_006.png
+BMB_T_180_007.png
+idle 8 0.2 L
+0 1 2 3 4 5 6 7

@@ -1,0 +1,106 @@
+20
+20
+73
+0 NULL NULL 0
+1 NULL tile_black.png 0
+2 NULL sheriff_house19.png 0
+3 carroca1_2_ground4.png NULL 0
+4 carroca1_ground4.png NULL 0
+5 carroca2_2_ground4.png NULL 1
+6 carroca2_ground4.png NULL 0
+7 carroca4_2_ground4.png NULL 0
+8 carroca4_ground4.png carroca4.png 0
+9 sheriff_house10.png NULL 0
+10 sheriff_house14.png NULL 0
+11 sheriff_house1_ground4_top.png NULL 1
+12 sheriff_house2_ground4.png NULL 0
+13 sheriff_house2_ground4_top.png NULL 1
+14 sheriff_house3_ground4.png NULL 0
+15 sheriff_house4_ground4_top.png NULL 0
+16 sheriff_house5.png NULL 0
+17 sheriff_house5_ground4_top.png NULL 1
+18 sheriff_house6.png NULL 0
+19 sheriff_house7_ground4.png NULL 0
+20 sheriff_house9.png NULL 0
+21 tile_black.png NULL 0
+22 tile_black.png wind6.png 0
+23 tile_black.png tile_black.png 0
+24 tile_black.png wind5.png 0
+25 tile_black.png wind4.png 0
+26 tile_black.png wind3.png 0
+27 tile_black.png sheriff_house20.png 0
+28 tile_black.png sheriff_house21.png 0
+29 tile_black.png sheriff_house22.png 0
+30 tile_black.png sheriff_house17.png 0
+31 tile_black.png sheriff_house18.png 0
+32 tile_black.png sheriff_house15.png 0
+33 tile_black.png sheriff_house11.png 0
+34 tile_black.png Tile_cactus1_top.png 0
+35 tile_ground2.png waterBox_6-8.png 1
+36 tile_ground2.png NULL 1
+37 tile_ground2_to_ground4_bot.png NULL 1
+38 tile_ground2_to_ground4_bot.png waterBox_4-8.png 1
+39 tile_ground2_to_ground4_bot.png Tile_cactus1_top.png 1
+40 tile_ground2_to_ground4_bot_left.png NULL 1
+41 tile_ground2_to_ground4_bot_right.png NULL 1
+42 tile_ground2_to_ground4_joint_bot.png NULL 1
+43 tile_ground2_to_ground4_joint_left.png NULL 1
+44 tile_ground2_to_ground4_joint_right.png NULL 1
+45 tile_ground2_to_ground4_joint_top.png NULL 1
+46 tile_ground2_to_ground4_left.png NULL 1
+47 tile_ground2_to_ground4_left.png waterBox_5-8.png 1
+48 tile_ground2_to_ground4_right.png waterBox_3-8.png 1
+49 tile_ground2_to_ground4_right.png NULL 1
+50 tile_ground2_to_ground4_right.png Tile_cactus1_top.png 1
+51 tile_ground2_to_ground4_top.png NULL 1
+52 tile_ground2_to_ground4_top_left.png waterBox_8-8.png 1
+53 tile_ground2_to_ground4_top_right.png carroca3.png 1
+54 tile_ground2_to_ground4_top_right.png NULL 1
+55 tile_ground4.png NULL 1
+56 tile_ground4.png Tile_cactus1_top.png 1
+57 tile_ground4.png wind2.png 1
+58 tile_ground4.png waterBox_7-8.png 1
+59 tile_ground4.png sheriff_house16.png 1
+60 tile_ground4.png sheriff_house12.png 1
+61 tile_ground4.png sheriff_house_8_12.png 1
+62 tile_ground4.png sheriff_house_8_9_12_13.png 1
+63 tile_ground4.png sheriff_house8.png 1
+64 tile_ground4.png carroca5.png 1
+65 tile_ground4.png carroca6.png 1
+66 tile_ground4.png sheriff_house13.png 1
+67 tile_ground4_cactus.png NULL 0
+68 tile_ground4_waterBox1.png NULL 0
+69 tile_ground4_waterBox1e2.png NULL 0
+70 tile_ground4_waterBox2.png NULL 0
+71 wind1.png NULL 0
+72 wind1_2.png NULL 1
+21 21 21 21 0 0 0 0 23 23 0 1 21 21 21 21 21 21 21 21 
+21 21 21 21 0 21 21 21 21 21 21 21 21 21 21 21 21 21 21 21 
+21 21 23 21 21 0 21 21 21 29 21 2 21 21 21 21 21 21 21 21 
+21 21 21 21 21 21 21 21 28 21 31 0 32 21 21 21 21 21 21 21 
+0 21 21 21 21 21 21 27 21 30 21 10 0 33 21 34 34 21 21 21 
+21 21 21 21 21 55 55 55 59 55 66 0 9 0 19 55 67 67 55 55 
+21 21 21 21 21 55 55 55 55 60 62 20 0 18 14 55 65 55 55 55 
+21 21 21 21 21 55 55 55 55 61 63 0 16 0 12 64 55 8 5 55 
+21 21 21 21 21 55 55 55 52 51 51 15 17 11 13 51 53 7 6 55 
+21 21 21 21 21 55 55 58 46 35 36 36 36 36 36 36 49 4 3 55 
+21 21 21 21 21 56 55 55 47 42 38 37 37 43 36 36 49 55 55 55 
+21 21 21 21 21 55 67 55 46 48 55 70 55 46 36 36 44 54 55 55 
+21 22 21 21 21 55 55 55 46 49 68 69 55 46 36 36 36 50 55 55 
+21 21 24 21 21 55 56 55 46 49 55 55 55 46 36 36 42 41 67 55 
+21 21 21 25 21 55 55 67 46 44 51 51 51 45 36 36 49 55 55 55 
+21 21 21 21 26 55 55 55 46 36 36 36 36 36 36 36 49 55 55 55 
+21 21 21 21 21 57 55 55 46 36 36 36 36 36 36 36 49 55 56 55 
+21 21 21 21 21 55 71 72 40 37 37 37 39 37 37 37 41 55 55 67 
+21 21 21 21 21 55 55 55 55 55 55 55 55 67 55 55 55 55 55 55 
+21 21 21 21 21 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 
+6 5
+6 6
+6 7
+6 8
+6 9
+18 15
+18 16
+18 17
+18 18
+18 19

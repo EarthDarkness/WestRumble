@@ -1,0 +1,19 @@
+16
+PWP_fuse_000.png
+PWP_fuse_001.png
+PWP_fuse_002.png
+PWP_fuse_003.png
+PWP_fuse_004.png
+PWP_fuse_005.png
+PWP_fuse_006.png
+PWP_fuse_007.png
+PWP_fuse_008.png
+PWP_fuse_009.png
+PWP_fuse_010.png
+PWP_fuse_011.png
+PWP_fuse_012.png
+PWP_fuse_013.png
+PWP_fuse_014.png
+PWP_fuse_015.png
+idle 16 0.2 L
+0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15

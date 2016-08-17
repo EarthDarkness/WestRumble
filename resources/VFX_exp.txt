@@ -1,0 +1,16 @@
+13
+VFX_exp_0.png
+VFX_exp_1.png
+VFX_exp_2.png
+VFX_exp_3.png
+VFX_exp_4.png
+VFX_exp_5.png
+VFX_exp_6.png
+VFX_exp_7.png
+VFX_exp_8.png
+VFX_exp_9.png
+VFX_exp_10.png
+VFX_exp_11.png
+VFX_exp_12.png
+exp 13 0.2 S
+0 1 2 3 4 5 6 7 8 9 10 11 12

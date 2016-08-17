@@ -1,0 +1,19 @@
+16
+PWP_detonator_000.png
+PWP_detonator_001.png
+PWP_detonator_002.png
+PWP_detonator_003.png
+PWP_detonator_004.png
+PWP_detonator_005.png
+PWP_detonator_006.png
+PWP_detonator_007.png
+PWP_detonator_008.png
+PWP_detonator_009.png
+PWP_detonator_010.png
+PWP_detonator_011.png
+PWP_detonator_012.png
+PWP_detonator_013.png
+PWP_detonator_014.png
+PWP_detonator_015.png
+idle 16 0.2 L
+0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15

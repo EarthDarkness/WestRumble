@@ -1,0 +1,19 @@
+16
+white/idle_right0001.png
+white/idle_right0003.png
+white/idle_right0005.png
+white/idle_right0007.png
+white/idle_right0009.png
+white/idle_right0011.png
+white/idle_right0013.png
+white/idle_right0015.png
+white/idle_right0017.png
+white/idle_right0019.png
+white/idle_right0021.png
+white/idle_right0023.png
+white/idle_right0025.png
+white/idle_right0027.png
+white/idle_right0029.png
+white/idle_right0031.png
+idle_right 16 0.2 L
+0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15

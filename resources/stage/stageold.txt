@@ -1,0 +1,34 @@
+10
+10
+11
+00 tile_ground1.png NULL 1
+01 tile_rock1.png NULL 0
+02 tile_grass1.png NULL 1
+03 tile_grass1_to_ground1_r.png NULL 0
+04 tile_grass1_to_ground1_l.png NULL 0
+05 tile_grass1_to_ground1_u.png NULL 0
+06 tile_grass1_to_ground1_d.png NULL 0
+07 tile_grass1_to_ground1_ur.png NULL 0
+08 tile_grass1_to_ground1_ul.png NULL 0
+09 tile_grass1_to_ground1_dr.png NULL 0
+10 tile_grass1_to_ground1_dl.png NULL 0
+1 0 1 1 1 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0
+1 0 0 0 0 0 0 0 0 0
+1 0 0 0 0 0 0 0 0 0
+1 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0
+1 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 2 2 0 0 0 0
+1 1
+1 2
+1 3
+1 4
+1 5
+9 1
+9 2
+9 3
+9 4
+9 5
