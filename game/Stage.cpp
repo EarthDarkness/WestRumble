@@ -204,15 +204,13 @@ void Stage::start(Team *teamA, Team *teamB)
 
 }
 
-void Stage::render(renderer& renderer){
+void Stage::renderMap(renderer& renderer){
+	renderer.renderMap(_tileMap, _camera, false);
+}
+
+void Stage::renderActors(renderer& renderer){
 	int w = getTileMap().width();
 	int h = getTileMap().height();
-	
-	renderer.renderMap(_tileMap, _camera, false);
-
-	
-	for(int i=0;i<_overlay.size();++i)
-		renderer.renderActorInMapCenter(_overlay[i], _camera);//render actors in tile
 
 	for(int j=0;j<h;++j){
 		for(int i=0;i<w;++i){
@@ -252,9 +250,8 @@ void Stage::render(renderer& renderer){
 			_vfx.clear();
 		}
 	}
-	
-	renderer.renderMap(_tileMap, _camera, true);
 
+	renderer.renderMap(_tileMap, _camera, true);
 }
 
 void Stage::clear(){
@@ -264,12 +261,12 @@ void Stage::clear(){
 		}
 	}
 
+
+	_vfx.clear();
+
 	bombs.clear();
 	blocks.clear();
 	power_ups.clear();
-	_overlay.clear();
-	_vfx.clear();
-
 }
 
 
@@ -373,275 +370,14 @@ Actors* Stage::getActorAt(int x, int y){
 	return _tileMap._map.at(x, y).actor;
 }
 Actors* Stage::getOverlayAt(int x, int y){
-	for(int i=0;i<_overlay.size();++i)
+	/*for(int i=0;i<_overlay.size();++i)
 		if(_overlay[i].getX() == x && _overlay[i].getY() == y)
 			return &_overlay[i];
+	return NULL;*/
 	return NULL;
 }
 	
-void Stage::clearOverlays(){
-	_overlay.clear();
-}
 
-void Stage::markEntry(Actors* entry){
-	if(!_tileMap.inBound(entry->getX(),entry->getY()))
-		return;
-	Actors ol;
-	ol.setPos(entry->getX(),entry->getY());
-	ol.setSprite("OL_marker");
-	_overlay.push_back(ol);
-}
-void Stage::markWalk(Character* entry){
-	_overlay.clear();
-
-	if(!_tileMap.inBound(entry->getX(),entry->getY()))
-		return;
-
-	for(int j = -entry->getSpeed();j<=entry->getSpeed();++j){
-		for(int i = -entry->getSpeed();i<=entry->getSpeed();++i){
-
-			if(abs(j)+abs(i) > entry->getSpeed())
-				continue;
-
-			int xx = i+entry->getX();
-			int yy = j+entry->getY();
-
-			if(_tileMap.getGround(xx,yy) != 1)
-				continue;
-
-			Actors* buf = _tileMap.getActor(xx,yy);
-			if(buf != NULL){
-				if(buf->getClass() != ACTOR_POWUP){
-					continue;
-				}
-			}
-
-			Actors ol;
-			ol.setPos(xx, yy);
-			ol.setSprite("OL_walk");
-			_overlay.push_back(ol);
-		}
-	}
-}
-void Stage::markBomb(Character* entry){
-	_overlay.clear();
-
-	if(!_tileMap.inBound(entry->getX(),entry->getY()))
-		return;
-
-	for(int j = -2;j<=2;++j){
-		for(int i = -2;i<=2;++i){
-
-			if(abs(j)+abs(i) > 2)
-				continue;
-
-			int xx = i+entry->getX();
-			int yy = j+entry->getY();
-
-			if(_tileMap.getGround(xx,yy) != 1)
-				continue;
-
-			Actors* buf = _tileMap.getActor(xx,yy);
-			if(buf != NULL)
-				continue;
-			
-
-			Actors ol;
-			ol.setPos(xx, yy);
-			ol.setSprite("OL_bomb");
-			_overlay.push_back(ol);
-		}
-	}
-}
-void Stage::markGunFire(Character* entry){
-	_overlay.clear();
-
-	if(!_tileMap.inBound(entry->getX(),entry->getY()))
-		return;
-
-	for(int j = -1;j<=1;++j){
-		for(int i = -1;i<=1;++i){
-			if(i==0&&j==0)
-				continue;
-			if(i!=0&&j!=0)
-				continue;
-
-			int xx = i+entry->getX();
-			int yy = j+entry->getY();
-
-			if(!_tileMap.existPos(xx,yy))
-				continue;
-
-			Actors ol;
-			ol.setPos(xx, yy);
-			ol.setSprite("OL_gunfire");
-			_overlay.push_back(ol);
-		}
-	}
-}
-void Stage::markTimerUp(Character* entry){
-	_overlay.clear();
-
-	if(!_tileMap.inBound(entry->getX(),entry->getY()))
-		return;
-	int range = 4;
-	for(int j = -range;j<=range;++j){
-		for(int i = -range;i<=range;++i){
-			int xx = i+entry->getX();
-			int yy = j+entry->getY();
-
-			if(_tileMap.getGround(xx,yy) != 1)
-				continue;
-			Actors* buf = _tileMap.getActor(xx,yy);
-			if(buf == NULL)
-				continue;
-			if(buf->getClass() != ACTOR_BOMB)
-				continue;
-			
-
-			Actors ol;
-			ol.setPos(xx, yy);
-			ol.setSprite("OL_uptimer");
-			_overlay.push_back(ol);
-		}
-	}
-}
-void Stage::markTimerDown(Character* entry){
-	_overlay.clear();
-
-	if(!_tileMap.inBound(entry->getX(),entry->getY()))
-		return;
-	int range = 4;
-	for(int j = -range;j<=range;++j){
-		for(int i = -range;i<=range;++i){
-			int xx = i+entry->getX();
-			int yy = j+entry->getY();
-
-			if(_tileMap.getGround(xx,yy) != 1)
-				continue;
-
-			Actors* buf = _tileMap.getActor(xx,yy);
-			if(buf == NULL)
-				continue;
-			if(buf->getClass() != ACTOR_BOMB)
-				continue;
-			
-
-			Actors ol;
-			ol.setPos(xx, yy);
-			ol.setSprite("OL_downtimer");
-			_overlay.push_back(ol);
-		}
-	}
-}
-void Stage::markThrow(Character* entry){//TODO sprite
-	_overlay.clear();
-
-	if(!_tileMap.inBound(entry->getX(),entry->getY()))
-		return;
-
-	for(int j = -1;j<=1;++j){
-		for(int i = -1;i<=1;++i){
-			int xx = i+entry->getX();
-			int yy = j+entry->getY();
-
-			if(_tileMap.getGround(xx,yy) != 1)
-				continue;
-
-			Actors* buf = _tileMap.getActor(xx,yy);
-			if(buf == NULL)
-				continue;
-			if(buf->getClass() != ACTOR_BOMB)
-				continue;
-
-			Actors ol;
-			ol.setPos(xx, yy);
-			ol.setSprite("OL_throw");
-			_overlay.push_back(ol);
-		}
-	}
-}
-void Stage::markDetonator(Character* entry){
-	_overlay.clear();
-
-	if(!_tileMap.inBound(entry->getX(),entry->getY()))
-		return;
-
-	for(int j = 0;j<getTileMap().height();++j){
-		for(int i = 0;i<getTileMap().width();++i){
-			int xx = i;
-			int yy = j;
-
-			Actors* buf = _tileMap.getActor(xx,yy);
-			if(buf == NULL)
-				continue;
-			if(buf->getClass() != ACTOR_BOMB)
-				continue;
-			if(static_cast<bomb*>(buf)->getOwner() != static_cast<Character*>(entry))
-				continue;
-
-			Actors ol;
-			ol.setPos(xx, yy);
-			ol.setSprite("OL_bomb");
-			_overlay.push_back(ol);
-		}
-	}
-}
-void Stage::markBarrel(Character* entry){//TODO sprite
-	_overlay.clear();
-
-	if(!_tileMap.inBound(entry->getX(),entry->getY()))
-		return;
-
-	for(int j = -2;j<=2;++j){
-		for(int i = -2;i<=2;++i){
-			int xx = i+entry->getX();
-			int yy = j+entry->getY();
-
-			if(_tileMap.getGround(xx,yy) != 1)
-				continue;
-
-			Actors* buf = _tileMap.getActor(xx,yy);
-			if(buf != NULL)
-				continue;
-			
-
-			Actors ol;
-			ol.setPos(xx, yy);
-			ol.setSprite("OL_barrel");
-			_overlay.push_back(ol);
-		}
-	}
-}
-void Stage::markRope(Character* entry){//TODO sprite
-	_overlay.clear();
-
-	if(!_tileMap.inBound(entry->getX(),entry->getY()))
-		return;
-
-	for(int j = -2;j<=2;++j){
-		for(int i = -2;i<=2;++i){
-			int xx = i+entry->getX();
-			int yy = j+entry->getY();
-
-			if(_tileMap.getGround(xx,yy) != 1)
-				continue;
-
-			Actors* buf = _tileMap.getActor(xx,yy);
-			if(buf == NULL)
-				continue;
-			if(buf->getClass() != ACTOR_CHAR)
-				continue;
-			if(!areEnemies(static_cast<Character*>(entry),static_cast<Character*>(buf)))
-				continue;
-
-			Actors ol;
-			ol.setPos(xx, yy);
-			ol.setSprite("OL_rope");
-			_overlay.push_back(ol);
-		}
-	}
-}
 
 int Stage::findActorsPtr(Actors* entry, vector<Actors*>& data){
 	for(int i=0;i<data.size();++i)
@@ -736,8 +472,8 @@ void Stage::checkGunfire(Character* c, vector<Actors*>& out){
 
 		Actors fx;
 		fx.setPos(xx, yy);
-		//int ap = findActorsPos(fx,_vfx);
-		//if(ap==-1){
+		int ap = findActorsPos(fx,_vfx);
+		if(ap==-1){
 			/*
 			VFX_gunfire_down.txt
 			VFX_gunfire_left.txt
@@ -748,7 +484,7 @@ void Stage::checkGunfire(Character* c, vector<Actors*>& out){
 			VFX_gunflare_right.txt
 			VFX_gunflare_up.txt
 			*/
-			//fx.setSprite("explosao.png");
+
 			_vfx.push_back(fx);
 			if(c->direction == GUN_E){
 				_vfx.back().getAnimation().loadAnim("resources/VFX_gunfire_right.txt");
@@ -765,23 +501,23 @@ void Stage::checkGunfire(Character* c, vector<Actors*>& out){
 			}
 			//_vfx.back().getAnimation().loadAnim("resources/VFX_gunfire.txt");
 			//_vfx.back().getAnimation().setState("gunfire");
-		//}else if(strcmp(_vfx[ap].getAnimation().getState(),"gunfire")!=0){
-		//	//fx.setSprite("explosao.png");
-		//	_vfx.push_back(fx);
-		//	if(c->direction == GUN_E){
-		//		_vfx.back().getAnimation().loadAnim("resources/VFX_gunfire_right.txt");
-		//	}else if(c->direction == GUN_W){
-		//		_vfx.back().getAnimation().loadAnim("resources/VFX_gunfire_left.txt");
-		//	}else if(c->direction == GUN_N){
-		//		_vfx.back().getAnimation().loadAnim("resources/VFX_gunfire_up.txt");
-		//	}else if(c->direction == GUN_S){
-		//		_vfx.back().getAnimation().loadAnim("resources/VFX_gunfire_down.txt");
-		//	}else{
-		//		_vfx.back().getAnimation().loadAnim("resources/VFX_gunfire_right.txt");
-		//	}
-		//	//_vfx.back().getAnimation().loadAnim("resources/VFX_gunfire.txt");
-		//	_vfx.back().getAnimation().setState("gunfire");
-		//}
+		}/*else if(strcmp(_vfx[ap].getAnimation().getState(),"gunfire")!=0){
+			//fx.setSprite("explosao.png");
+			_vfx.push_back(fx);
+			if(c->direction == GUN_E){
+				_vfx.back().getAnimation().loadAnim("resources/VFX_gunfire_right.txt");
+			}else if(c->direction == GUN_W){
+				_vfx.back().getAnimation().loadAnim("resources/VFX_gunfire_left.txt");
+			}else if(c->direction == GUN_N){
+				_vfx.back().getAnimation().loadAnim("resources/VFX_gunfire_up.txt");
+			}else if(c->direction == GUN_S){
+				_vfx.back().getAnimation().loadAnim("resources/VFX_gunfire_down.txt");
+			}else{
+				_vfx.back().getAnimation().loadAnim("resources/VFX_gunfire_right.txt");
+			}
+			//_vfx.back().getAnimation().loadAnim("resources/VFX_gunfire.txt");
+			_vfx.back().getAnimation().setState("gunfire");
+		}*/
 
 		Actors* buf = _tileMap.getActor(xx,yy);
 		if(buf != NULL){

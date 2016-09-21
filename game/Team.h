@@ -65,7 +65,7 @@ public:
 	Character& getCharacter(int pos);
 	void setCharacter(int pos, Character c);
 
-	bool isMember(Character* c);
+	int isMember(Character* c);
 
 	void reset();
 

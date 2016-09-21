@@ -25,7 +25,6 @@ using namespace std;
 class Stage
 {
 private:
-	TileMap _tileMap;	
 	int _initPos[2][5][2]; // [qual equipe][qual personagem][qual posicao]
 
 	Team *_teams[2];
@@ -37,7 +36,10 @@ private:
 
 	Actors _action;
 
+	vector<Actors> _vfx;
+
 public:
+	TileMap _tileMap;	
 	Stage();
 	~Stage();
 
@@ -46,7 +48,8 @@ public:
 
 	int loadStage(const char* path, resources& resources);
 	void start(Team *teamA, Team *teamB);
-	void render(renderer& renderer);
+	void renderMap(renderer& renderer);
+	void renderActors(renderer& renderer);
 	
 	void clear();
 
@@ -64,19 +67,6 @@ public:
 
 	Actors* getActorAt(int x, int y);
 	Actors* getOverlayAt(int x, int y);
-	
-	void clearOverlays();
-	
-	void markEntry(Actors* entry);
-	void markWalk(Character* entry);
-	void markBomb(Character* entry);
-	void markGunFire(Character* entry);
-	void markTimerUp(Character* entry);
-	void markTimerDown(Character* entry);
-	void markThrow(Character* entry);
-	void markDetonator(Character* entry);
-	void markBarrel(Character* entry);
-	void markRope(Character* entry);
 
 	void moveActor(int x0, int y0, int x, int y);
 	void instantiateActor(Actors* a, int x, int y);
@@ -105,10 +95,6 @@ public:
 	void checkGunfire(Character* c, vector<Actors*>& out);
 
 	bool waitForVFX();
-
-private:
-	vector<Actors> _overlay;
-	vector<Actors> _vfx;
 
 
 };

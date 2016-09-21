@@ -95,11 +95,11 @@ void Team::setCharacter(int pos, Character c){
 	_characters[pos] = c;
 }
 
-bool Team::isMember(Character* c){
+int Team::isMember(Character* c){
 	for(int i=0;i<5;++i)
 		if(&_characters[i] == c)
-			return true;
-	return false;
+			return i;
+	return -1;
 }
 
 void Team::reset(){

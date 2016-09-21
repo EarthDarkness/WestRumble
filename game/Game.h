@@ -10,6 +10,7 @@
 #include "bomb.h"
 #include "store.h"
 #include "enum.h"
+#include "userInterface.h"
 
 #include <stack>
 #include <queue>
@@ -42,6 +43,8 @@ private:
 	
 
 	queue<int> _selectedActions;
+	queue<string> _actionMsg;
+	userInterface _ui;
 
 	int player;
 	bool field;
@@ -70,6 +73,10 @@ private:
 	void renderShop();
 	void renderStage();
 	void renderEnd();
+
+
+	void proccessMessages();
+
 
 	Team A;
 	Team B;

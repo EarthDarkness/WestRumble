@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "block.h"
+#include "NetProtocol.h"
 
 animation CHR_char_P1;
 animation CHR_char_P2;
@@ -75,6 +76,7 @@ void Game::init(){
 	shop.setGUI(width_screen,height_screen);
 
 	reset();
+
 
 }
 void Game::setGUI(){
@@ -365,7 +367,8 @@ void Game::update(){
 
 		if (shop.isDone()){
 			state = STATEGAME;
-			engine._render.playMusic("BGM",true,false);
+			//engine._render.playMusic("BGM",true,false);
+			_ui.init(&stage);
 		}
 		break;
 					 }
@@ -432,22 +435,27 @@ void Game::updateStage(){
 	if(!_cam.isDone())
 		_cam.update();
 
-	if(!field){//if player turn
-		/*bool end_turn = true;
-		for(int i=0;i<5;++i)//test no move left
-			if(stage.getTeam(player).getCharacter(i).getAlive())
-				if(stage.getTeam(player).actions[i] != CHAR_END)
-					end_turn = false;
-		if(end_turn){
-			field = true;
-		}*/
-		//test no move left
+	//test no move left
+	/*if(!field){//if player turn
 		field = true;
 		for(int i=0;i<5;++i)
 			if(stage.getTeam(player).getCharacter(i).getAlive())
 				if(stage.getTeam(player).actions[i] != CHAR_END)
 					field = false;
+	}*/
+
+	if(!field)
+		turnPlayer();
+
+	while(!_ui._actionMsg.empty()){
+		_actionMsg.push(_ui._actionMsg.front());
+		_ui._actionMsg.pop();
 	}
+	proccessMessages();
+
+	if(field)//one per turn end
+		turnField();
+
 
 	//move buttons
 	if(engine._input.isDown()){
@@ -465,28 +473,32 @@ void Game::updateStage(){
 			return;
 		}
 	}
+	
+	
+	
+	
 	//turn button
-	if(engine._input.isPress()){
-		if(button_end_turn.checkCollision(engine._input.getX(), engine._input.getY())){
-			if(!field){
-				field = true;
-				stage.clearOverlays();
-				while(!_selectedActions.empty())
-					_selectedActions.pop();
-			}
-			
-				//return;
-			/*stage.clearOverlays();
-			selected = NULL;
-			stage.getTeam(player).beginTurn();
-			centerTeam(player);*/
-		}
-		if(!field)//player turn
-			turnPlayer();
-	}
+	//if(engine._input.isPress()){
+	//	if(button_end_turn.checkCollision(engine._input.getX(), engine._input.getY())){
+	//		if(!field){
+	//			field = true;
+	//			stage.clearOverlays();
+	//			while(!_selectedActions.empty())
+	//				_selectedActions.pop();
+	//		}
+	//		
+	//			//return;
+	//		/*stage.clearOverlays();
+	//		selected = NULL;
+	//		stage.getTeam(player).beginTurn();
+	//		centerTeam(player);*/
+	//	}
+	//	if(!field)//player turn
+	//		turnPlayer();
+	//}
 
-	if(field)//bomb turn
-		turnField();
+	//if(field)//bomb turn
+	//	turnField();
 	
 
 	
@@ -634,7 +646,12 @@ void Game::renderMenu(){
 }
 void Game::renderStage()
 {
-	stage.render(engine._render);
+	stage.renderMap(engine._render);
+	_ui.renderOverlay(engine._render,stage.getCamera());
+	stage.renderActors(engine._render);
+	_ui.renderIcons(engine._render,stage.getCamera());
+
+
 
 	//render button right move
 	engine._render.renderSprite(button_move_right.image_id.c_str(), button_move_right.rect.x, button_move_right.rect.y, button_move_right.rect.w, button_move_right.rect.h);
@@ -678,6 +695,7 @@ void Game::renderStage()
 
 	}
 
+
 	//render player
 	if (player == 0){
 		engine._render.renderSprite("jogador1.png", 0 + 20 + 200, 0);
@@ -701,6 +719,165 @@ void Game::renderEnd(){
 		engine._render.renderSprite("draw.png", width_screen/2 - 50, height_screen/2 - 20);
 	}
 
+}
+
+
+void Game::proccessMessages(){
+	while(!_actionMsg.empty()){
+		const char* msg = _actionMsg.front().c_str();
+		Team* curteam = &stage.getTeam(player);
+
+		if(msg[0] == WRP_END_TURN){
+			field = true;
+
+		}else if(msg[0] == WRP_MOVE){
+			int pid = 0;
+			int xx = 0;
+			int yy = 0;
+
+			WrpDecodeMove(msg,pid,xx,yy);
+
+			Character* act = &(curteam->getCharacter(pid));
+
+			Actors* tgt = stage.getActorAt(xx,yy);
+			if(tgt != NULL){
+				if(tgt->getClass() == ACTOR_POWUP) act->AddPowerUp((PowerUp*)tgt);
+			}
+
+			stage.moveActor(act->getX(), act->getY(), xx, yy);//TODO validate movment
+
+			curteam->actions[pid] = CHAR_MOVED;
+			curteam->_state[pid].addCooldown(ACTIONMOVE,1);
+
+		}else if(msg[0] == WRP_DYNAMITE){
+			int pid = 0;
+			int xx = 0;
+			int yy = 0;
+
+			WrpDecodeDynamite(msg,pid,xx,yy);
+
+			Character* act = &(curteam->getCharacter(pid));
+
+			bomb b;
+			b.init(act->getFire(),act);
+			if(act->queryPowerUp(POWUP_DETONATOR)) b.setTurn(-1);
+
+			stage.bombs.push_back(b);
+			act->AddEntry((bomb*)&stage.bombs.back());
+			stage.instantiateActor(&stage.bombs.back(), xx, yy);
+
+			curteam->actions[pid] = CHAR_END;
+
+		}else if(msg[0] == WRP_SHOT){
+			int pid = 0;
+			int dir = 0;
+
+			WrpDecodeShot(msg,pid,dir);
+
+			Character* act = &(curteam->getCharacter(pid));
+
+			if(dir == WRP_RIGHT){
+				act->direction = GUN_E;
+				act->setState("ready_right");
+			}else if(dir == WRP_LEFT){
+				act->direction = GUN_W;
+				act->setState("ready_left");
+			}else if(dir == WRP_DOWN){
+				act->direction = GUN_S;
+				act->setState("ready_down");
+			}else if(dir == WRP_UP){
+				act->direction = GUN_N;
+				act->setState("ready_up");
+			}
+
+			act->shot = false;
+			curteam->_state[pid].addCooldown(ACTIONGUNFIRE,3);
+			curteam->actions[pid] = CHAR_END;
+
+		}else if(msg[0] == WRP_TIME_UP){
+			int pid = 0;
+			int xx = 0;
+			int yy = 0;
+
+			WrpDecodeTimeUp(msg,pid,xx,yy);
+
+			bomb* b = (bomb*)stage.getActorAt(xx, yy);
+			if(b != NULL) b->addTurn(1);
+
+			curteam->actions[pid] = CHAR_END;
+
+		}else if(msg[0] == WRP_TIME_DOWN){
+			int pid = 0;
+			int xx = 0;
+			int yy = 0;
+
+			WrpDecodeTimeDown(msg,pid,xx,yy);
+
+			bomb* b = (bomb*)stage.getActorAt(xx, yy);
+			if(b != NULL) b->addTurn(-1);
+
+			curteam->actions[pid] = CHAR_END;
+
+		}else if(msg[0] == WRP_THROW){
+			int pid = 0;
+			int xi = 0;
+			int yi = 0;
+			int xx = 0;
+			int yy = 0;
+
+			WrpDecodeThrow(msg,pid,xi,yi,xx,yy);
+
+			bomb* b = (bomb*)stage.getActorAt(xi, yi);
+			if(b != NULL){
+				b->setPos(xx, yy);
+				stage.getTileMap().at(xx, yy).actor = b;
+				stage.getTileMap().at(xi, yi).actor = NULL;
+			}
+
+			curteam->actions[pid] = CHAR_END;
+
+		}else if(msg[0] == WRP_BARREL){
+			int pid = 0;
+			int xx = 0;
+			int yy = 0;
+
+			WrpDecodeBarrel(msg,pid,xx,yy);
+
+			stage.blocks.push_back(block());
+			stage.instantiateActor(&stage.blocks.back(), xx, yy);
+
+			curteam->actions[pid] = CHAR_END;
+
+		}else if(msg[0] == WRP_ROPE){
+			int pid = 0;
+			int xx = 0;
+			int yy = 0;
+
+			WrpDecodeRope(msg,pid,xx,yy);
+
+			Character* tgt = (Character*)stage.getActorAt(xx,yy);
+
+			if(tgt != NULL){
+				if(tgt->getClass() == ACTOR_CHAR){
+					Team* opo = &stage.getTeam((player+1)%2);
+					opo->_state[opo->checkSelected(tgt)].addCooldown(ACTIONMOVE,2);
+				}
+			}
+			curteam->_state[pid].addCooldown(ACTIONSTUN,1);
+			curteam->actions[pid] = CHAR_END;
+
+		}else if(msg[0] == WRP_DETONATE){
+			int pid = 0;
+
+			WrpDecodeDetonate(msg,pid);
+
+			Character* act = &(curteam->getCharacter(pid));
+
+			act->detonate();
+			curteam->actions[pid] = CHAR_END;
+		}
+		_actionMsg.pop();
+	}
 }
 
 
@@ -789,7 +966,7 @@ void Game::calcActions(){
 void Game::initAction(){
 	if(_selectedActions.empty()){
 		//stage.clearSelectedTiles();
-		stage.clearOverlays();
+		//stage.clearOverlays();
 		stage.setAction("NULL",0,0);
 		return;
 	}
@@ -797,37 +974,37 @@ void Game::initAction(){
 	int act = _selectedActions.front();
 
 	if(act == ACTIONMOVE){
-		stage.markWalk(static_cast<Character*>(selected));
+		//stage.markWalk(static_cast<Character*>(selected));
 		stage.setAction("GFX_ACT_move",selected->getX(),selected->getY());
 	}else if(act == ACTIONBOMB){
-		stage.markBomb(static_cast<Character*>(selected));
+		//stage.markBomb(static_cast<Character*>(selected));
 		stage.setAction("GFX_ACT_bomb",selected->getX(),selected->getY());
 	}else if(act == ACTIONGUNFIRE){
-		stage.markGunFire(static_cast<Character*>(selected));
+		//stage.markGunFire(static_cast<Character*>(selected));
 		stage.setAction("GFX_ACT_shot",selected->getX(),selected->getY());
 	}else if(act == ACTIONTIMER_UP){
-		stage.markTimerUp(static_cast<Character*>(selected));
+		//stage.markTimerUp(static_cast<Character*>(selected));
 		stage.setAction("GFX_ACT_timerup",selected->getX(),selected->getY());
 	}else if(act == ACTIONTIMER_DOWN){
-		stage.markTimerDown(static_cast<Character*>(selected));
+		//stage.markTimerDown(static_cast<Character*>(selected));
 		stage.setAction("GFX_ACT_timerdown",selected->getX(),selected->getY());
 	}else if(act == ACTIONRELAUNCHSELECT){
-		stage.markThrow(static_cast<Character*>(selected));
+		//stage.markThrow(static_cast<Character*>(selected));
 		stage.setAction("GFX_ACT_grab",selected->getX(),selected->getY());
 	}else if(act == ACTIONRELAUNCH){
-		stage.markBomb(static_cast<Character*>(selected));
+		//stage.markBomb(static_cast<Character*>(selected));
 		stage.setAction("GFX_ACT_throw",selected->getX(),selected->getY());
 	}else if(act == ACTIONBARRIER){
-		stage.markBarrel(static_cast<Character*>(selected));
+		//stage.markBarrel(static_cast<Character*>(selected));
 		stage.setAction("GFX_ACT_barrel",selected->getX(),selected->getY());
 	}else if(act == ACTIONSTUN){
-		stage.markRope(static_cast<Character*>(selected));
+		//stage.markRope(static_cast<Character*>(selected));
 		stage.setAction("GFX_ACT_stun",selected->getX(),selected->getY());
 	}else if(act == ACTIONBOMBDETONATOR){
-		stage.markDetonator(static_cast<Character*>(selected));
+		//stage.markDetonator(static_cast<Character*>(selected));
 		stage.setAction("GFX_ACT_detonate",selected->getX(),selected->getY());
 	}
-	stage.markEntry(selected);
+	//stage.markEntry(selected);
 }
 void Game::updateAction(int x, int y){
 	//FROM HERE //change when endshot isDone
@@ -852,6 +1029,9 @@ void Game::updateAction(int x, int y){
 		}
 	}*/
 
+	proccessMessages();
+
+
 	if(_selectedActions.empty())
 		return;
 
@@ -859,9 +1039,9 @@ void Game::updateAction(int x, int y){
 		_selectedActions.pop();
 		return;
 	}
-	Actors* mark = stage.getOverlayAt(x,y);
-	if(mark == NULL)
-		return;
+	//Actors* mark = stage.getOverlayAt(x,y);
+	//if(mark == NULL)
+		//return;
 	
 	Team* curteam = &stage.getTeam(player);
 	int pos = curteam->checkSelected((Character*)selected);
@@ -878,7 +1058,7 @@ void Game::updateAction(int x, int y){
 				cout << "POWER UP ADICIONADO!" << endl;
 			}
 		}
-		stage.moveActor(selected->getX(), selected->getY(), mark->getX(), mark->getY());
+		//stage.moveActor(selected->getX(), selected->getY(), mark->getX(), mark->getY());
 
 		centerAt(selected);
 
@@ -998,7 +1178,7 @@ void Game::updateAction(int x, int y){
 }
 
 void Game::turnPlayer(){
-	int mapx, mapy;
+	/*int mapx, mapy;
 	winToMat(engine._input.getX(), engine._input.getY(), stage.getCamera().getX(), stage.getCamera().getY(), stage.getCamera().getScale(), mapx, mapy);
 
 	Actors* clicked = stage.getActorAt(mapx,mapy);
@@ -1007,7 +1187,7 @@ void Game::turnPlayer(){
 	if(selected != NULL){
 		if(_selectedActions.empty()){
 			selected = NULL;
-			stage.clearOverlays();
+			//stage.clearOverlays();
 			stage.setAction("NULL",0,0);
 		}else{
 			updateAction(mapx,mapy);
@@ -1027,7 +1207,15 @@ void Game::turnPlayer(){
 			calcActions();
 		}
 	}
-	initAction();
+	initAction();*/
+	if(engine._input.isPress()){
+		int val = 0;
+		if(button_end_turn.checkCollision(engine._input.getX(),engine._input.getY()))
+			val = 1;
+		int xm,ym;
+		winToMat(engine._input.getX(), engine._input.getY(), stage.getCamera().getX(), stage.getCamera().getY(), stage.getCamera().getScale(), xm, ym);
+		_ui.update(xm,ym,val);
+	}
 }
 void Game::turnField(){
 	vector<Actors*> hits;
