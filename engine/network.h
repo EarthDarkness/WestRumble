@@ -6,19 +6,25 @@
 
 enum NETID{
 	NET_SERVER = 0,
+	NET_SELF = 0, 
 	NET_CLIENT1,
 	NET_CLIENT2,
 	NET_CLIENT3,
 	NET_MAXUSERSIZE
 };
 
+const int LEN = 1024;
+const int WSIZE = 64;
 class network {
 private:
 	//SDLNet_SocketSet _sockets;//hidden pointer like (_SDLNet_SocketSet*)
-	TCPsocket _self;//hidden pointer like (_TCPsocket*)
-	TCPsocket _peers[NET_MAXUSERSIZE-1];
-
+	TCPsocket _socket[NET_MAXUSERSIZE];//hidden pointer like (_TCPsocket*)
 	SDL_Thread* _thread[NET_MAXUSERSIZE];
+
+	char _window[WSIZE][LEN];
+	int _in;
+	int _out;
+
 
 	int _netId;
 	bool _working;
@@ -26,10 +32,14 @@ private:
 	int launchListenThread();
 	int launchReceiveThread(int id);
 
+	void waitForThreads();
+
+
 public:
 	volatile int _who;
 	volatile int _signal;
 	volatile int _hear;
+
 
 	int listenRoutine();
 	int receiveRoutine(int id);
@@ -41,6 +51,9 @@ public:
 	int initClient(const char* addr, uint16_t port);
 
 	int send(void* data, int len);
+	int recv(void* data, int len);
+
+	void close();
 
 };
 
