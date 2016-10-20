@@ -35,7 +35,7 @@ private:
 
 public:
 	int direction;
-	bool shot;
+	bool shot;//Unused?
 
 	Character();
 	~Character();

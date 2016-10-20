@@ -21,6 +21,20 @@
 using namespace std;
 
 //int rand();
+class StageData
+{
+public:
+	int _turn;
+	int _suddenDeath;
+
+	matMN<int> _type;
+	matMN<int> _data;
+
+
+
+	StageData();
+	StageData();
+};
 
 class Stage
 {

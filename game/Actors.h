@@ -37,5 +37,6 @@ public:
 	void setState(const char* name);
 
 	int combo;
+
 };
 #endif
