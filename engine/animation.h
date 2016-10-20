@@ -1,7 +1,7 @@
 #ifndef ANIM_H
 #define ANIM_H
 
-#include "movieClipF.h"
+#include "movieClipW.h"
 #include "resources.h"
 #include <map>
 
@@ -11,8 +11,11 @@ using namespace std;
 class animation
 {
 private:
-	map<string,movieClipF<string> > _data;
-	string _state;
+	//map<string,movieClipF<string> > _data;
+	int _index[50];//50 = max aniamtions//pointer** (index) to start of aniamtion
+	movieClipW _frame[50];//up//frame of aniamtion (index+frame == image id)
+
+	string _state;//to int//enum
 public:
 	animation();
 	~animation();
