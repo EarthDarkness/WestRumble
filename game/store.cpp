@@ -1,5 +1,6 @@
 #include "store.h"
 #include "../engine/translator.h"
+#include "Props.h"
 
 #include <iostream>
 
@@ -34,7 +35,7 @@ void goodsData::set(int x, int y, int w, int h, int price, int powup, int stock 
 store::store(){
 	_client = NULL;
 	for(int i=0;i<5;++i)
-		_player[i].image_id = "NULL";
+		_player[i].image_id = 1;
 	
 	_selected = 0;
 	_done = false;
@@ -72,7 +73,7 @@ void store::setGUI(int width, int height){
 	int xv = width<height?0:spa*2+ww;
 	int yv = width<height?spa*2+hh:0;
 
-	_exit.image_id = "exit.png";
+	_exit.image_id = IMG_UI::exit;
 	_exit.setPos(width-aa-spa,height-aa-spa,aa,aa);
 
 	for(int i=0;i<5;++i){
@@ -95,45 +96,16 @@ void store::setGUI(int width, int height){
 
 }
 void store::load(resources& res){
-
-
-	//button_end_turn.setPos(width_screen-dist-ss/2,height_screen-dist-ss/2,dist,dist);
-
-	//res.loadImage("resources/image/bomb.png","bomb.png");
-	//res.loadImage("resources/image/boot.png","boot.png");
-	//res.loadImage("resources/image/fire.png","fire.png");
-
-	res.loadImage("resources/image/UI_char_black.png","UI_char_black");
-	res.loadImage("resources/image/UI_char_white.png","UI_char_white");
-	res.loadImage("resources/image/select.png","select.png");
-
-	res.loadImage("resources/image/exit.png","exit.png");
-
-
-	//_exit.image_id = "exit.png";
-	//_exit.setPos(700,500,48,48);
-	//_exit.setPos(0,0,48,48);
-	/*
-	for(int i=0;i<5;++i){
-		_player[i].image_id = "char.png";
-		_player[i].setPos(50,50+i*100,48,64);
-	}*/
-
-	//get<0>(_goods[0]).image_id = "bomb.png";
-	//get<0>(_goods[1]).image_id = "boot.png";
-	//get<0>(_goods[2]).image_id = "fire.png";
-	/*_goods[0]._gui.image_id = "bomb.png";
-	_goods[1]._gui.image_id = "boot.png";
-	_goods[2]._gui.image_id = "fire.png";*/
-	_goods[0]._gui.image_id = "NULL";
-	_goods[1]._gui.image_id = "NULL";
-	_goods[2]._gui.image_id = "NULL";
-	_goods[3]._gui.image_id = "NULL";
-	_goods[4]._gui.image_id = "NULL";
-	_goods[5]._gui.image_id = "NULL";
-	_goods[6]._gui.image_id = "NULL";
-	_goods[7]._gui.image_id = "NULL";
-	_goods[8]._gui.image_id = "NULL";
+	//invisible buttons
+	_goods[0]._gui.image_id = 1;
+	_goods[1]._gui.image_id = 1;
+	_goods[2]._gui.image_id = 1;
+	_goods[3]._gui.image_id = 1;
+	_goods[4]._gui.image_id = 1;
+	_goods[5]._gui.image_id = 1;
+	_goods[6]._gui.image_id = 1;
+	_goods[7]._gui.image_id = 1;
+	_goods[8]._gui.image_id = 1;
 	/*for(int i=0;i<3;++i){
 		_goods[i]._gui.setPos(400,200+i*96,48,48);
 		//get<0>(_goods[i]).setPos(400,200+i*96,48,48);
@@ -156,12 +128,7 @@ void store::load(resources& res){
 	_goods[6]._data.init(POWUP_DETONATOR);
 	_goods[7]._data.init(POWUP_BARRIER);
 	_goods[8]._data.init(POWUP_STUN);
-	//get<1>(_goods[0]) = 100;
-	//get<1>(_goods[1]) = 50;
-	//get<1>(_goods[2]) = 150;
-	//get<2>(_goods[0]).init(POWUP_BOMB);
-	//get<2>(_goods[1]).init(POWUP_SPEED);
-	//get<2>(_goods[2]).init(POWUP_FIRE);
+
 	_goods[0]._stock = 6;
 	_goods[1]._stock = 6;
 	_goods[2]._stock = 6;
@@ -183,9 +150,9 @@ void store::init(Team* client, int color){
 	
 	for(int i=0;i<5;++i){
 		if(color == 0){
-			_player[i].image_id = "UI_char_black";
+			_player[i].image_id = IMG_GFX::char_black;
 		}else{
-			_player[i].image_id = "UI_char_white";
+			_player[i].image_id = IMG_GFX::char_white;
 		}
 	}
 
@@ -212,7 +179,7 @@ void store::update(core& engine){
 
 	if(_exit.checkCollision(engine._input.getX(),engine._input.getY())){
 		_done = true;
-		engine._render.renderSprite("L1",350,350);
+		//engine._render.renderSprite("L1",350,350);//debug???
 		return;
 	}
 	for(int i=0;i<5;++i){
@@ -259,11 +226,11 @@ void store::update(core& engine){
 	}
 }
 void store::render(core& engine){
-	engine._render.renderSprite(_exit.image_id.c_str(),_exit.rect.x,_exit.rect.y,_exit.rect.w,_exit.rect.h);
+	engine._render.renderSprite(_exit.image_id,_exit.rect.x,_exit.rect.y,_exit.rect.w,_exit.rect.h);
 	for(int i=0;i<5;++i)
-		engine._render.renderSprite(_player[i].image_id.c_str(),_player[i].rect.x,_player[i].rect.y,_player[i].rect.w,_player[i].rect.h);
+		engine._render.renderSprite(_player[i].image_id,_player[i].rect.x,_player[i].rect.y,_player[i].rect.w,_player[i].rect.h);
 	if(_selected >=0 && _selected <= 5)
-		engine._render.renderSprite("select.png",_player[_selected].rect.x,_player[_selected].rect.y,_player[_selected].rect.w,_player[_selected].rect.h);
+		engine._render.renderSprite(IMG_GFX::select,_player[_selected].rect.x,_player[_selected].rect.y,_player[_selected].rect.w,_player[_selected].rect.h);
 	for(int i=0;i<9;++i){
 		if(_goods[i]._stock == 0)
 			continue;

@@ -28,16 +28,20 @@ bomb::bomb(){
 	_turns = DEF_BOMB_TIMER;
 	_fire = 0;
 
-	//_sprite = "explosivo.png";
-	//_sprite.set("default","explosivo.png");
-	//_sprite.
+	_index = -1;
+	_team = -1;
+	_owner = -1;
 }
 bomb::~bomb(){
 }
 
-void bomb::init(int fire, Character* c){
+
+void bomb::init(int fire, int index, int team, int owner){
 	_fire = fire;
-	_character = c;
+
+	_index = index;
+	_team = team;
+	_owner = owner;
 
 	int r = rand()%6;
 	cout << "BOMB: " << _fire << "-" << r << endl;
@@ -84,14 +88,10 @@ void bomb::init(int fire, Character* c){
 			_sprite.init(BMB_H_300);
 		}
 	}
-	_sprite.setState("idle");
+	//TODO set initial state
+	//_sprite.setState("idle");
 }
 
-void bomb::clear(){
-	_character->RemoveEntry(_x, _y);
-
-	cout << "bomba destruida" << endl;
-}
 
 void bomb::setFire(int fire){
 	_fire = fire;
@@ -110,8 +110,14 @@ int bomb::getTurn(){
 	return _turns;
 }
 
-Character* bomb::getOwner(){
-	return _character;
+int bomb::getindex(){
+	return _index;
+}
+int bomb::getTeam(){
+	return _team;
+}
+int bomb::getOwner(){
+	return _owner;
 }
 
 bool bomb::checkTurnUp(){
@@ -120,7 +126,6 @@ bool bomb::checkTurnUp(){
 	}
 	return false;
 }
-
 bool bomb::checkTurnDown(){
 	if (_turns > 1){
 		return true;

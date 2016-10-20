@@ -6,35 +6,30 @@
 #include <map>
 
 using namespace std;
+static const int MAX_ANIMS = 32;
 
 
 class animation
 {
 private:
-	//map<string,movieClipF<string> > _data;
-	int _index[50];//50 = max aniamtions//pointer** (index) to start of aniamtion
-	movieClipW _frame[50];//up//frame of aniamtion (index+frame == image id)
+	int _index[MAX_ANIMS];//pointer** (index) to start of aniamtion
+	movieClipW _frame[MAX_ANIMS];//frame of aniamtion (index+frame == image id)
 
-	string _state;//to int//enum
+	int _state;//enum
 public:
 	animation();
 	~animation();
 
 	void init(animation& src);
 
-	void reset(const char* name);
-	const char* get(const char* name);//update and return proper iamge of animation
-	const char* get();
-	bool isDone(const char* name);
+	int get();
 
-	void set(const char* anim, const char* name);
-	void setState(string state);
+	bool isDone();//is done current anim
 
-	const char* getState();
+	void setState(int stt);
 
-	map<string,movieClipF<string> >& getData();
+	int getState();
 
-	void loadAnim(const char* file);
-	static void loadRes(const char* file, resources& res);
+	void loadAnim(int stt, int index, int size, float speed, bool loop);
 };
 #endif

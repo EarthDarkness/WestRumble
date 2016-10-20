@@ -18,22 +18,14 @@ void renderer::renderMap(TileMap& map, camera& cam, bool top){
 	SDL_Rect pos;
 	SDL_Texture* buf = NULL;
 
-	//int xx = 300;
-	//int yy = 100;
-		
 	for(int j=0;j<map._map.height();++j){
 		for(int i=0;i<map._map.width();++i){
 			matToWin(i,j,cam.getX(),cam.getY(),cam.getScale(),pos.x,pos.y);
-			//pos.x = (int)(1.41f*0.5f*(float)(i-j)*32.0f)+xx;
-			//pos.y = (int)(1.41f*0.25f*(float)(i+j)*32.0f)+yy;
+			
 			if(top){
-				if(strcmp(map._map.at(i,j).up.c_str(),"NULL")==0)
-					continue;
-				buf = _res->getImage(map._map.at(i,j).up.c_str());
+				buf = _res->getImage(map._map.at(i,j).up);
 			}else{
-				if(strcmp(map._map.at(i,j).bot.c_str(),"NULL")==0)
-					continue;
-				buf = _res->getImage(map._map.at(i,j).bot.c_str());
+				buf = _res->getImage(map._map.at(i,j).bot);
 			}
 			SDL_QueryTexture(buf,NULL,NULL,&pos.w,&pos.h);
 			SDL_RenderCopy(engRenderer,buf,NULL,&pos);
@@ -47,8 +39,6 @@ void renderer::renderActor(Actors& entry, int x, int y, int w, int h){
 	pos.x = x;
 	pos.y = y;
 	
-	if(strcmp(entry.getSprite(),"NULL")==0)
-		return;
 	buf = _res->getImage(entry.getSprite());
 
 	pos.w = w;
@@ -63,22 +53,18 @@ void renderer::renderActorInMap(Actors& entry, camera& cam, int w, int h){
 
 	matToWin(entry.getX(),entry.getY(),cam.getX(),cam.getY(),cam.getScale(),pos.x,pos.y);
 
-	if(strcmp(entry.getSprite(),"NULL")!=0)
-		buf = _res->getImage(entry.getSprite());
+	buf = _res->getImage(entry.getSprite());
+
 	pos.w = w;
 	pos.h = h;
 	if(w == -1 || h == -1)
 		SDL_QueryTexture(buf,NULL,NULL,&pos.w,&pos.h);
-	//pos.x -= cam.getScale()/2;
-	//pos.y -= cam.getScale()/4;
+	
 	SDL_RenderCopy(engRenderer,buf,NULL,&pos);
 }
 void renderer::renderActorInMapCenter(Actors& entry, camera& cam, int offX, int offY){
 	SDL_Rect pos;
 	SDL_Texture* buf = NULL;
-
-	if(strcmp(entry.getSprite(),"NULL")==0)
-		return;
 
 	matToWin(entry.getX(),entry.getY(),cam.getX(),cam.getY(),cam.getScale(),pos.x,pos.y);
 
@@ -91,8 +77,8 @@ void renderer::renderActorInMapCenter(Actors& entry, camera& cam, int offX, int 
 
 	SDL_RenderCopy(engRenderer,buf,NULL,&pos);
 }
-void renderer::renderSprite(const char* name, int x, int y, int w, int h){
-	SDL_Texture* buf = _res->getImage(name);
+void renderer::renderSprite(int index, int x, int y, int w, int h){
+	SDL_Texture* buf = _res->getImage(index);
 	if(buf == NULL)
 		return;
 	SDL_Rect pos;
@@ -110,10 +96,7 @@ void renderer::renderText(const char* text, font& f, int x, int y){
 	int h = f.height();
 	int line = 0;
 	for(int i=0;i<len;++i){
-		const char* buf = f.getChar(text[i]);
-		if(buf == NULL)
-			continue;
-		renderSprite(buf,x+i*w,y+line*h,w,h);
+		renderSprite(f.getChar(text[i]),x+i*w,y+line*h,w,h);
 	}
 }
 void renderer::renderTextInMapCenter(const char* text, camera& cam, font& f, int x, int y, int offX, int offY){
@@ -128,10 +111,7 @@ void renderer::renderTextInMapCenter(const char* text, camera& cam, font& f, int
 	yy += (cam.getScale()/2-h)/2 + offY;
 
 	for(int i=0;i<len;++i){
-		const char* buf = f.getChar(text[i]);
-		if(buf == NULL)
-			continue;
-		renderSprite(buf,xx+i*w,yy+line*h,w,h);
+		renderSprite(f.getChar(text[i]),xx+i*w,yy+line*h,w,h);
 	}
 }
 

@@ -25,7 +25,7 @@ public:
 	Actors();
 	~Actors();
 
-	const char* getSprite();
+	int getSprite();
 	int getX();
 	int getY();
 
@@ -34,7 +34,7 @@ public:
 	int getClass();
 
 	animation& getAnimation();
-	void setState(const char* name);
+	void setState(int stt);
 
 	int combo;
 

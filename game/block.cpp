@@ -4,7 +4,8 @@ block::block(){
 	_class = ACTOR_BLOCK;
 
 	_data = 0;
-	setSprite("BLK_barrel");
+	//TODO initialize aniamtion
+	//setSprite("BLK_barrel");
 }
 block::~block(){
 }

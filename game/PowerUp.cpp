@@ -61,7 +61,8 @@ void PowerUp::init(int type){
 		_sprite.init(PWP_detonator);
 	}
 
-	_sprite.setState("idle");
+	//TODO initlize srpite state
+	//_sprite.setState("idle");
 
 	if (type > POWUP_NONE && type < POWUP_END && type != POWUP_ACTIVE)
 		_type = type;

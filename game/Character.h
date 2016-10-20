@@ -3,14 +3,13 @@
 
 #include "Actors.h"
 #include "PowerUp.h"
-#include "bomb.h"
 
 #include <vector>
 #include <list>
 
 using namespace std;
 
-class bomb;
+static const int MAX_BOMBS = 6;
 
 enum GunFireDir{
 	GUN_NONE = 0,
@@ -22,15 +21,15 @@ enum GunFireDir{
 class Character : public Actors{
 private:
 	//int _movTiles;
-	int _speed;
-	int _bombs;
-	int _fire;
+	int _speed;//movment
+	int _capacity;//number of max bombs
+	int _power;//dynamite power
 	int _shield;
 	bool alive;
 
-
-	vector<int> _effects;//power-ups that have active effect 
-	list<bomb*> entries; //lista de bombas
+	bool _effects[ACTIVE_POWUP_SIZE];//power-ups that have active effect 
+	int _bombs[MAX_BOMBS];//index of bombs instanced]
+	int _size;//current number of bombs instanced
 
 
 public:
@@ -55,10 +54,10 @@ public:
 	void AddShield(int s);
 
 	bool haveBomb();
-	void detonate();
+	void detonate(int* child);
 
-	void AddEntry(bomb* b);
-	void RemoveEntry(int x, int y);
+	bool AddDynamite(int index);
+	void RemoveEntry(int index);
 
 	void setAlive(bool b);
 	bool getAlive();

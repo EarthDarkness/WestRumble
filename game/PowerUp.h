@@ -18,6 +18,9 @@ enum POWERUPTYPE{
 	POWUP_END
 };
 
+static const int ACTIVE_POWUP_SIZE = (POWUP_END-POWUP_ACTIVE-1);
+static const int ACTIVE_POWUP_OFFSET = (-POWUP_ACTIVE-1);
+
 class PowerUp : public Actors
 {
 private:

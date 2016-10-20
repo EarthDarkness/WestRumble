@@ -8,10 +8,8 @@
 
 using namespace std;
 
-#define DEF_BOMB_TIMER 5
-#define MAX_BOMB_TIMER 5
-
-class Character;
+static const int DEF_BOMB_TIMER = 5;
+static const int MAX_BOMB_TIMER = 5;
 
 class bomb : public Actors
 {
@@ -19,7 +17,9 @@ private:
 	int _turns;
 	int _fire;
 
-	Character* _character;
+	int _index;//index on the list of bombs
+	int _team;//team of the owner of this bomb, -1 = nature forces of destruction
+	int _owner;//owner id
 
 public:
 	bomb();
@@ -35,11 +35,11 @@ public:
 	bool checkTurnUp();
 	bool checkTurnDown();
 
-	void init(int fire, Character* c);
-	void clear();
+	void init(int fire, int index, int team = -1, int owner = -1);
 
-	//Actors* getActor();
-	Character* getOwner();
+	int getindex();
+	int getTeam();
+	int getOwner();
 
 };
 #endif

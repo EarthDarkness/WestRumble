@@ -14,8 +14,8 @@ using namespace std;
 
 struct Tile{
 	Tile(){
-		bot = "";
-		up = "";
+		bot = 0;
+		up = 0;
 		collision = 0;
 		actor = NULL;
 	}
@@ -28,10 +28,10 @@ struct Tile{
 		actor = a;
 	}
 
-	string bot;
-	string up;
+	int bot;
+	int up;
 	int collision;
-	Actors* actor;
+	Actors* actor;//to index
 
 };
 
@@ -43,16 +43,6 @@ public:
 
 	void setTile(Tile t, int x, int y);
 	void init(int w, int h);
-
-	bool checkPos(int x, int y);
-
-	//begin deprecated
-	bool existPos(int x, int y);
-
-	bool checkPosMove(int x, int y);
-	bool checkPosBomb(int x, int y);
-	bool checkPosSpecial(int x, int y, int powup_type);
-	//end deprecated
 
 	int getGround(int x, int y);
 	Actors* getActor(int x, int y);

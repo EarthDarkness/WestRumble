@@ -20,6 +20,7 @@ public:
 
 
 	movieClipW() {
+		_size = 0;
 		_pos = 0.0f;
 		_current = 0;
 		_speed = 1.0f;

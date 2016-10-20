@@ -1,4 +1,5 @@
 #include "Actors.h"
+#include "Props.h"
 
 Actors::Actors(){
 	_class = ACTOR_ACTOR;
@@ -6,15 +7,14 @@ Actors::Actors(){
 	_x = 0;
 	_y = 0;
 
-	//_sprite = "NULL";
 }
 Actors::~Actors(){
 
 }
 
-const char* Actors::getSprite(){
+int Actors::getSprite(){
 	//return _sprite.c_str();
-	return _sprite.get();
+	return G_Anim[_sprite.get()];
 }
 int Actors::getX(){
 	return _x;
@@ -27,7 +27,8 @@ void Actors::setPos(int x, int y){
 	_y = y;
 }
 void Actors::setSprite(const char* name){
-	_sprite.set("default",name);
+	//_sprite.set("default",name);
+	//IMPLEMENT
 }
 
 int Actors::getClass(){
@@ -37,6 +38,6 @@ int Actors::getClass(){
 animation& Actors::getAnimation(){
 	return _sprite;
 }
-void Actors::setState(const char* name){
-	_sprite.setState(name);
+void Actors::setState(int stt){
+	_sprite.setState(stt);
 }

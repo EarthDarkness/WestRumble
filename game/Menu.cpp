@@ -1,23 +1,24 @@
 #include "Menu.h"
 #include "enum.h"
+#include "Props.h"
 
 Menu::Menu(){
 	_state = MAINMENU;
 
-	_logo.image_id = "GFX_logo";
+	_logo.image_id = IMG_GFX::logo;
 
-	_play.image_id = "UI_play";
-	_tutorial.image_id = "UI_tutorial";
-	_credits.image_id = "UI_credits";
+	_play.image_id = IMG_UI::play;
+	_tutorial.image_id = IMG_UI::tutorial;
+	_credits.image_id = IMG_UI::credits;
 
-	_next.image_id = "UI_move";
-	_prev.image_id = "UI_move";
-	_back.image_id = "exit.png";
+	_next.image_id = IMG_UI::move;
+	_prev.image_id = IMG_UI::move;
+	_back.image_id = IMG_UI::exit;
 
-	_info[0].image_id = "TUT_objectives";
-	_info[1].image_id = "TUT_controls";
-	_info[2].image_id = "TUT_rules";
-	_info[3].image_id = "TUT_actions";
+	_info[0].image_id = IMG_TUT::objectives;
+	_info[1].image_id = IMG_TUT::controls;
+	_info[2].image_id = IMG_TUT::rules;
+	_info[3].image_id = IMG_TUT::actions;
 
 	_page = 0;
 

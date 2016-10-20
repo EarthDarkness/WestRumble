@@ -9,9 +9,9 @@ class Button
 {
 
 public:
-	string image_id;
-	string image_press_id;
-	string sound_press_id;
+	int image_id;
+	int image_press_id;
+	int sound_press_id;
 	SDL_Rect rect;
 
 	Button(); 

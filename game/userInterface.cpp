@@ -365,7 +365,7 @@ void userInterface::markGunFire(Character* entry){
 			int xx = i+entry->getX();
 			int yy = j+entry->getY();
 
-			if(!_tileMap->existPos(xx,yy))
+			if(!_tileMap->inBound(xx,yy))
 				continue;
 
 			Actors ol;
@@ -473,8 +473,8 @@ void userInterface::markDetonator(Character* entry){
 				continue;
 			if(buf->getClass() != ACTOR_BOMB)
 				continue;
-			if(static_cast<bomb*>(buf)->getOwner() != static_cast<Character*>(entry))
-				continue;
+			//if(static_cast<bomb*>(buf)->getOwner() != static_cast<Character*>(entry))
+			//	continue;
 
 			Actors ol;
 			ol.setPos(xx, yy);

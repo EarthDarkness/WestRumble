@@ -17,11 +17,12 @@
 #include "Button.h"
 #include "PowerUp.h"
 #include "block.h"
+#include "bomb.h"
 
 using namespace std;
 
 //int rand();
-class StageData
+/*class StageData
 {
 public:
 	int _turn;
@@ -34,7 +35,7 @@ public:
 
 	StageData();
 	StageData();
-};
+};*/
 
 class Stage
 {

@@ -1,8 +1,8 @@
 #include "Button.h"
 Button::Button(){
-	image_id = "";
-	image_press_id = "";
-	sound_press_id = "";
+	image_id = 0;
+	image_press_id = 0;
+	sound_press_id = 0;
 }
 Button::~Button(){
 

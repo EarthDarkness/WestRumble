@@ -271,7 +271,7 @@ void motion::update(){
 		}
 	}
 	if(!_animDone){
-		_animDone = _anim->isDone(_anim->getState());
+		_animDone = _anim->isDone();
 	}
 }
 bool motion::isDone(){

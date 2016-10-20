@@ -11,8 +11,8 @@ resources::~resources(){
 }
 
 void resources::clear(){
-	for(map<string,SDL_Texture*>::iterator it = image.begin();it != image.end();++it)
-		SDL_DestroyTexture(it->second);
+	for(int i=0;i<image.size();++i)
+		SDL_DestroyTexture(image[i]);
 	for(map<string,Mix_Chunk*>::iterator it = sound.begin();it != sound.end();++it)
 		Mix_FreeChunk(it->second);
 	for(map<string,Mix_Music*>::iterator it = music.begin();it != music.end();++it)
@@ -20,10 +20,9 @@ void resources::clear(){
 	
 }
 
-void resources::eraseImage(const char* name){
-	map<string, SDL_Texture*>::iterator it = image.find(name);
-	if(it != image.end())
-		SDL_DestroyTexture(it->second);
+void resources::eraseImage(int index){
+	SDL_DestroyTexture(image[index]);
+	image[index] = NULL;
 }
 void resources::eraseSound(const char* name){
 	map<string,Mix_Chunk*>::iterator it = sound.find(name);
@@ -36,15 +35,15 @@ void resources::eraseMusic(const char* name){
 		Mix_FreeMusic(it->second);
 }
 
-int resources::loadImage(const char* path, const char* name){
+int resources::loadImage(const char* path){
 	SDL_Texture* buf = NULL;
 	buf = IMG_LoadTexture(engRenderer, path);
 	if(buf == NULL){
 		cerr << "Couldn't load image " << path << endl;
 		return -1;
 	}else{
-		image[name] = buf;
-		return 0;
+		image.push_back(buf);
+		return image.size()-1;
 	}
 }
 int resources::loadSound(const char* path, const char* name){
@@ -70,10 +69,10 @@ int resources::loadMusic(const char* path, const char* name){
 	}
 }
 
-SDL_Texture* resources::getImage(const char* name){
-	if(image.find(name) == image.end())
+SDL_Texture* resources::getImage(int index){
+	if(index < 0 || index >= image.size())
 		return NULL;
-	return image[name];
+	return image[index];
 }
 Mix_Chunk* resources::getSound(const char* name){
 	if(sound.find(name) == sound.end())

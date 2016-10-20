@@ -1,40 +1,7 @@
 #include "Game.h"
 #include "block.h"
 #include "NetProtocol.h"
-
-animation CHR_char_P1;
-animation CHR_char_P2;
-
-animation PWP_barrel;
-animation PWP_boot;
-animation PWP_detonator;
-animation PWP_dynamite;
-animation PWP_fuse;
-animation PWP_glove;
-animation PWP_gunpowder;
-animation PWP_rope;
-animation PWP_star;
-
-animation BMB_S_0;
-animation BMB_S_30;
-animation BMB_S_80;
-animation BMB_S_180;
-animation BMB_S_250;
-animation BMB_S_300;
-
-animation BMB_T_0;
-animation BMB_T_30;
-animation BMB_T_80;
-animation BMB_T_180;
-animation BMB_T_250;
-animation BMB_T_300;
-
-animation BMB_H_0;
-animation BMB_H_30;
-animation BMB_H_80;
-animation BMB_H_180;
-animation BMB_H_250;
-animation BMB_H_300;
+#include "Props.h"
 
 Game::Game(){
 	selected = NULL;
@@ -88,13 +55,13 @@ void Game::setGUI(){
 	int sh = height_screen-2*(space+ss+dist);
 	
 
-	button_end_turn.image_id = "UI_endturn";
+	button_end_turn.image_id = IMG_UI::endturn;
 	button_end_turn.setPos(width_screen-dist-ss/2,height_screen-dist-ss/2,dist,dist);
 
-	button_move_left.image_id = "UI_move";
-	button_move_right.image_id = "UI_move";
-	button_move_up.image_id = "UI_move";
-	button_move_down.image_id = "UI_move";
+	button_move_left.image_id = IMG_UI::move;
+	button_move_right.image_id = IMG_UI::move;
+	button_move_up.image_id = IMG_UI::move;
+	button_move_down.image_id = IMG_UI::move;
 
 	button_move_left.setPos(space,space+ss+dist,ss,sh);
 	button_move_right.setPos(width_screen-space-ss,space+ss+dist,ss,sh);
@@ -108,201 +75,15 @@ void Game::setGUI(){
 void Game::loadResources(){
 	engine._res.loadMusic("resources/lilywest.wav","BGM");
 
-	engine._res.loadImage("resources/image/GFX_logo.png", "GFX_logo");
-	engine._res.loadImage("resources/image/BGN_title.png", "BGN_title");
-	engine._res.loadImage("resources/image/UI_play.png", "UI_play");
-	engine._res.loadImage("resources/image/UI_tutorial.png", "UI_tutorial");
-	engine._res.loadImage("resources/image/UI_credits.png", "UI_credits");
+	loadProps(engine._res);
 
-	
-	engine._res.loadImage("resources/image/TUT_actions.png", "TUT_actions");
-	engine._res.loadImage("resources/image/TUT_controls.png", "TUT_controls");
-	engine._res.loadImage("resources/image/TUT_objectives.png", "TUT_objectives");
-	engine._res.loadImage("resources/image/TUT_rules.png", "TUT_rules");
-
-	engine._res.loadImage("resources/image/UI_move.png", "UI_move");
-	engine._res.loadImage("resources/image/UI_endturn.png", "UI_endturn");
-
-	engine._res.loadImage("resources/image/OL_bomb.png", "OL_bomb");
-	engine._res.loadImage("resources/image/OL_barrel.png", "OL_barrel");
-	engine._res.loadImage("resources/image/OL_downtimer.png", "OL_downtimer");
-	engine._res.loadImage("resources/image/OL_uptimer.png", "OL_uptimer");
-	engine._res.loadImage("resources/image/OL_gunfire.png", "OL_gunfire");
-	engine._res.loadImage("resources/image/OL_rope.png", "OL_rope");
-	engine._res.loadImage("resources/image/OL_throw.png", "OL_throw");
-	engine._res.loadImage("resources/image/OL_walk.png", "OL_walk");
-	engine._res.loadImage("resources/image/OL_marker.png", "OL_marker");
-
-	engine._res.loadImage("resources/image/GFX_ACT_barrel.png","GFX_ACT_barrel");
-	engine._res.loadImage("resources/image/GFX_ACT_bomb.png","GFX_ACT_bomb");
-	engine._res.loadImage("resources/image/GFX_ACT_detonate.png","GFX_ACT_detonate");
-	engine._res.loadImage("resources/image/GFX_ACT_grab.png","GFX_ACT_grab");
-	engine._res.loadImage("resources/image/GFX_ACT_move.png","GFX_ACT_move");
-	engine._res.loadImage("resources/image/GFX_ACT_shot.png","GFX_ACT_shot");
-	engine._res.loadImage("resources/image/GFX_ACT_stun.png","GFX_ACT_stun");
-	engine._res.loadImage("resources/image/GFX_ACT_throw.png","GFX_ACT_throw");
-	engine._res.loadImage("resources/image/GFX_ACT_timerdown.png","GFX_ACT_timerdown");
-	engine._res.loadImage("resources/image/GFX_ACT_timerup.png","GFX_ACT_timerup");
-
-	engine._res.loadImage("resources/image/BLK_box.png", "BLK_box");
-	engine._res.loadImage("resources/image/BLK_barrel.png", "BLK_barrel");
-
-	//engine._res.loadImage("resources/image/turn.png", "turn.png");
-
-	engine._res.loadImage("resources/image/jogador1.png", "jogador1.png");
-	engine._res.loadImage("resources/image/jogador2.png", "jogador2.png");
-	engine._res.loadImage("resources/image/draw.png", "draw.png");
-	
-	animation::loadRes("resources/PWP_barrel.txt", engine._res);
-	animation::loadRes("resources/PWP_boot.txt", engine._res);
-	animation::loadRes("resources/PWP_detonator.txt", engine._res);
-	animation::loadRes("resources/PWP_dynamite.txt", engine._res);
-	animation::loadRes("resources/PWP_fuse.txt", engine._res);
-	animation::loadRes("resources/PWP_glove.txt", engine._res);
-	animation::loadRes("resources/PWP_gunpowder.txt", engine._res);
-	animation::loadRes("resources/PWP_rope.txt", engine._res);
-	animation::loadRes("resources/PWP_star.txt", engine._res);
-	//
-	animation::loadRes("resources/CHR_black_idle_left.txt", engine._res);
-	animation::loadRes("resources/CHR_black_idle_right.txt", engine._res);
-	animation::loadRes("resources/CHR_black_idle_up.txt", engine._res);
-	animation::loadRes("resources/CHR_black_idle_down.txt", engine._res);
-	animation::loadRes("resources/CHR_black_ready_left.txt", engine._res);
-	animation::loadRes("resources/CHR_black_ready_right.txt", engine._res);
-	animation::loadRes("resources/CHR_black_ready_up.txt", engine._res);
-	animation::loadRes("resources/CHR_black_ready_down.txt", engine._res);
-	animation::loadRes("resources/CHR_black_shot_down.txt", engine._res);
-	animation::loadRes("resources/CHR_black_shot_left.txt", engine._res);
-	animation::loadRes("resources/CHR_black_shot_right.txt", engine._res);
-	animation::loadRes("resources/CHR_black_shot_up.txt", engine._res);
-
-	animation::loadRes("resources/CHR_white_idle_left.txt", engine._res);
-	animation::loadRes("resources/CHR_white_idle_right.txt", engine._res);
-	animation::loadRes("resources/CHR_white_idle_up.txt", engine._res);
-	animation::loadRes("resources/CHR_white_idle_down.txt", engine._res);
-	animation::loadRes("resources/CHR_white_ready_left.txt", engine._res);
-	animation::loadRes("resources/CHR_white_ready_right.txt", engine._res);
-	animation::loadRes("resources/CHR_white_ready_up.txt", engine._res);
-	animation::loadRes("resources/CHR_white_ready_down.txt", engine._res);
-	animation::loadRes("resources/CHR_white_shot_down.txt", engine._res);
-	animation::loadRes("resources/CHR_white_shot_left.txt", engine._res);
-	animation::loadRes("resources/CHR_white_shot_right.txt", engine._res);
-	animation::loadRes("resources/CHR_white_shot_up.txt", engine._res);
-	//
-	animation::loadRes("resources/VFX_exp.txt", engine._res);
-	/*
-	VFX_gunfire_down.txt
-	VFX_gunfire_left.txt
-	VFX_gunfire_right.txt
-	VFX_gunfire_up.txt
-	VFX_gunflare_down.txt
-	VFX_gunflare_left.txt
-	VFX_gunflare_right.txt
-	VFX_gunflare_up.txt
-	*/
-	animation::loadRes("resources/VFX_gunfire_down.txt", engine._res);
-	animation::loadRes("resources/VFX_gunfire_left.txt", engine._res);
-	animation::loadRes("resources/VFX_gunfire_right.txt", engine._res);
-	animation::loadRes("resources/VFX_gunfire_up.txt", engine._res);
-
-	animation::loadRes("resources/VFX_gunflare_down.txt", engine._res);
-	animation::loadRes("resources/VFX_gunflare_left.txt", engine._res);
-	animation::loadRes("resources/VFX_gunflare_right.txt", engine._res);
-	animation::loadRes("resources/VFX_gunflare_up.txt", engine._res);
-	
-
-	PWP_barrel.loadAnim("resources/PWP_barrel.txt");
-	PWP_boot.loadAnim("resources/PWP_boot.txt");
-	PWP_detonator.loadAnim("resources/PWP_detonator.txt");
-	PWP_dynamite.loadAnim("resources/PWP_dynamite.txt");
-	PWP_fuse.loadAnim("resources/PWP_fuse.txt");
-	PWP_glove.loadAnim("resources/PWP_glove.txt");
-	PWP_gunpowder.loadAnim("resources/PWP_gunpowder.txt");
-	PWP_rope.loadAnim("resources/PWP_rope.txt");
-	PWP_star.loadAnim("resources/PWP_star.txt");
-	//
-	CHR_char_P1.loadAnim("resources/CHR_black_idle_left.txt");
-	CHR_char_P1.loadAnim("resources/CHR_black_idle_right.txt");
-	CHR_char_P1.loadAnim("resources/CHR_black_idle_up.txt");
-	CHR_char_P1.loadAnim("resources/CHR_black_idle_down.txt");
-	CHR_char_P1.loadAnim("resources/CHR_black_ready_left.txt");
-	CHR_char_P1.loadAnim("resources/CHR_black_ready_right.txt");
-	CHR_char_P1.loadAnim("resources/CHR_black_ready_up.txt");
-	CHR_char_P1.loadAnim("resources/CHR_black_ready_down.txt");
-	CHR_char_P1.loadAnim("resources/CHR_black_shot_down.txt");
-	CHR_char_P1.loadAnim("resources/CHR_black_shot_left.txt");
-	CHR_char_P1.loadAnim("resources/CHR_black_shot_right.txt");
-	CHR_char_P1.loadAnim("resources/CHR_black_shot_up.txt");
-
-	CHR_char_P2.loadAnim("resources/CHR_white_idle_left.txt");
-	CHR_char_P2.loadAnim("resources/CHR_white_idle_right.txt");
-	CHR_char_P2.loadAnim("resources/CHR_white_idle_up.txt");
-	CHR_char_P2.loadAnim("resources/CHR_white_idle_down.txt");
-	CHR_char_P2.loadAnim("resources/CHR_white_ready_left.txt");
-	CHR_char_P2.loadAnim("resources/CHR_white_ready_right.txt");
-	CHR_char_P2.loadAnim("resources/CHR_white_ready_up.txt");
-	CHR_char_P2.loadAnim("resources/CHR_white_ready_down.txt");
-	CHR_char_P2.loadAnim("resources/CHR_white_shot_down.txt");
-	CHR_char_P2.loadAnim("resources/CHR_white_shot_left.txt");
-	CHR_char_P2.loadAnim("resources/CHR_white_shot_right.txt");
-	CHR_char_P2.loadAnim("resources/CHR_white_shot_up.txt");
-
-	animation::loadRes("resources/BMB_S_0.txt", engine._res);
-	animation::loadRes("resources/BMB_S_30.txt", engine._res);
-	animation::loadRes("resources/BMB_S_80.txt", engine._res);
-	animation::loadRes("resources/BMB_S_180.txt", engine._res);
-	animation::loadRes("resources/BMB_S_250.txt", engine._res);
-	animation::loadRes("resources/BMB_S_300.txt", engine._res);
-
-	animation::loadRes("resources/BMB_T_0.txt", engine._res);
-	animation::loadRes("resources/BMB_T_30.txt", engine._res);
-	animation::loadRes("resources/BMB_T_80.txt", engine._res);
-	animation::loadRes("resources/BMB_T_180.txt", engine._res);
-	animation::loadRes("resources/BMB_T_250.txt", engine._res);
-	animation::loadRes("resources/BMB_T_300.txt", engine._res);
-
-	animation::loadRes("resources/BMB_H_0.txt", engine._res);
-	animation::loadRes("resources/BMB_H_30.txt", engine._res);
-	animation::loadRes("resources/BMB_H_80.txt", engine._res);
-	animation::loadRes("resources/BMB_H_180.txt", engine._res);
-	animation::loadRes("resources/BMB_H_250.txt", engine._res);
-	animation::loadRes("resources/BMB_H_300.txt", engine._res);
-	//
-	//
-	BMB_S_0.loadAnim("resources/BMB_S_0.txt");
-	BMB_S_30.loadAnim("resources/BMB_S_30.txt");
-	BMB_S_80.loadAnim("resources/BMB_S_80.txt");
-	BMB_S_180.loadAnim("resources/BMB_S_180.txt");
-	BMB_S_250.loadAnim("resources/BMB_S_250.txt");
-	BMB_S_300.loadAnim("resources/BMB_S_300.txt");
-
-	BMB_T_0.loadAnim("resources/BMB_T_0.txt");
-	BMB_T_30.loadAnim("resources/BMB_T_30.txt");
-	BMB_T_80.loadAnim("resources/BMB_T_80.txt");
-	BMB_T_180.loadAnim("resources/BMB_T_180.txt");
-	BMB_T_250.loadAnim("resources/BMB_T_250.txt");
-	BMB_T_300.loadAnim("resources/BMB_T_300.txt");
-
-	BMB_H_0.loadAnim("resources/BMB_H_0.txt");
-	BMB_H_30.loadAnim("resources/BMB_H_30.txt");
-	BMB_H_80.loadAnim("resources/BMB_H_80.txt");
-	BMB_H_180.loadAnim("resources/BMB_H_180.txt");
-	BMB_H_250.loadAnim("resources/BMB_H_250.txt");
-	BMB_H_300.loadAnim("resources/BMB_H_300.txt");
-	
 	engine.loadFont();
 	shop.load(engine._res);
 
-	engine._res.loadImage("resources/image/GFX_UI_bomb.png","GFX_UI_bomb");
-	engine._res.loadImage("resources/image/GFX_UI_gunpowder.png","GFX_UI_gunpowder");
-	engine._res.loadImage("resources/image/GFX_UI_boot.png","GFX_UI_boot");
-	engine._res.loadImage("resources/image/GFX_UI_timer.png","GFX_UI_timer");
-
-
-	_speed = "GFX_UI_boot";
-	_bombs = "GFX_UI_bomb";
-	_fire = "GFX_UI_gunpowder";
-	_turn = "GFX_UI_timer";
+	_speed = IMG_GFX::boot;
+	_bombs = IMG_GFX::bomb;
+	_fire = IMG_GFX::gunpowder;
+	_turn = IMG_GFX::timer;
 		
 }
 
@@ -597,17 +378,17 @@ void Game::render()
 	switch (state)
 	{
 	case STATEMENU:{
-		engine._render.renderSprite("BGN_title",0,0,width_screen,height_screen);
+		engine._render.renderSprite(IMG_GFX::wood,0,0,width_screen,height_screen);
 		renderMenu();
 		break;
 				   }
 	case STATESHOP_A:{
-		engine._render.renderSprite("BGN_title",0,0,width_screen,height_screen);
+		engine._render.renderSprite(IMG_GFX::wood,0,0,width_screen,height_screen);
 		shop.render(engine);
 		break;
 					 }
 	case STATESHOP_B:{
-		engine._render.renderSprite("BGN_title",0,0,width_screen,height_screen);
+		engine._render.renderSprite(IMG_GFX::wood,0,0,width_screen,height_screen);
 		shop.render(engine);
 		break;
 					 }
@@ -616,7 +397,7 @@ void Game::render()
 		break;
 				   }
 	case STATEEND:{
-		engine._render.renderSprite("BGN_title",0,0,width_screen,height_screen);
+		engine._render.renderSprite(IMG_GFX::wood,0,0,width_screen,height_screen);
 		renderEnd();
 		break;
 					}
@@ -628,19 +409,19 @@ void Game::render()
 }
 void Game::renderMenu(){
 	if(menu._state == MAINMENU){
-		engine._render.renderSprite(menu._logo.image_id.c_str(),menu._logo.rect.x,menu._logo.rect.y,menu._logo.rect.w,menu._logo.rect.h);
+		engine._render.renderSprite(menu._logo.image_id,menu._logo.rect.x,menu._logo.rect.y,menu._logo.rect.w,menu._logo.rect.h);
 			
-		engine._render.renderSprite(menu._play.image_id.c_str(), menu._play.rect.x, menu._play.rect.y, menu._play.rect.w, menu._play.rect.h);
-		engine._render.renderSprite(menu._tutorial.image_id.c_str(), menu._tutorial.rect.x, menu._tutorial.rect.y, menu._tutorial.rect.w, menu._tutorial.rect.h);
-		engine._render.renderSprite(menu._credits.image_id.c_str(), menu._credits.rect.x, menu._credits.rect.y, menu._credits.rect.w, menu._credits.rect.h);
+		engine._render.renderSprite(menu._play.image_id, menu._play.rect.x, menu._play.rect.y, menu._play.rect.w, menu._play.rect.h);
+		engine._render.renderSprite(menu._tutorial.image_id, menu._tutorial.rect.x, menu._tutorial.rect.y, menu._tutorial.rect.w, menu._tutorial.rect.h);
+		engine._render.renderSprite(menu._credits.image_id, menu._credits.rect.x, menu._credits.rect.y, menu._credits.rect.w, menu._credits.rect.h);
 	}else if(menu._state == STAGEMENU){
 
 	}else if(menu._state == TUTORIALMENU){
-		engine._render.renderSprite(menu._next.image_id.c_str(), menu._next.rect.x, menu._next.rect.y, menu._next.rect.w, menu._next.rect.h);
-		engine._render.renderSprite(menu._prev.image_id.c_str(), menu._prev.rect.x, menu._prev.rect.y, menu._prev.rect.w, menu._prev.rect.h);
-		engine._render.renderSprite(menu._back.image_id.c_str(), menu._back.rect.x, menu._back.rect.y, menu._back.rect.w, menu._back.rect.h);
+		engine._render.renderSprite(menu._next.image_id, menu._next.rect.x, menu._next.rect.y, menu._next.rect.w, menu._next.rect.h);
+		engine._render.renderSprite(menu._prev.image_id, menu._prev.rect.x, menu._prev.rect.y, menu._prev.rect.w, menu._prev.rect.h);
+		engine._render.renderSprite(menu._back.image_id, menu._back.rect.x, menu._back.rect.y, menu._back.rect.w, menu._back.rect.h);
 
-		engine._render.renderSprite(menu._info[menu._page].image_id.c_str(), menu._info[menu._page].rect.x, menu._info[menu._page].rect.y, menu._info[menu._page].rect.w, menu._info[menu._page].rect.h);
+		engine._render.renderSprite(menu._info[menu._page].image_id, menu._info[menu._page].rect.x, menu._info[menu._page].rect.y, menu._info[menu._page].rect.w, menu._info[menu._page].rect.h);
 	}
 	
 }
@@ -654,41 +435,41 @@ void Game::renderStage()
 
 
 	//render button right move
-	engine._render.renderSprite(button_move_right.image_id.c_str(), button_move_right.rect.x, button_move_right.rect.y, button_move_right.rect.w, button_move_right.rect.h);
+	engine._render.renderSprite(button_move_right.image_id, button_move_right.rect.x, button_move_right.rect.y, button_move_right.rect.w, button_move_right.rect.h);
 
 	//render button left move
-	engine._render.renderSprite(button_move_left.image_id.c_str(), button_move_left.rect.x, button_move_left.rect.y, button_move_left.rect.w, button_move_left.rect.h);
+	engine._render.renderSprite(button_move_left.image_id, button_move_left.rect.x, button_move_left.rect.y, button_move_left.rect.w, button_move_left.rect.h);
 
 	//render button up move
-	engine._render.renderSprite(button_move_up.image_id.c_str(), button_move_up.rect.x, button_move_up.rect.y, button_move_up.rect.w, button_move_up.rect.h);
+	engine._render.renderSprite(button_move_up.image_id, button_move_up.rect.x, button_move_up.rect.y, button_move_up.rect.w, button_move_up.rect.h);
 
 	//render button down move
-	engine._render.renderSprite(button_move_down.image_id.c_str(), button_move_down.rect.x, button_move_down.rect.y, button_move_down.rect.w, button_move_down.rect.h);
+	engine._render.renderSprite(button_move_down.image_id, button_move_down.rect.x, button_move_down.rect.y, button_move_down.rect.w, button_move_down.rect.h);
 
 	//render button end turn
-	engine._render.renderSprite(button_end_turn.image_id.c_str(), button_end_turn.rect.x, button_end_turn.rect.y, button_end_turn.rect.w, button_end_turn.rect.h);
+	engine._render.renderSprite(button_end_turn.image_id, button_end_turn.rect.x, button_end_turn.rect.y, button_end_turn.rect.w, button_end_turn.rect.h);
 
 
 	//render status
 	if(visualized != NULL){
 		if(visualized->getClass() == ACTOR_CHAR){
 			//render speed
-			engine._render.renderSprite(_speed.c_str(), -15, -15);
+			engine._render.renderSprite(_speed, -15, -15);
 			engine._render.renderText(i_to_str(((Character*)visualized)->getSpeed()).c_str(), engine._font, 0 + 25 + 20, 0);
 			//render bomb
-			engine._render.renderSprite(_bombs.c_str(), -15, 50-15);
+			engine._render.renderSprite(_bombs, -15, 50-15);
 			engine._render.renderText(i_to_str(((Character*)visualized)->getBombs()).c_str(), engine._font, 0 + 25 + 20, 50);
 			//render fire
-			engine._render.renderSprite(_fire.c_str(), -15, 100-15);
+			engine._render.renderSprite(_fire, -15, 100-15);
 			engine._render.renderText(i_to_str(((Character*)visualized)->getFire()).c_str(), engine._font, 0 + 25 + 20, 100);
 		} else if(visualized->getClass() == ACTOR_BOMB){
 
 			//render fire
-			engine._render.renderSprite(_fire.c_str(), -15, -15);
+			engine._render.renderSprite(_fire, -15, -15);
 			engine._render.renderText(i_to_str(((bomb*)visualized)->getFire()).c_str(), engine._font, 0 + 25 + 20, 0);
 
 			//render turn
-			engine._render.renderSprite(_turn.c_str(), -15, 50-15);
+			engine._render.renderSprite(_turn, -15, 50-15);
 			engine._render.renderText(i_to_str(((bomb*)visualized)->getTurn()).c_str(), engine._font, 0 + 25 + 20, 50);
 
 		}
@@ -698,10 +479,10 @@ void Game::renderStage()
 
 	//render player
 	if (player == 0){
-		engine._render.renderSprite("jogador1.png", 0 + 20 + 200, 0);
+		engine._render.renderSprite(IMG_GFX::win1, 0 + 20 + 200, 0);
 	}
 	else if (player == 1){
-		engine._render.renderSprite("jogador2.png", 0 + 20 + 200, 0);
+		engine._render.renderSprite(IMG_GFX::win2, 0 + 20 + 200, 0);
 	}
 	else if (player == 2)
 	{
@@ -712,11 +493,11 @@ void Game::renderStage()
 }
 void Game::renderEnd(){
 	if(winner == 0){
-		engine._render.renderSprite("jogador1.png", width_screen/2 - 50, height_screen/2 - 20);
+		engine._render.renderSprite(IMG_GFX::win1, width_screen/2 - 50, height_screen/2 - 20);
 	}else if(winner == 1){
-		engine._render.renderSprite("jogador2.png", width_screen/2 - 50, height_screen/2 - 20);
+		engine._render.renderSprite(IMG_GFX::win2, width_screen/2 - 50, height_screen/2 - 20);
 	}else{
-		engine._render.renderSprite("draw.png", width_screen/2 - 50, height_screen/2 - 20);
+		engine._render.renderSprite(IMG_GFX::tie, width_screen/2 - 50, height_screen/2 - 20);
 	}
 
 }
@@ -759,11 +540,12 @@ void Game::proccessMessages(){
 			Character* act = &(curteam->getCharacter(pid));
 
 			bomb b;
-			b.init(act->getFire(),act);
+			b.init(act->getFire(),stage.bombs.size(),player,pid);
 			if(act->queryPowerUp(POWUP_DETONATOR)) b.setTurn(-1);
 
 			stage.bombs.push_back(b);
-			act->AddEntry((bomb*)&stage.bombs.back());
+			//act->AddEntry((bomb*)&stage.bombs.back());
+			act->AddDynamite(stage.bombs.size());
 			stage.instantiateActor(&stage.bombs.back(), xx, yy);
 
 			curteam->actions[pid] = CHAR_END;
@@ -778,16 +560,16 @@ void Game::proccessMessages(){
 
 			if(dir == WRP_RIGHT){
 				act->direction = GUN_E;
-				act->setState("ready_right");
+				act->setState(ANIM_READY_R);
 			}else if(dir == WRP_LEFT){
 				act->direction = GUN_W;
-				act->setState("ready_left");
+				act->setState(ANIM_READY_L);
 			}else if(dir == WRP_DOWN){
 				act->direction = GUN_S;
-				act->setState("ready_down");
+				act->setState(ANIM_READY_D);
 			}else if(dir == WRP_UP){
 				act->direction = GUN_N;
-				act->setState("ready_up");
+				act->setState(ANIM_READY_U);
 			}
 
 			act->shot = false;
@@ -1089,19 +871,19 @@ void Game::updateAction(int x, int y){
 
 		if (dx == 1){
 			((Character*)selected)->direction = GUN_E;
-			((Character*)selected)->setState("ready_right");
+			((Character*)selected)->setState(ANIM_READY_R);
 			cout << "E" << endl;
 		}else if (dx == -1){
 			((Character*)selected)->direction = GUN_W;
-			((Character*)selected)->setState("ready_left");
+			((Character*)selected)->setState(ANIM_READY_L);
 			cout << "W" << endl;
 		}else if (dy == 1){
 			((Character*)selected)->direction = GUN_S;
-			((Character*)selected)->setState("ready_down");
+			((Character*)selected)->setState(ANIM_READY_D);
 			cout << "S" << endl;
 		}else if (dy == -1){
 			((Character*)selected)->direction = GUN_N;
-			((Character*)selected)->setState("ready_up");
+			((Character*)selected)->setState(ANIM_READY_U);
 			cout << "N" << endl;
 		}
 
@@ -1244,13 +1026,13 @@ void Game::turnField(){
 		//tbuf->_state[j].setState(ACTIONGUNFIRE,STATE_STAGE2);
 
 		if(tbuf->getCharacter(j).direction == GUN_N){
-			tbuf->getCharacter(j).setState("shot_up");
+			tbuf->getCharacter(j).setState(ANIM_SHOT_U);
 		}else if(tbuf->getCharacter(j).direction == GUN_S){
-			tbuf->getCharacter(j).setState("shot_down");
+			tbuf->getCharacter(j).setState(ANIM_SHOT_D);
 		}else if(tbuf->getCharacter(j).direction == GUN_W){
-			tbuf->getCharacter(j).setState("shot_left");
+			tbuf->getCharacter(j).setState(ANIM_SHOT_L);
 		}else if(tbuf->getCharacter(j).direction == GUN_E){
-			tbuf->getCharacter(j).setState("shot_right");
+			tbuf->getCharacter(j).setState(ANIM_SHOT_R);
 		}
 	}
 	}
@@ -1287,13 +1069,13 @@ void Game::turnField(){
 		if(stage.getTeam(player).getCharacter(i).getAlive()){
 			if(stage.getTeam(player)._state[i].getState(ACTIONGUNFIRE) == 1){
 				if(stage.getTeam(player).getCharacter(i).direction == GUN_E){
-					stage.getTeam(player).getCharacter(i).setState("idle_right");
+					stage.getTeam(player).getCharacter(i).setState(ANIM_IDLE_R);
 				}else if(stage.getTeam(player).getCharacter(i).direction == GUN_W){
-					stage.getTeam(player).getCharacter(i).setState("idle_left");
+					stage.getTeam(player).getCharacter(i).setState(ANIM_IDLE_L);
 				}else if(stage.getTeam(player).getCharacter(i).direction == GUN_N){
-					stage.getTeam(player).getCharacter(i).setState("idle_up");
+					stage.getTeam(player).getCharacter(i).setState(ANIM_IDLE_U);
 				}else if(stage.getTeam(player).getCharacter(i).direction == GUN_S){
-					stage.getTeam(player).getCharacter(i).setState("idle_down");
+					stage.getTeam(player).getCharacter(i).setState(ANIM_IDLE_D);
 				}
 			}
 		}

@@ -89,11 +89,11 @@ private:
 	Button button_end_turn;
 
 	//status
-	string _speed;
-	string _bombs;
-	string _fire;
-	string _shield;
-	string _turn;
+	int _speed;
+	int _bombs;
+	int _fire;
+	int _shield;
+	int _turn;
 
 
 public:

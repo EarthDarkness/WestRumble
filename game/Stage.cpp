@@ -2,6 +2,7 @@
 #include <time.h>
 //#include <random>
 #include "enum.h"
+#include "Props.h"
 
 #define SUDDENDEATH 20
 
@@ -27,8 +28,8 @@ void Stage::init(font* f){
 
 }*/
 
-int Stage::loadStage(const char* path, resources& resources)
-{
+//TODO fix redundance
+int Stage::loadStage(const char* path, resources& res){
 	int width;
 	int height;
 	int num_ids;
@@ -54,52 +55,41 @@ int Stage::loadStage(const char* path, resources& resources)
 		int id;
 		int collision;
 
-		//stage.getline(line,512);
-					// int string string int
-		//sscanf(line, "%d %s %s %d", &id, botton, top, &collision);
-
 		stage >> id;
 		stage >> botton;
 		stage >> top;
 		stage >> collision;
 
-		/*
-		stage >> id;
+		
 
-		Tile t;
-		stage >> t.bot;
-		stage >> t.top;
-		stage >> t.hit;
-		*/
-
-		paths[id].bot.assign(botton);
-		paths[id].up.assign(top);
+		paths[id].bot = res.loadImage(botton);
+		paths[id].up = res.loadImage(top);
 		paths[id].collision = collision;
 	}
 
-	list<string> names;
-	
-	//percorre todos os caminhos das imagens adicionando em uma lista
-	for (map<int, Tile>::iterator it = paths.begin(); it != paths.end(); it++){
-		names.push_back(it->second.bot);
-		names.push_back(it->second.up);
-	}
-
-	//remove todos os repetidos
-	names.sort();
-	names.unique();
-
-	//carrega todas as imagens da lista (pela referencia de rousources)
-	for (list<string>::iterator it = names.begin(); it != names.end(); it++){
-
-		if (strcmp(it->c_str(), "NULL") != 0){
-			string s;
-			s.assign("resources/image/");
-			s.append(it->c_str());
-			resources.loadImage(s.c_str(), it->c_str());
-		}
-	}
-	
+	//list<string> names;
+	//
+	////percorre todos os caminhos das imagens adicionando em uma lista
+	//for (map<int, Tile>::iterator it = paths.begin(); it != paths.end(); it++){
+	//	names.push_back(it->second.bot);
+	//	names.push_back(it->second.up);
+	//}
+	//
+	////remove todos os repetidos
+	//names.sort();
+	//names.unique();
+	//
+	////carrega todas as imagens da lista (pela referencia de rousources)
+	//for (list<string>::iterator it = names.begin(); it != names.end(); it++){
+	//
+	//	if (strcmp(it->c_str(), "NULL") != 0){
+	//		string s;
+	//		s.assign("resources/image/");
+	//		s.append(it->c_str());
+	//		resources.loadImage(s.c_str(), it->c_str());
+	//	}
+	//}
+	//
 	//setar id das imagens, no tile map
 
 	_tileMap.init(width, height);
@@ -233,20 +223,21 @@ void Stage::renderActors(renderer& renderer){
 	renderer.renderActorInMapCenter(_action,_camera,-15,-75);
 
 	for(int i=0;i<_vfx.size();++i){
-		if(strcmp(_vfx[i].getAnimation().getState(),"gunfire_right")==0 || strcmp(_vfx[i].getAnimation().getState(),"gunflare_right")==0){
+		if(_vfx[i].getAnimation().getState() == ANIM_IDLE_R){
 			renderer.renderActorInMapCenter(_vfx[i],_camera,15,-15);
-		}else if(strcmp(_vfx[i].getAnimation().getState(),"gunfire_down")==0 || strcmp(_vfx[i].getAnimation().getState(),"gunflare_down")==0){
+		}else if(_vfx[i].getAnimation().getState() == ANIM_IDLE_D){
 			renderer.renderActorInMapCenter(_vfx[i],_camera,-15,-15);
-		}else if(strcmp(_vfx[i].getAnimation().getState(),"gunfire_left")==0 || strcmp(_vfx[i].getAnimation().getState(),"gunflare_left")==0){
+		}if(_vfx[i].getAnimation().getState() == ANIM_IDLE_L){
 			renderer.renderActorInMapCenter(_vfx[i],_camera,-15,-15);
-		}else if(strcmp(_vfx[i].getAnimation().getState(),"gunfire_up")==0 || strcmp(_vfx[i].getAnimation().getState(),"gunflare_up")==0){
+		}if(_vfx[i].getAnimation().getState() == ANIM_IDLE_U){
 			renderer.renderActorInMapCenter(_vfx[i],_camera,15,-15);
 		}else{
 			renderer.renderActorInMapCenter(_vfx[i],_camera);
 		}
+		
 	}
 	if(!_vfx.empty()){
-		if(_vfx.back().getAnimation().isDone(_vfx.back().getAnimation().getState())){
+		if(_vfx.back().getAnimation().isDone()){
 			_vfx.clear();
 		}
 	}
@@ -293,7 +284,7 @@ void Stage::dropBomb(int num){
 			continue;
 
 		bomb b;
-		b.init(2,NULL);
+		b.init(2,bombs.size());
 		b.setTurn(2);
 		bombs.push_back(b);
 		instantiateActor(&bombs.back(),xx,yy);
@@ -412,14 +403,14 @@ void Stage::checkExplosion(bomb* b, vector<Actors*>& out){
 				if(ap==-1){
 					//fx.setSprite("explosao.png");
 					_vfx.push_back(fx);
-					_vfx.back().getAnimation().loadAnim("resources/VFX_exp.txt");
-					_vfx.back().getAnimation().setState("exp");
-				}else if(strcmp(_vfx[ap].getAnimation().getState(),"exp")!=0){
+					_vfx.back().getAnimation().init(VFX_explosion);
+
+				}/*else if(strcmp(_vfx[ap].getAnimation().getState(),"exp")!=0){
 					//fx.setSprite("explosao.png");
 					_vfx.push_back(fx);
 					_vfx.back().getAnimation().loadAnim("resources/VFX_exp.txt");
 					_vfx.back().getAnimation().setState("exp");
-				}
+				}*///TODO handle this case
 				Actors* buf = _tileMap.getActor(xx,yy);
 				if(buf != NULL){
 					if(findActorsPtr(buf,out) == -1)
@@ -449,18 +440,15 @@ void Stage::checkGunfire(Character* c, vector<Actors*>& out){
 	fx.setPos(c->getX(), c->getY());
 	
 	_vfx.push_back(fx);
+	_vfx.back().getAnimation().init(VFX_gunflare);
 	if(c->direction == GUN_E){
-		_vfx.back().getAnimation().loadAnim("resources/VFX_gunflare_right.txt");
-		_vfx.back().getAnimation().setState("gunflare_right");
+		_vfx.back().getAnimation().setState(ANIM_IDLE_R);
 	}else if(c->direction == GUN_W){
-		_vfx.back().getAnimation().loadAnim("resources/VFX_gunflare_left.txt");
-		_vfx.back().getAnimation().setState("gunflare_left");
+		_vfx.back().getAnimation().setState(ANIM_IDLE_L);
 	}else if(c->direction == GUN_N){
-		_vfx.back().getAnimation().loadAnim("resources/VFX_gunflare_up.txt");
-		_vfx.back().getAnimation().setState("gunflare_up");
+		_vfx.back().getAnimation().setState(ANIM_IDLE_U);
 	}else if(c->direction == GUN_S){
-		_vfx.back().getAnimation().loadAnim("resources/VFX_gunflare_down.txt");
-		_vfx.back().getAnimation().setState("gunflare_down");
+		_vfx.back().getAnimation().setState(ANIM_IDLE_D);
 	}
 	}
 	for(int k=1;;++k){
@@ -486,18 +474,15 @@ void Stage::checkGunfire(Character* c, vector<Actors*>& out){
 			*/
 
 			_vfx.push_back(fx);
+			_vfx.back().getAnimation().init(VFX_gunfire);
 			if(c->direction == GUN_E){
-				_vfx.back().getAnimation().loadAnim("resources/VFX_gunfire_right.txt");
-				_vfx.back().getAnimation().setState("gunfire_right");
+				_vfx.back().getAnimation().setState(ANIM_IDLE_R);
 			}else if(c->direction == GUN_W){
-				_vfx.back().getAnimation().loadAnim("resources/VFX_gunfire_left.txt");
-				_vfx.back().getAnimation().setState("gunfire_left");
+				_vfx.back().getAnimation().setState(ANIM_IDLE_L);
 			}else if(c->direction == GUN_N){
-				_vfx.back().getAnimation().loadAnim("resources/VFX_gunfire_up.txt");
-				_vfx.back().getAnimation().setState("gunfire_up");
+				_vfx.back().getAnimation().setState(ANIM_IDLE_U);
 			}else if(c->direction == GUN_S){
-				_vfx.back().getAnimation().loadAnim("resources/VFX_gunfire_down.txt");
-				_vfx.back().getAnimation().setState("gunfire_down");
+				_vfx.back().getAnimation().setState(ANIM_IDLE_D);
 			}
 			//_vfx.back().getAnimation().loadAnim("resources/VFX_gunfire.txt");
 			//_vfx.back().getAnimation().setState("gunfire");
@@ -589,15 +574,15 @@ void Stage::moveActor(int x0, int y0, int x, int y){
 		dy = y-y0;
 		if(dx*dx > dy*dy){
 			if(dx > 0){
-				_tileMap._map.at(x, y).actor->setState("idle_right");
+				_tileMap._map.at(x, y).actor->setState(ANIM_IDLE_R);
 			}else{
-				_tileMap._map.at(x, y).actor->setState("idle_left");
+				_tileMap._map.at(x, y).actor->setState(ANIM_IDLE_L);
 			}
 		}else{
 			if(dy > 0){
-				_tileMap._map.at(x, y).actor->setState("idle_down");
+				_tileMap._map.at(x, y).actor->setState(ANIM_IDLE_D);
 			}else{
-				_tileMap._map.at(x, y).actor->setState("idle_up");
+				_tileMap._map.at(x, y).actor->setState(ANIM_IDLE_U);
 			}
 		}
 	}
