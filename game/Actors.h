@@ -30,7 +30,7 @@ public:
 	int getY();
 
 	void setPos(int x, int y);
-	void setSprite(const char* name);
+	//void setSprite(const char* name);
 	int getClass();
 
 	animation& getAnimation();

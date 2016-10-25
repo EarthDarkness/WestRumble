@@ -72,7 +72,7 @@ public:
 	void addTurn();
 	void dropBomb(int num);
 	
-	void setAction(const char* name, int x, int y);
+	void setAction(int act, int x, int y);
 
 	matMN<Tile>& getTileMap();
 	camera& getCamera();

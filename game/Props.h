@@ -46,7 +46,11 @@ extern animation BMB_H_180;
 extern animation BMB_H_250;
 extern animation BMB_H_300;
 
+extern animation BLK_box;
+extern animation BLK_barrel;
 
+extern animation UI_action;
+extern animation UI_ovelay;
 
 struct IMG_UI{
 	static int endturn;
@@ -133,7 +137,7 @@ struct IMG_BLK{
 	}
 };
 
-enum ANIM_STATE{
+enum ANIM_STATE_CHR{
 	ANIM_IDLE=0,
 
 	ANIM_IDLE_L=0,
@@ -150,6 +154,19 @@ enum ANIM_STATE{
 	ANIM_SHOT_R=9,
 	ANIM_SHOT_U=10,
 	ANIM_SHOT_D=11,
+};
+enum ANIM_STATE_UI{
+	ANIM_NONE=0,
+	ANIM_MOVE=1,
+	ANIM_BOMB=2,
+	ANIM_SHOT=3,
+	ANIM_TIMERUP=4,
+	ANIM_TIMERDOWN=5,
+	ANIM_GRAB=6,
+	ANIM_LAUNCH=7,
+	ANIM_BARREL=8,
+	ANIM_STUN=9,
+	ANIM_DETOANTE=10
 };
 
 

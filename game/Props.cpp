@@ -47,6 +47,11 @@ animation BMB_H_180;
 animation BMB_H_250;
 animation BMB_H_300;
 
+animation BLK_box;
+animation BLK_barrel;
+
+animation UI_action;
+animation UI_ovelay;
 
 int IMG_UI::endturn = 0;
 int IMG_UI::move = 0;
@@ -121,6 +126,7 @@ void loadAnimation(const char* file, animation& anim, int stt, resources& res){
 	string str;
 	int size;
 	float sp;
+	char loop;
 	bool l;
 
 	in >> size;
@@ -142,14 +148,24 @@ void loadAnimation(const char* file, animation& anim, int stt, resources& res){
 	in >> str;
 	in >> size;
 	in >> sp;
-	in >> l;
+	in >> loop;
+
+	l = (loop == 'L');
 
 	int val = pushAnimation(&(index[0]),size); 
 
 	anim.loadAnim(stt,val,size,sp,l);
 }
+void loadAnimation(int sprite, animation& anim, int stt, resources& res){
+	int val = pushAnimation(&sprite,1); 
+
+	anim.loadAnim(stt,val,1,1.0f,true);
+}
 
 void intLoadImages(resources& res){
+	res.loadImage("resources/image/invalid.png");
+	res.loadImage("resources/image/transparent.png");
+
 	IMG_GFX::logo = res.loadImage("resources/image/GFX_logo.png");
 	IMG_GFX::wood = res.loadImage("resources/image/BGN_title.png");
 
@@ -193,7 +209,6 @@ void intLoadImages(resources& res){
 	IMG_GFX::win1 = res.loadImage("resources/image/jogador1.png");
 	IMG_GFX::win2 = res.loadImage("resources/image/jogador2.png");
 	IMG_GFX::tie = res.loadImage("resources/image/draw.png");
-
 
 	IMG_GFX::bomb = res.loadImage("resources/image/GFX_UI_bomb.png");
 	IMG_GFX::gunpowder = res.loadImage("resources/image/GFX_UI_gunpowder.png");
@@ -283,6 +298,32 @@ void intLoadAnimations(resources& res){
 	loadAnimation("resources/CHR_white_shot_right.txt",CHR_char_P2,ANIM_SHOT_R,res);
 	loadAnimation("resources/CHR_white_shot_up.txt",CHR_char_P2,ANIM_SHOT_U,res);
 	loadAnimation("resources/CHR_white_shot_down.txt",CHR_char_P2,ANIM_SHOT_D,res);
+
+	loadAnimation(IMG_BLK::box,BLK_box,ANIM_IDLE,res);
+	loadAnimation(IMG_BLK::barrel,BLK_barrel,ANIM_IDLE,res);
+
+	loadAnimation(1,UI_action,ANIM_NONE,res);
+	loadAnimation(IMG_ACT::move,UI_action,ANIM_MOVE,res);
+	loadAnimation(IMG_ACT::bomb,UI_action,ANIM_BOMB,res);
+	loadAnimation(IMG_ACT::shot,UI_action,ANIM_SHOT,res);
+	loadAnimation(IMG_ACT::timeup,UI_action,ANIM_TIMERUP,res);
+	loadAnimation(IMG_ACT::timedown,UI_action,ANIM_TIMERDOWN,res);
+	loadAnimation(IMG_ACT::grab,UI_action,ANIM_GRAB,res);
+	loadAnimation(IMG_ACT::launch,UI_action,ANIM_LAUNCH,res);
+	loadAnimation(IMG_ACT::barrel,UI_action,ANIM_BARREL,res);
+	loadAnimation(IMG_ACT::stun,UI_action,ANIM_STUN,res);
+	loadAnimation(IMG_ACT::detonate,UI_action,ANIM_DETOANTE,res);
+
+	loadAnimation(IMG_OL::marker,UI_ovelay,ANIM_NONE,res);
+	loadAnimation(IMG_OL::walk,UI_ovelay,ANIM_MOVE,res);
+	loadAnimation(IMG_OL::bomb,UI_ovelay,ANIM_BOMB,res);
+	loadAnimation(IMG_OL::gunfire,UI_ovelay,ANIM_SHOT,res);
+	loadAnimation(IMG_OL::uptimer,UI_ovelay,ANIM_TIMERUP,res);
+	loadAnimation(IMG_OL::downtimer,UI_ovelay,ANIM_TIMERDOWN,res);
+	loadAnimation(IMG_OL::launch,UI_ovelay,ANIM_LAUNCH,res);
+	loadAnimation(IMG_OL::barrel,UI_ovelay,ANIM_BARREL,res);
+	loadAnimation(IMG_OL::rope,UI_ovelay,ANIM_STUN,res);
+
 
 }
 

@@ -37,6 +37,8 @@ void Game::init(){
 
 	loadResources();
 
+	menu.init();
+
 	setGUI();
 
 	stage.init(&engine._font);
@@ -655,7 +657,7 @@ void Game::proccessMessages(){
 
 			Character* act = &(curteam->getCharacter(pid));
 
-			act->detonate();
+			//FIX//act->detonate();
 			curteam->actions[pid] = CHAR_END;
 		}
 		_actionMsg.pop();
@@ -749,7 +751,7 @@ void Game::initAction(){
 	if(_selectedActions.empty()){
 		//stage.clearSelectedTiles();
 		//stage.clearOverlays();
-		stage.setAction("NULL",0,0);
+		stage.setAction(ANIM_NONE,0,0);
 		return;
 	}
 	
@@ -757,34 +759,34 @@ void Game::initAction(){
 
 	if(act == ACTIONMOVE){
 		//stage.markWalk(static_cast<Character*>(selected));
-		stage.setAction("GFX_ACT_move",selected->getX(),selected->getY());
+		stage.setAction(ANIM_MOVE,selected->getX(),selected->getY());
 	}else if(act == ACTIONBOMB){
 		//stage.markBomb(static_cast<Character*>(selected));
-		stage.setAction("GFX_ACT_bomb",selected->getX(),selected->getY());
+		stage.setAction(ANIM_BOMB,selected->getX(),selected->getY());
 	}else if(act == ACTIONGUNFIRE){
 		//stage.markGunFire(static_cast<Character*>(selected));
-		stage.setAction("GFX_ACT_shot",selected->getX(),selected->getY());
+		stage.setAction(ANIM_SHOT,selected->getX(),selected->getY());
 	}else if(act == ACTIONTIMER_UP){
 		//stage.markTimerUp(static_cast<Character*>(selected));
-		stage.setAction("GFX_ACT_timerup",selected->getX(),selected->getY());
+		stage.setAction(ANIM_TIMERUP,selected->getX(),selected->getY());
 	}else if(act == ACTIONTIMER_DOWN){
 		//stage.markTimerDown(static_cast<Character*>(selected));
-		stage.setAction("GFX_ACT_timerdown",selected->getX(),selected->getY());
+		stage.setAction(ANIM_TIMERDOWN,selected->getX(),selected->getY());
 	}else if(act == ACTIONRELAUNCHSELECT){
 		//stage.markThrow(static_cast<Character*>(selected));
-		stage.setAction("GFX_ACT_grab",selected->getX(),selected->getY());
+		stage.setAction(ANIM_GRAB,selected->getX(),selected->getY());
 	}else if(act == ACTIONRELAUNCH){
 		//stage.markBomb(static_cast<Character*>(selected));
-		stage.setAction("GFX_ACT_throw",selected->getX(),selected->getY());
+		stage.setAction(ANIM_LAUNCH,selected->getX(),selected->getY());
 	}else if(act == ACTIONBARRIER){
 		//stage.markBarrel(static_cast<Character*>(selected));
-		stage.setAction("GFX_ACT_barrel",selected->getX(),selected->getY());
+		stage.setAction(ANIM_BARREL,selected->getX(),selected->getY());
 	}else if(act == ACTIONSTUN){
 		//stage.markRope(static_cast<Character*>(selected));
-		stage.setAction("GFX_ACT_stun",selected->getX(),selected->getY());
+		stage.setAction(ANIM_STUN,selected->getX(),selected->getY());
 	}else if(act == ACTIONBOMBDETONATOR){
 		//stage.markDetonator(static_cast<Character*>(selected));
-		stage.setAction("GFX_ACT_detonate",selected->getX(),selected->getY());
+		stage.setAction(ANIM_DETOANTE,selected->getX(),selected->getY());
 	}
 	//stage.markEntry(selected);
 }
@@ -855,12 +857,12 @@ void Game::updateAction(int x, int y){
 
 	}else if(act == ACTIONBOMB){
 		bomb b;
-		b.init(((Character*)selected)->getFire(), (Character*)selected);
+		//FIX//b.init(((Character*)selected)->getFire(), (Character*)selected);
 		if(static_cast<Character*>(selected)->queryPowerUp(POWUP_DETONATOR))
 			b.setTurn(-1);
 
 		stage.bombs.push_back(b);
-		((Character*)selected)->AddEntry((bomb*)&stage.bombs.back());
+		//FIX//((Character*)selected)->AddEntry((bomb*)&stage.bombs.back());
 		stage.instantiateActor(&stage.bombs.back(), x, y);
 
 		curteam->actions[pos] = CHAR_END;
@@ -948,7 +950,7 @@ void Game::updateAction(int x, int y){
 
 		curteam->actions[pos] = CHAR_END;
 	}else if(act == ACTIONBOMBDETONATOR){
-		((Character*)selected)->detonate();
+		//FIX//((Character*)selected)->detonate();
 		curteam->actions[pos] = CHAR_END;
 	}else{
 		return;
@@ -1045,8 +1047,8 @@ void Game::turnField(){
 	while(!hits.empty()){
 		if(hits.back()->getClass() == ACTOR_BOMB){
 			bomb* b = static_cast<bomb*>(hits.back());
-			if(b->getOwner() != NULL)
-				b->getOwner()->RemoveEntry(b->getX(),b->getY());
+			//FIX//if(b->getOwner() != NULL)
+				//b->getOwner()->RemoveEntry(b->getX(),b->getY());
 			stage.getTileMap().at(hits.back()->getX(),hits.back()->getY()).actor = NULL;
 			for(list<bomb>::iterator it=stage.bombs.begin();it!=stage.bombs.end();++it){
 				if(&*it == hits.back()){

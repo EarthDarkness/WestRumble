@@ -24,6 +24,8 @@ private:
 	Actors _ohi;//Over Head Icon
 
 	Button* _endturn;
+
+	void pushOvelay(int x, int y, int ol);
 	
 public:
 	queue<string> _actionMsg;

@@ -5,6 +5,30 @@
 Menu::Menu(){
 	_state = MAINMENU;
 
+	_logo.image_id = 0;
+
+	_play.image_id = 0;
+	_tutorial.image_id = 0;
+	_credits.image_id = 0;
+
+	_next.image_id = 0;
+	_prev.image_id = 0;
+	_back.image_id = 0;
+
+	_info[0].image_id = 0;
+	_info[1].image_id = 0;
+	_info[2].image_id = 0;
+	_info[3].image_id = 0;
+
+	_page = 0;
+
+}
+Menu::~Menu(){
+}
+
+void Menu::init(){
+	_state = MAINMENU;
+
 	_logo.image_id = IMG_GFX::logo;
 
 	_play.image_id = IMG_UI::play;
@@ -21,9 +45,6 @@ Menu::Menu(){
 	_info[3].image_id = IMG_TUT::actions;
 
 	_page = 0;
-
-}
-Menu::~Menu(){
 }
 
 void Menu::setGUI(int width, int height){

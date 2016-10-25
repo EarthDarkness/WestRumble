@@ -40,7 +40,7 @@ int resources::loadImage(const char* path){
 	buf = IMG_LoadTexture(engRenderer, path);
 	if(buf == NULL){
 		cerr << "Couldn't load image " << path << endl;
-		return -1;
+		return 0;
 	}else{
 		image.push_back(buf);
 		return image.size()-1;

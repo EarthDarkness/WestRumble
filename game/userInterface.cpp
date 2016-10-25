@@ -1,5 +1,6 @@
 #include "userInterface.h"
 #include "NetProtocol.h"
+#include "Props.h"
 
 
 userInterface::userInterface(){
@@ -13,6 +14,14 @@ userInterface::userInterface(){
 userInterface::~userInterface(){
 }
 
+
+
+void userInterface::pushOvelay(int x, int y, int ol){
+	_overlay.push_back(Actors());
+	_overlay.back().getAnimation().init(UI_ovelay);
+	_overlay.back().setPos(x,y);
+	_overlay.back().setState(ol);
+}
 
 void userInterface::init(Stage* stg){
 	_stg = stg;
@@ -270,7 +279,7 @@ void userInterface::clearCommands(){
 
 
 void userInterface::setOHI(const char* name, int x, int y){
-	_ohi.setSprite(name);
+	//_ohi.setSprite(name);
 	_ohi.setPos(x,y);
 }
 
@@ -282,10 +291,8 @@ void userInterface::clearOverlays(){
 void userInterface::markEntry(Actors* entry){
 	if(!_tileMap->inBound(entry->getX(),entry->getY()))
 		return;
-	Actors ol;
-	ol.setPos(entry->getX(),entry->getY());
-	ol.setSprite("OL_marker");
-	_overlay.push_back(ol);
+
+	pushOvelay(entry->getX(),entry->getY(),ANIM_NONE);
 }
 void userInterface::markWalk(Character* entry){
 	_overlay.clear();
@@ -312,10 +319,7 @@ void userInterface::markWalk(Character* entry){
 				}
 			}
 
-			Actors ol;
-			ol.setPos(xx, yy);
-			ol.setSprite("OL_walk");
-			_overlay.push_back(ol);
+			pushOvelay(xx,yy,ANIM_MOVE);
 		}
 	}
 }
@@ -342,10 +346,8 @@ void userInterface::markBomb(Character* entry){
 				continue;
 			
 
-			Actors ol;
-			ol.setPos(xx, yy);
-			ol.setSprite("OL_bomb");
-			_overlay.push_back(ol);
+
+			pushOvelay(xx,yy,ANIM_BOMB);
 		}
 	}
 }
@@ -368,10 +370,8 @@ void userInterface::markGunFire(Character* entry){
 			if(!_tileMap->inBound(xx,yy))
 				continue;
 
-			Actors ol;
-			ol.setPos(xx, yy);
-			ol.setSprite("OL_gunfire");
-			_overlay.push_back(ol);
+
+			pushOvelay(xx,yy,ANIM_SHOT);
 		}
 	}
 }
@@ -395,10 +395,8 @@ void userInterface::markTimerUp(Character* entry){
 				continue;
 			
 
-			Actors ol;
-			ol.setPos(xx, yy);
-			ol.setSprite("OL_uptimer");
-			_overlay.push_back(ol);
+
+			pushOvelay(xx,yy,ANIM_TIMERUP);
 		}
 	}
 }
@@ -423,10 +421,8 @@ void userInterface::markTimerDown(Character* entry){
 				continue;
 			
 
-			Actors ol;
-			ol.setPos(xx, yy);
-			ol.setSprite("OL_downtimer");
-			_overlay.push_back(ol);
+
+			pushOvelay(xx,yy,ANIM_TIMERDOWN);
 		}
 	}
 }
@@ -450,10 +446,8 @@ void userInterface::markThrow(Character* entry){//TODO sprite
 			if(buf->getClass() != ACTOR_BOMB)
 				continue;
 
-			Actors ol;
-			ol.setPos(xx, yy);
-			ol.setSprite("OL_throw");
-			_overlay.push_back(ol);
+
+			pushOvelay(xx,yy,ANIM_LAUNCH);
 		}
 	}
 }
@@ -476,10 +470,8 @@ void userInterface::markDetonator(Character* entry){
 			//if(static_cast<bomb*>(buf)->getOwner() != static_cast<Character*>(entry))
 			//	continue;
 
-			Actors ol;
-			ol.setPos(xx, yy);
-			ol.setSprite("OL_bomb");
-			_overlay.push_back(ol);
+
+			pushOvelay(xx,yy,ANIM_DETOANTE);
 		}
 	}
 }
@@ -502,10 +494,8 @@ void userInterface::markBarrel(Character* entry){//TODO sprite
 				continue;
 			
 
-			Actors ol;
-			ol.setPos(xx, yy);
-			ol.setSprite("OL_barrel");
-			_overlay.push_back(ol);
+
+			pushOvelay(xx,yy,ANIM_BARREL);
 		}
 	}
 }
@@ -531,10 +521,8 @@ void userInterface::markRope(Character* entry){//TODO sprite
 			if(!areEnemies(static_cast<Character*>(entry),static_cast<Character*>(buf)))
 				continue;
 
-			Actors ol;
-			ol.setPos(xx, yy);
-			ol.setSprite("OL_rope");
-			_overlay.push_back(ol);
+
+			pushOvelay(xx,yy,ANIM_STUN);
 		}
 	}
 }

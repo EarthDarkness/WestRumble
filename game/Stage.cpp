@@ -13,7 +13,7 @@ Stage::Stage(){
 	_camera.setScale(120);
 	_font = NULL;
 
-	_action.setSprite("NULL");
+	//_action.setSprite("NULL");//HANDLE
 }
 
 
@@ -23,6 +23,7 @@ Stage::~Stage(){
 
 void Stage::init(font* f){
 	_font = f;
+	_action.getAnimation().init(UI_action);
 }
 /*void Stage::setGUI(int width, int height){
 
@@ -60,10 +61,20 @@ int Stage::loadStage(const char* path, resources& res){
 		stage >> top;
 		stage >> collision;
 
-		
-
-		paths[id].bot = res.loadImage(botton);
-		paths[id].up = res.loadImage(top);
+		const char* path = "resources/image/";
+		string filepath;
+		if(strcmp(botton,"NULL")!=0){
+			filepath = path;filepath += botton;
+			paths[id].bot = res.loadImage(filepath.c_str());
+		}else{
+			paths[id].bot = 1;
+		}
+		if(strcmp(top,"NULL")!=0){
+			filepath = path;filepath += top;
+			paths[id].up = res.loadImage(filepath.c_str());
+		}else{
+			paths[id].up = 1;
+		}
 		paths[id].collision = collision;
 	}
 
@@ -295,9 +306,9 @@ void Stage::dropBomb(int num){
 	}
 }
 
-void Stage::setAction(const char* name, int x, int y){
+void Stage::setAction(int act, int x, int y){
 	_action.setPos(x,y);
-	_action.setSprite(name);
+	_action.setState(act);
 }
 
 matMN<Tile>& Stage::getTileMap(){
@@ -333,9 +344,9 @@ void Stage::polulate(){
 			continue;
 
 		block b;
-		b.setSprite("BLK_box");
-
+		//b.setSprite("BLK_box");//deprecated
 		blocks.push_back(b);
+		blocks.back().getAnimation().init(BLK_box);
 		instantiateActor(&blocks.back(),pos[r]%w,pos[r]/w);
 
 	}

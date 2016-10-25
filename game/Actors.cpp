@@ -26,10 +26,10 @@ void Actors::setPos(int x, int y){
 	_x = x;
 	_y = y;
 }
-void Actors::setSprite(const char* name){
-	//_sprite.set("default",name);
-	//IMPLEMENT
-}
+//void Actors::setSprite(const char* name){
+//	//_sprite.set("default",name);
+//	//IMPLEMENT
+//}
 
 int Actors::getClass(){
 	return _class;

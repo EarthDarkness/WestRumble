@@ -18,13 +18,15 @@ animation::~animation(){
 void animation::init(animation& src){
 	for(int i=0;i<MAX_ANIMS;++i){
 		_index[i] = src._index[i];
-		_frame[i]._loop = src._frame[i]._loop;
-
+		_frame[i].init(src._frame[i].size());
 		_frame[i].setSpeed(src._frame[i].getSpeed());
+		_frame[i]._loop = src._frame[i]._loop;
 	}
+	_frame[0].play();
 }
 
 int animation::get(){
+	_frame[_state].update();
 	return _index[_state]+_frame[_state].get();
 }
 

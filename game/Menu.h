@@ -26,6 +26,8 @@ public:
 	Menu();
 	~Menu();
 
+	void init();
+
 	void setGUI(int width, int height);
 
 	//mainmenu
