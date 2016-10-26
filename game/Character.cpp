@@ -128,3 +128,7 @@ void Character::setAlive(bool b){
 bool Character::getAlive(){
 	return alive;
 }
+
+Character* Character::getCharacter(){
+	return reinterpret_cast<Character*>(this);
+}

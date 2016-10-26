@@ -62,5 +62,7 @@ public:
 	void setAlive(bool b);
 	bool getAlive();
 
+	Character* getCharacter();
+
 };
 #endif

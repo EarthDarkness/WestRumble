@@ -16,3 +16,7 @@ void block::setData(int data){
 int block::getData(){
 	return _data;
 }
+
+block* block::getBlock(){
+	return dynamic_cast<block*>(this);
+}

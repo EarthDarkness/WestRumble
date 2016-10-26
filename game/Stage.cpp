@@ -225,11 +225,25 @@ void Stage::renderActors(renderer& renderer){
 				renderer.renderActorInMapCenter(*ptr,_camera);
 
 			if(ptr->getClass() == ACTOR_BOMB){
-				if(((bomb*)ptr)->getTurn() >= 0)
-					renderer.renderTextInMapCenter(i_to_str(((bomb*)ptr)->getTurn()).c_str(),_camera,*_font,ptr->getX(),ptr->getY());
+				if(ptr->getBomb()->getTurn() >= 0)
+					renderer.renderTextInMapCenter(i_to_str(ptr->getBomb()->getTurn()).c_str(),_camera,*_font,ptr->getX(),ptr->getY());
 			}
 		}
 	}
+
+	/*for(list<bomb>::iterator it = bombs.begin();it != bombs.end();++it){
+		renderer.renderActorInMapCenter(*it,_camera);
+	}
+	for(list<block>::iterator it = blocks.begin();it != blocks.end();++it){
+		renderer.renderActorInMapCenter(*it,_camera);
+	}
+	for(list<PowerUp>::iterator it = power_ups.begin();it != power_ups.end();++it){
+		renderer.renderActorInMapCenter(*it,_camera);
+	}
+	for(int i=0;i<5;++i){
+		renderer.renderActorInMapCenter(_teams[0]->getCharacter(i),_camera);
+		renderer.renderActorInMapCenter(_teams[1]->getCharacter(i),_camera);
+	}*/
 
 	for(int i=0;i<_vfx.size();++i){
 		if(_vfx[i].getAnimation().getState() == ANIM_IDLE_R){
@@ -264,9 +278,9 @@ void Stage::clear(){
 
 	_vfx.clear();
 
-	bombs.clear();
-	blocks.clear();
-	power_ups.clear();
+	_bombs.clear();
+	_blocks.clear();
+	_powerUps.clear();
 }
 
 
@@ -292,11 +306,11 @@ void Stage::dropBomb(int num){
 		if(_tileMap._map.at(xx,yy).actor != NULL)
 			continue;
 
-		bomb b;
-		b.init(2,bombs.size());
-		b.setTurn(2);
-		bombs.push_back(b);
-		instantiateActor(&bombs.back(),xx,yy);
+		int index = insert(_bombs);
+		bomb* b = &(_bombs[index]);
+		b->init(2,index);
+		b->setTurn(2);
+		instantiateActor(b,xx,yy);
 		++n;
 		if(n>=num)
 			break;
@@ -336,9 +350,12 @@ void Stage::polulate(){
 		if(_tileMap._map.at(pos[r]).actor != NULL)
 			continue;
 
-		blocks.push_back(block());
-		blocks.back().setAnimation(BLK_TABLE,BLK_ID_BOX);
-		instantiateActor(&blocks.back(),pos[r]%w,pos[r]/w);
+
+		int index = insert(_blocks);
+		block* b = &(_blocks[index]);
+
+		b->setAnimation(BLK_TABLE,BLK_ID_BOX);
+		instantiateActor(b,pos[r]%w,pos[r]/w);
 
 	}
 
@@ -350,11 +367,11 @@ void Stage::spawn(int x, int y){
 		if(i != POWUP_ACTIVE)
 			powup.push_back(i);
 
-	PowerUp p;
-	p.init(powup[rand()%powup.size()]);
-	power_ups.push_back(p);
+	int index = insert(_powerUps);
+	PowerUp* p = &(_powerUps[index]);
+	p->init(powup[rand()%powup.size()]);
 
-	instantiateActor(&power_ups.back(),x,y);
+	instantiateActor(p,x,y);
 }
 
 Actors* Stage::getActorAt(int x, int y){
@@ -520,43 +537,23 @@ bool Stage::waitForVFX(){
 }
 
 void Stage::moveActor(int x0, int y0, int x, int y){
-	
-	if (_tileMap._map.at(x, y).actor != NULL){
-		if (_tileMap._map.at(x, y).actor->getClass() == ACTOR_BOMB){
-			//nao move por cima de bomba
-			return;
-		}
-		else if (_tileMap._map.at(x, y).actor->getClass() == ACTOR_BLOCK){
-			//nao move por cima de bloco
-			return;
-		}
-		else if (_tileMap._map.at(x, y).actor->getClass() == ACTOR_CHAR){
-			//nao move por cima de char
-			return;
-		}
-		else if (_tileMap._map.at(x, y).actor->getClass() == ACTOR_POWUP){
-			//move por cima de power up
+	Actors* dst = _tileMap._map.at(x, y).actor;
+
+	if(dst != NULL){
+		if(dst->getClass() == ACTOR_POWUP){
+			//powerup applied outside this method
 
 			//remove power up da lista de renderizados
-			for (list<PowerUp>::iterator it = power_ups.begin(); it != power_ups.end(); it++){
-				if (it->getX() == _tileMap._map.at(x, y).actor->getX() && it->getY() == _tileMap._map.at(x, y).actor->getY()){
-					power_ups.erase(it);
-					break;
-				}
-			}
+			_powerUps[dst->getIndex()].deactivate();
 
 			_tileMap._map.at(x0, y0).actor->setPos(x, y);
-
 			_tileMap._map.at(x, y).actor = _tileMap._map.at(x0, y0).actor;
-
 			_tileMap._map.at(x0, y0).actor = NULL;
-			
+
 
 		}
-		
-	}
-	else { // actor == null 
-		//move por cima de tile com actor null
+
+	}else{ // actor == null 
 
 		//nova posicao
 		_tileMap._map.at(x0, y0).actor->setPos(x, y);
@@ -627,13 +624,7 @@ void Stage::hitPowUp(PowerUp* p){
 		return;
 
 	_tileMap._map.at(p->getX(),p->getY()).setActor(NULL);
-
-	for(list<PowerUp>::iterator it=power_ups.begin();it!=power_ups.end();it++){
-		if(&*it == p){
-			power_ups.erase(it);
-			break;
-		}
-	}
+	_powerUps[p->getIndex()].deactivate();
 }
 void Stage::hitBlock(block* b){
 	if(b == NULL)
@@ -641,10 +632,5 @@ void Stage::hitBlock(block* b){
 
 	_tileMap._map.at(b->getX(),b->getY()).setActor(NULL);
 	spawn(b->getX(),b->getY());
-	for(list<block>::iterator it=blocks.begin();it!=blocks.end();it++){
-		if(&*it == b){
-			blocks.erase(it);
-			break;
-		}
-	}
+	_blocks[b->getIndex()].deactivate();
 }

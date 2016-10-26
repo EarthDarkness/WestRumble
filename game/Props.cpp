@@ -71,6 +71,9 @@ animation* BLK_TABLE[]={
 animation UI_action;
 animation UI_ovelay;
 
+int IMG_INVALID = 0;
+int IMG_TRANSPARENT = 1;
+
 int IMG_UI::endturn = 0;
 int IMG_UI::move = 0;
 int IMG_UI::play = 0;
@@ -323,7 +326,7 @@ void intLoadAnimations(resources& res){
 	loadAnimation(IMG_BLK::box,BLK_box,ANIM_IDLE,res);
 	loadAnimation(IMG_BLK::barrel,BLK_barrel,ANIM_IDLE,res);
 
-	loadAnimation(1,UI_action,ANIM_NONE,res);
+	loadAnimation(IMG_TRANSPARENT,UI_action,ANIM_NONE,res);
 	loadAnimation(IMG_ACT::move,UI_action,ANIM_MOVE,res);
 	loadAnimation(IMG_ACT::bomb,UI_action,ANIM_BOMB,res);
 	loadAnimation(IMG_ACT::shot,UI_action,ANIM_SHOT,res);

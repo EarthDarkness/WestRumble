@@ -23,24 +23,6 @@ int PowerUp::getType(){
 }
 
 void PowerUp::init(int type){
-//adicionar sprite para tipo de power up
-
-	/*if (type == POWUP_SPEED){
-		_sprite.set("default","boot.png");
-	}
-	else if (type == POWUP_BOMB){
-		_sprite.set("default","bomb.png");
-	}
-	else if (type == POWUP_FIRE){
-		_sprite.set("default","fire.png");
-	}
-	else if (type == POWUP_SHIELD){
-		_sprite.set("default","star.png");
-	}
-
-	if(type > POWUP_NONE && type < POWUP_ACTIVE)
-		_type = type;*/
-
 	if (type == POWUP_SPEED){
 		_sprite.init(PWP_boot);
 	}else if (type == POWUP_BOMB){
@@ -61,9 +43,11 @@ void PowerUp::init(int type){
 		_sprite.init(PWP_detonator);
 	}
 
-	//TODO initlize srpite state
-	//_sprite.setState("idle");
-
 	if (type > POWUP_NONE && type < POWUP_END && type != POWUP_ACTIVE)
 		_type = type;
+}
+
+
+PowerUp* PowerUp::getPowerUp(){
+	return reinterpret_cast<PowerUp*>(this);
 }

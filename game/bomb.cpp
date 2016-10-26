@@ -18,10 +18,12 @@ bomb::~bomb(){
 }
 
 
-void bomb::init(int fire, int index, int team, int owner){
+void bomb::init(int fire, int team, int owner){
+	if(_index != 0)//already in use
+		return;
+
 	_fire = fire;
 
-	_index = index;
 	_team = team;
 	_owner = owner;
 
@@ -54,9 +56,6 @@ int bomb::getTurn(){
 	return _turns;
 }
 
-int bomb::getindex(){
-	return _index;
-}
 int bomb::getTeam(){
 	return _team;
 }
@@ -76,3 +75,9 @@ bool bomb::checkTurnDown(){
 	}
 	return false;
 }
+
+bomb* bomb::getBomb(){
+	return reinterpret_cast<bomb*>(this);
+}
+
+

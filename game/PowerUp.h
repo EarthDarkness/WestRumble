@@ -32,6 +32,9 @@ public:
 	void init(int type);
 
 	int getType();
+
+	PowerUp* getPowerUp();
+
 };
 
 #endif

@@ -35,11 +35,11 @@ public:
 	bool checkTurnUp();
 	bool checkTurnDown();
 
-	void init(int fire, int index, int team = -1, int owner = -1);
+	void init(int fire, int team = -1, int owner = -1);
 
-	int getindex();
 	int getTeam();
 	int getOwner();
 
+	bomb* getBomb();
 };
 #endif

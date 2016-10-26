@@ -78,6 +78,10 @@ enum BLK_ID{
 extern animation UI_action;
 extern animation UI_ovelay;
 
+
+extern int IMG_INVALID;
+extern int IMG_TRANSPARENT;
+
 struct IMG_UI{
 	static int endturn;
 	static int move;

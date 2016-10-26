@@ -95,7 +95,7 @@ void userInterface::update(int xm, int ym, int val){
 			setOHI(ANIM_NONE,0,0);
 			if(clicked != NULL)
 				if(clicked->getClass() == ACTOR_CHAR)
-					if(_teams[_player]->checkSelected((Character*)clicked) != -1){
+					if(_teams[_player]->checkSelected(clicked->getCharacter()) != -1){
 						_selected = clicked;
 					}
 			fillCommands();
@@ -118,7 +118,7 @@ void userInterface::updateCommand(int xm, int ym){
 	if(mark == NULL)
 		return;
 
-	Character* chr = (Character*)_selected;
+	Character* chr = _selected->getCharacter();
 
 
 	Team* curteam = _teams[_player];
@@ -232,7 +232,7 @@ void userInterface::fillCommands(){
 	if(_selected->getClass() != ACTOR_CHAR)
 		return;
 
-	Character* chr = (Character*)_selected;
+	Character* chr = _selected->getCharacter();
 	Team* curteam = _teams[_player];
 
 	int pos = curteam->checkSelected(chr);

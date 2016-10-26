@@ -12,6 +12,7 @@
 #include <map>
 #include <list>
 #include <stack>
+#include <vector>
 #include <sstream>
 #include "../engine/translator.h"
 #include "Button.h"
@@ -20,6 +21,23 @@
 #include "bomb.h"
 
 using namespace std;
+
+template<class T>
+int insert(vector<T>& dst){
+	for(int i=0;i<dst.size();++i){
+		if(dst[i].isActive()){
+			dst[i].activate(i);
+			return i;
+		}
+	}
+	dst.push_back(T());
+	dst.back().activate(dst.size()-1);
+	return dst.size()-1;
+}
+template<class T>
+void remove(vector<T>& src, int pos){
+	src[pos].deactivate();
+}
 
 //int rand();
 /*class StageData
@@ -89,14 +107,18 @@ public:
 	void hitPowUp(PowerUp* p);
 	void hitBlock(block* b);
 
+	vector<bomb> _bombs;
+	vector<block> _blocks;
+	vector<PowerUp> _powerUps;
+
 	//bombas desenhadas
-	list<bomb> bombs;
+	//list<bomb> bombs;
 	
 	//blocks desenhados
-	list<block> blocks;
+	//list<block> blocks;
 
 	//power ups
-	list<PowerUp> power_ups;
+	//list<PowerUp> power_ups;
 	
 	
 	int findActorsPtr(Actors* entry, vector<Actors*>& data);

@@ -14,6 +14,6 @@ public:
 	void setData(int data);
 	int getData();
 
-
+	block* getBlock();
 };
 #endif

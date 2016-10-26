@@ -8,6 +8,8 @@ Actors::Actors(){
 	_y = 0;
 
 	_anim = 0;
+
+	_index = -1;
 }
 Actors::~Actors(){
 
@@ -49,3 +51,31 @@ animation& Actors::getAnimation(){
 void Actors::setState(int stt){
 	_sprite.setState(stt);
 }
+
+void Actors::activate(int index){
+	if(_index == -1)
+		_index = index;
+}
+void Actors::deactivate(){
+	_index = -1;
+}
+int Actors::getIndex(){
+	return _index;
+}
+bool Actors::isActive(){
+	return _index >= 0;
+}
+
+block* Actors::getBlock(){
+	return NULL;
+}
+bomb* Actors::getBomb(){
+	return NULL;
+}
+Character* Actors::getCharacter(){
+	return NULL;
+}
+PowerUp* Actors::getPowerUp(){
+	return NULL;
+}
+

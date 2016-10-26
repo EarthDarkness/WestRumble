@@ -457,22 +457,22 @@ void Game::renderStage()
 		if(visualized->getClass() == ACTOR_CHAR){
 			//render speed
 			engine._render.renderSprite(_speed, -15, -15);
-			engine._render.renderText(i_to_str(((Character*)visualized)->getSpeed()).c_str(), engine._font, 0 + 25 + 20, 0);
+			engine._render.renderText(i_to_str(visualized->getCharacter()->getSpeed()).c_str(), engine._font, 0 + 25 + 20, 0);
 			//render bomb
 			engine._render.renderSprite(_bombs, -15, 50-15);
-			engine._render.renderText(i_to_str(((Character*)visualized)->getBombs()).c_str(), engine._font, 0 + 25 + 20, 50);
+			engine._render.renderText(i_to_str(visualized->getCharacter()->getBombs()).c_str(), engine._font, 0 + 25 + 20, 50);
 			//render fire
 			engine._render.renderSprite(_fire, -15, 100-15);
-			engine._render.renderText(i_to_str(((Character*)visualized)->getFire()).c_str(), engine._font, 0 + 25 + 20, 100);
+			engine._render.renderText(i_to_str(visualized->getCharacter()->getFire()).c_str(), engine._font, 0 + 25 + 20, 100);
 		} else if(visualized->getClass() == ACTOR_BOMB){
 
 			//render fire
 			engine._render.renderSprite(_fire, -15, -15);
-			engine._render.renderText(i_to_str(((bomb*)visualized)->getFire()).c_str(), engine._font, 0 + 25 + 20, 0);
+			engine._render.renderText(i_to_str(visualized->getBomb()->getFire()).c_str(), engine._font, 0 + 25 + 20, 0);
 
 			//render turn
 			engine._render.renderSprite(_turn, -15, 50-15);
-			engine._render.renderText(i_to_str(((bomb*)visualized)->getTurn()).c_str(), engine._font, 0 + 25 + 20, 50);
+			engine._render.renderText(i_to_str(visualized->getBomb()->getTurn()).c_str(), engine._font, 0 + 25 + 20, 50);
 
 		}
 
@@ -524,7 +524,7 @@ void Game::proccessMessages(){
 
 			Actors* tgt = stage.getActorAt(xx,yy);
 			if(tgt != NULL){
-				if(tgt->getClass() == ACTOR_POWUP) act->AddPowerUp((PowerUp*)tgt);
+				if(tgt->getClass() == ACTOR_POWUP) act->AddPowerUp(tgt->getPowerUp());
 			}
 
 			stage.moveActor(act->getX(), act->getY(), xx, yy);//TODO validate movment
@@ -541,14 +541,15 @@ void Game::proccessMessages(){
 
 			Character* act = &(curteam->getCharacter(pid));
 
-			bomb b;
-			b.init(act->getFire(),stage.bombs.size(),player,pid);
-			if(act->queryPowerUp(POWUP_DETONATOR)) b.setTurn(-1);
+			int index = insert(stage._bombs);
+			bomb* b = &(stage._bombs[index]);
 
-			stage.bombs.push_back(b);
-			//act->AddEntry((bomb*)&stage.bombs.back());
-			act->AddDynamite(stage.bombs.size());
-			stage.instantiateActor(&stage.bombs.back(), xx, yy);
+			b->init(act->getFire(),player,pid);
+
+			if(act->queryPowerUp(POWUP_DETONATOR)) b->setTurn(-1);
+
+			act->AddDynamite(index);
+			stage.instantiateActor(b, xx, yy);
 
 			curteam->actions[pid] = CHAR_END;
 
@@ -585,7 +586,7 @@ void Game::proccessMessages(){
 
 			WrpDecodeTimeUp(msg,pid,xx,yy);
 
-			bomb* b = (bomb*)stage.getActorAt(xx, yy);
+			bomb* b = stage.getActorAt(xx, yy)->getBomb();
 			if(b != NULL) b->addTurn(1);
 
 			curteam->actions[pid] = CHAR_END;
@@ -597,7 +598,7 @@ void Game::proccessMessages(){
 
 			WrpDecodeTimeDown(msg,pid,xx,yy);
 
-			bomb* b = (bomb*)stage.getActorAt(xx, yy);
+			bomb* b = stage.getActorAt(xx, yy)->getBomb();
 			if(b != NULL) b->addTurn(-1);
 
 			curteam->actions[pid] = CHAR_END;
@@ -611,7 +612,7 @@ void Game::proccessMessages(){
 
 			WrpDecodeThrow(msg,pid,xi,yi,xx,yy);
 
-			bomb* b = (bomb*)stage.getActorAt(xi, yi);
+			bomb* b = stage.getActorAt(xi, yi)->getBomb();
 			if(b != NULL){
 				b->setPos(xx, yy);
 				stage.getTileMap().at(xx, yy).actor = b;
@@ -627,8 +628,9 @@ void Game::proccessMessages(){
 
 			WrpDecodeBarrel(msg,pid,xx,yy);
 
-			stage.blocks.push_back(block());
-			stage.instantiateActor(&stage.blocks.back(), xx, yy);
+			int index = insert(stage._blocks);
+			block* b = &(stage._blocks[index]);
+			stage.instantiateActor(b, xx, yy);
 
 			curteam->actions[pid] = CHAR_END;
 
@@ -639,7 +641,7 @@ void Game::proccessMessages(){
 
 			WrpDecodeRope(msg,pid,xx,yy);
 
-			Character* tgt = (Character*)stage.getActorAt(xx,yy);
+			Character* tgt = stage.getActorAt(xx,yy)->getCharacter();
 
 			if(tgt != NULL){
 				if(tgt->getClass() == ACTOR_CHAR){
@@ -736,17 +738,18 @@ void Game::turnPlayer(){
 void Game::turnField(){
 	vector<Actors*> hits;
 	//calc bomb to explode
-	for (list<bomb>::iterator it = stage.bombs.begin(); it != stage.bombs.end(); it++){
-		if (it->getClass() == ACTOR_BOMB){
-			bomb* ptr = &*it;
-			if(ptr->getTurn() != -1){
-				ptr->addTurn(-1);
-				if(ptr->getTurn() < 1){
-					hits.push_back(ptr);
-				}
+	//for (list<bomb>::iterator it = stage._bombs.begin(); it != stage.bombs.end(); it++){
+	for(int i=0;i<stage._bombs.size();++i){
+		bomb* b = &(stage._bombs[i]);
+		if(b->isActive())
+		if(b->getTurn() != -1){
+			b->addTurn(-1);
+			if(b->getTurn() < 1){
+				hits.push_back(b);
 			}
 		}
 	}
+
 	//calc gunfire
 	//for(int i=0;i<2;++i){
 	{
@@ -778,23 +781,21 @@ void Game::turnField(){
 	//apply damage
 	while(!hits.empty()){
 		if(hits.back()->getClass() == ACTOR_BOMB){
-			bomb* b = static_cast<bomb*>(hits.back());
-			//FIX//if(b->getOwner() != NULL)
-				//b->getOwner()->RemoveEntry(b->getX(),b->getY());
-			stage.getTileMap().at(hits.back()->getX(),hits.back()->getY()).actor = NULL;
-			for(list<bomb>::iterator it=stage.bombs.begin();it!=stage.bombs.end();++it){
-				if(&*it == hits.back()){
-					stage.bombs.erase(it);
-					break;
-				}
+			bomb* b = hits.back()->getBomb();
+
+			if(b->getOwner() != -1){
+				stage.getTeam(b->getTeam()).getCharacter(b->getOwner()).RemoveEntry(b->getIndex());
 			}
 
+			stage.getTileMap().at(hits.back()->getX(),hits.back()->getY()).actor = NULL;
+			remove(stage._bombs,b->getIndex());
+
 		}else if(hits.back()->getClass() == ACTOR_CHAR){
-			stage.hitChar(static_cast<Character*>(hits.back()));
+			stage.hitChar(hits.back()->getCharacter());
 		}else if(hits.back()->getClass() == ACTOR_POWUP){
-			stage.hitPowUp(static_cast<PowerUp*>(hits.back()));
+			stage.hitPowUp(hits.back()->getPowerUp());
 		}else if(hits.back()->getClass() == ACTOR_BLOCK){
-			stage.hitBlock(static_cast<block*>(hits.back()));
+			stage.hitBlock(hits.back()->getBlock());
 		}
 		hits.pop_back();
 	}

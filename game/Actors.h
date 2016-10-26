@@ -14,14 +14,20 @@ enum ACTOR_CLASS{
 	ACTOR_BLOCK
 };
 
+class block;
+class bomb;
+class Character;
+class PowerUp;
+
 class Actors
 {
 protected:
 	int _class;
 	int _x,_y;
 
-	int _anim;
-	
+	bool _index;
+
+	int _anim;	
 	animation _sprite;
 public:
 	Actors();
@@ -32,7 +38,6 @@ public:
 	int getY();
 
 	void setPos(int x, int y);
-	//void setSprite(const char* name);
 	int getClass();
 
 	void setAnimation(animation* table[],int id,int stt=0);
@@ -40,7 +45,16 @@ public:
 
 	void setState(int stt);
 
-	int combo;
+	void activate(int index);
+	void deactivate();
+	int getIndex();
+	bool isActive();
+
+	virtual block* getBlock();
+	virtual bomb* getBomb();
+	virtual Character* getCharacter();
+	virtual PowerUp* getPowerUp();
+	
 
 };
 #endif
