@@ -49,8 +49,6 @@ private:
 	int _turn;
 	int _suddenDeath;
 
-	Actors _action;
-
 	vector<Actors> _vfx;
 
 public:
@@ -71,8 +69,6 @@ public:
 	int suddenDeath();
 	void addTurn();
 	void dropBomb(int num);
-	
-	void setAction(int act, int x, int y);
 
 	matMN<Tile>& getTileMap();
 	camera& getCamera();

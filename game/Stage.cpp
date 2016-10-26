@@ -23,7 +23,6 @@ Stage::~Stage(){
 
 void Stage::init(font* f){
 	_font = f;
-	_action.getAnimation().init(UI_action);
 }
 /*void Stage::setGUI(int width, int height){
 
@@ -231,7 +230,6 @@ void Stage::renderActors(renderer& renderer){
 			}
 		}
 	}
-	renderer.renderActorInMapCenter(_action,_camera,-15,-75);
 
 	for(int i=0;i<_vfx.size();++i){
 		if(_vfx[i].getAnimation().getState() == ANIM_IDLE_R){
@@ -304,11 +302,6 @@ void Stage::dropBomb(int num){
 			break;
 
 	}
-}
-
-void Stage::setAction(int act, int x, int y){
-	_action.setPos(x,y);
-	_action.setState(act);
 }
 
 matMN<Tile>& Stage::getTileMap(){

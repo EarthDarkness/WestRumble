@@ -28,6 +28,7 @@ void userInterface::init(Stage* stg){
 	_tileMap = &(_stg->_tileMap);
 	_teams[0] = &(_stg->getTeam(0));
 	_teams[1] = &(_stg->getTeam(1));
+	_ohi.getAnimation().init(UI_action);
 }
 
 
@@ -82,7 +83,7 @@ void userInterface::update(int xm, int ym, int val){
 		if(_commands.empty()){
 			_selected = NULL;
 			clearOverlays();
-			setOHI("NULL",0,0);
+			setOHI(ANIM_NONE,0,0);
 		}else{
 			updateCommand(xm,ym);
 		}
@@ -91,7 +92,7 @@ void userInterface::update(int xm, int ym, int val){
 	if(getOverlayAt(xm,ym) == NULL){//não clicou em tile marcado
 		if(_selected != clicked){
 			_selected = NULL;
-			setOHI("NULL",0,0);
+			setOHI(ANIM_NONE,0,0);
 			if(clicked != NULL)
 				if(clicked->getClass() == ACTOR_CHAR)
 					if(_teams[_player]->checkSelected((Character*)clicked) != -1){
@@ -181,7 +182,7 @@ void userInterface::updateCommand(int xm, int ym){
 void userInterface::initCommand(){
 	if(_commands.empty()){
 		clearOverlays();
-		setOHI("NULL",0,0);
+		setOHI(ANIM_NONE,0,0);
 		return;
 	}
 
@@ -191,34 +192,34 @@ void userInterface::initCommand(){
 
 	if(act == ACTIONMOVE){
 		markWalk(chr);
-		setOHI("GFX_ACT_move",chr->getX(),chr->getY());
+		setOHI(ANIM_MOVE,chr->getX(),chr->getY());
 	}else if(act == ACTIONBOMB){
 		markBomb(chr);
-		setOHI("GFX_ACT_bomb",chr->getX(),chr->getY());
+		setOHI(ANIM_BOMB,chr->getX(),chr->getY());
 	}else if(act == ACTIONGUNFIRE){
 		markGunFire(chr);
-		setOHI("GFX_ACT_shot",chr->getX(),chr->getY());
+		setOHI(ANIM_SHOT,chr->getX(),chr->getY());
 	}else if(act == ACTIONTIMER_UP){
 		markTimerUp(chr);
-		setOHI("GFX_ACT_timerup",chr->getX(),chr->getY());
+		setOHI(ANIM_TIMERUP,chr->getX(),chr->getY());
 	}else if(act == ACTIONTIMER_DOWN){
 		markTimerDown(chr);
-		setOHI("GFX_ACT_timerdown",chr->getX(),chr->getY());
+		setOHI(ANIM_TIMERDOWN,chr->getX(),chr->getY());
 	}else if(act == ACTIONRELAUNCHSELECT){
 		markThrow(chr);
-		setOHI("GFX_ACT_grab",chr->getX(),chr->getY());
+		setOHI(ANIM_GRAB,chr->getX(),chr->getY());
 	}else if(act == ACTIONRELAUNCH){
 		markBomb(chr);
-		setOHI("GFX_ACT_throw",chr->getX(),chr->getY());
+		setOHI(ANIM_LAUNCH,chr->getX(),chr->getY());
 	}else if(act == ACTIONBARRIER){
 		markBarrel(chr);
-		setOHI("GFX_ACT_barrel",chr->getX(),chr->getY());
+		setOHI(ANIM_BARREL,chr->getX(),chr->getY());
 	}else if(act == ACTIONSTUN){
 		markRope(chr);
-		setOHI("GFX_ACT_stun",chr->getX(),chr->getY());
+		setOHI(ANIM_STUN,chr->getX(),chr->getY());
 	}else if(act == ACTIONBOMBDETONATOR){
 		markDetonator(chr);
-		setOHI("GFX_ACT_detonate",chr->getX(),chr->getY());
+		setOHI(ANIM_DETOANTE,chr->getX(),chr->getY());
 	}
 	
 }
@@ -278,8 +279,8 @@ void userInterface::clearCommands(){
 }
 
 
-void userInterface::setOHI(const char* name, int x, int y){
-	//_ohi.setSprite(name);
+void userInterface::setOHI(int name, int x, int y){
+	_ohi.getAnimation().setState(name);
 	_ohi.setPos(x,y);
 }
 

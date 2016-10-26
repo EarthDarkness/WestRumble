@@ -57,10 +57,6 @@ private:
 
 	void checkEnd();
 
-	void calcActions();
-	void initAction();
-	void updateAction(int x, int y);
-
 	void turnPlayer();
 	void turnField();
 

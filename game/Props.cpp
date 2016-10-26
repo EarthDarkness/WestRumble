@@ -165,6 +165,10 @@ void loadAnimation(int sprite, animation& anim, int stt, resources& res){
 void intLoadImages(resources& res){
 	res.loadImage("resources/image/invalid.png");
 	res.loadImage("resources/image/transparent.png");
+	{
+		int zero=0;
+		pushAnimation(&zero,1);
+	}
 
 	IMG_GFX::logo = res.loadImage("resources/image/GFX_logo.png");
 	IMG_GFX::wood = res.loadImage("resources/image/BGN_title.png");

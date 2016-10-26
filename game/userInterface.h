@@ -51,7 +51,7 @@ public:
 	void fillCommands();
 	void clearCommands();
 
-	void setOHI(const char* name, int x, int y);
+	void setOHI(int name, int x, int y);
 
 	void clearOverlays();
 
