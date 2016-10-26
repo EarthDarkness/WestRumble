@@ -19,6 +19,8 @@ class Actors
 protected:
 	int _class;
 	int _x,_y;
+
+	int _anim;
 	
 	animation _sprite;
 public:
@@ -33,7 +35,9 @@ public:
 	//void setSprite(const char* name);
 	int getClass();
 
+	void setAnimation(animation* table[],int id,int stt=0);
 	animation& getAnimation();
+
 	void setState(int stt);
 
 	int combo;

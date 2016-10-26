@@ -12,6 +12,15 @@ extern animation VFX_gunfire;
 extern animation VFX_gunflare;
 extern animation VFX_explosion;
 
+extern animation* VFX_TABLE[];
+
+enum VFX_ID{
+	VFX_ID_NONE=0,
+	VFX_ID_GUNFLARE,
+	VFX_ID_GUNFIRE,
+	VFX_ID_EXPLOSION
+};
+
 extern animation CHR_char_P1;
 extern animation CHR_char_P2;
 
@@ -25,29 +34,46 @@ extern animation PWP_gunpowder;
 extern animation PWP_rope;
 extern animation PWP_star;
 
-extern animation BMB_S_0;
-extern animation BMB_S_30;
-extern animation BMB_S_80;
-extern animation BMB_S_180;
-extern animation BMB_S_250;
-extern animation BMB_S_300;
+extern animation* PWP_TABLE[];
 
-extern animation BMB_T_0;
-extern animation BMB_T_30;
-extern animation BMB_T_80;
-extern animation BMB_T_180;
-extern animation BMB_T_250;
-extern animation BMB_T_300;
+enum PWP_ID{
+	PWP_ID_NONE=0,
+	PWP_ID_BARREL,
+	PWP_ID_BOOT,
+	PWP_ID_DETOANTOR,
+	PWP_ID_DYNAMITE,
+	PWP_ID_FUSE,
+	PWP_ID_GLOVE,
+	PWP_ID_GUNPOWDER,
+	PWP_ID_ROPE,
+	PWP_ID_STAR
+};
 
-extern animation BMB_H_0;
-extern animation BMB_H_30;
-extern animation BMB_H_80;
-extern animation BMB_H_180;
-extern animation BMB_H_250;
+extern animation BMB_SINGLE;
+extern animation BMB_TRIPLE;
+extern animation BMB_SEPTUPLE;
+
+extern animation* BMB_TABLE[];
+
+enum BMB_ID{
+	BMB_ID_NONE=0,
+	BMB_ID_SINGLE,
+	BMB_ID_TRIPLE,
+	BMB_ID_SEPTUPLE
+};
+
 extern animation BMB_H_300;
 
 extern animation BLK_box;
 extern animation BLK_barrel;
+
+extern animation* BLK_TABLE[];
+
+enum BLK_ID{
+	BLK_ID_NONE=0,
+	BLK_ID_BOX,
+	BLK_ID_BARREL
+};
 
 extern animation UI_action;
 extern animation UI_ovelay;
@@ -167,6 +193,14 @@ enum ANIM_STATE_UI{
 	ANIM_BARREL=8,
 	ANIM_STUN=9,
 	ANIM_DETOANTE=10
+};
+enum ANIM_STATE_BMB{
+	ANIM_0=0,
+	ANIM_30,
+	ANIM_80,
+	ANIM_180,
+	ANIM_250,
+	ANIM_300
 };
 
 

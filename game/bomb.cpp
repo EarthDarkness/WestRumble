@@ -1,25 +1,7 @@
 #include "bomb.h"
 #include "enum.h"
+#include "Props.h"
 
-extern animation BMB_S_0;
-extern animation BMB_S_30;
-extern animation BMB_S_80;
-extern animation BMB_S_180;
-extern animation BMB_S_250;
-extern animation BMB_S_300;
-
-extern animation BMB_T_0;
-extern animation BMB_T_30;
-extern animation BMB_T_80;
-extern animation BMB_T_180;
-extern animation BMB_T_250;
-extern animation BMB_T_300;
-
-extern animation BMB_H_0;
-extern animation BMB_H_30;
-extern animation BMB_H_80;
-extern animation BMB_H_180;
-extern animation BMB_H_250;
 extern animation BMB_H_300;
 
 bomb::bomb(){
@@ -46,50 +28,12 @@ void bomb::init(int fire, int index, int team, int owner){
 	int r = rand()%6;
 	cout << "BOMB: " << _fire << "-" << r << endl;
 	if(_fire <= 2){
-		if(r == 0){
-			_sprite.init(BMB_S_0);
-		}else if(r == 1){
-			_sprite.init(BMB_S_30);
-		}else if(r == 2){
-			_sprite.init(BMB_S_80);
-		}else if(r == 3){
-			_sprite.init(BMB_S_180);
-		}else if(r == 4){
-			_sprite.init(BMB_S_250);
-		}else if(r == 5){
-			_sprite.init(BMB_S_300);
-		}
+		setAnimation(BMB_TABLE,BMB_ID_SINGLE,r);
 	}else if(_fire <= 4){
-		if(r == 0){
-			_sprite.init(BMB_T_0);
-		}else if(r == 1){
-			_sprite.init(BMB_T_30);
-		}else if(r == 2){
-			_sprite.init(BMB_T_80);
-		}else if(r == 3){
-			_sprite.init(BMB_T_180);
-		}else if(r == 4){
-			_sprite.init(BMB_T_250);
-		}else if(r == 5){
-			_sprite.init(BMB_T_300);
-		}
+		setAnimation(BMB_TABLE,BMB_ID_TRIPLE,r);
 	}else if(_fire >4){
-		if(r == 0){
-			_sprite.init(BMB_H_0);
-		}else if(r == 1){
-			_sprite.init(BMB_H_30);
-		}else if(r == 2){
-			_sprite.init(BMB_H_80);
-		}else if(r == 3){
-			_sprite.init(BMB_H_180);
-		}else if(r == 4){
-			_sprite.init(BMB_H_250);
-		}else if(r == 5){
-			_sprite.init(BMB_H_300);
-		}
+		setAnimation(BMB_TABLE,BMB_ID_SEPTUPLE,r);
 	}
-	//TODO set initial state
-	//_sprite.setState("idle");
 }
 
 

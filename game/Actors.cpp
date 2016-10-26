@@ -7,6 +7,7 @@ Actors::Actors(){
 	_x = 0;
 	_y = 0;
 
+	_anim = 0;
 }
 Actors::~Actors(){
 
@@ -35,9 +36,16 @@ int Actors::getClass(){
 	return _class;
 }
 
+void Actors::setAnimation(animation* table[],int id,int stt){
+	_anim = id;
+	if(id > 0)
+		_sprite.init(*table[id]);
+	_sprite.setState(stt);
+}
 animation& Actors::getAnimation(){
 	return _sprite;
 }
+
 void Actors::setState(int stt){
 	_sprite.setState(stt);
 }

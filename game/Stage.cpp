@@ -336,10 +336,8 @@ void Stage::polulate(){
 		if(_tileMap._map.at(pos[r]).actor != NULL)
 			continue;
 
-		block b;
-		//b.setSprite("BLK_box");//deprecated
-		blocks.push_back(b);
-		blocks.back().getAnimation().init(BLK_box);
+		blocks.push_back(block());
+		blocks.back().setAnimation(BLK_TABLE,BLK_ID_BOX);
 		instantiateActor(&blocks.back(),pos[r]%w,pos[r]/w);
 
 	}
@@ -407,7 +405,7 @@ void Stage::checkExplosion(bomb* b, vector<Actors*>& out){
 				if(ap==-1){
 					//fx.setSprite("explosao.png");
 					_vfx.push_back(fx);
-					_vfx.back().getAnimation().init(VFX_explosion);
+					_vfx.back().setAnimation(VFX_TABLE,VFX_ID_EXPLOSION);
 
 				}/*else if(strcmp(_vfx[ap].getAnimation().getState(),"exp")!=0){
 					//fx.setSprite("explosao.png");
@@ -444,15 +442,14 @@ void Stage::checkGunfire(Character* c, vector<Actors*>& out){
 	fx.setPos(c->getX(), c->getY());
 	
 	_vfx.push_back(fx);
-	_vfx.back().getAnimation().init(VFX_gunflare);
 	if(c->direction == GUN_E){
-		_vfx.back().getAnimation().setState(ANIM_IDLE_R);
+		_vfx.back().setAnimation(VFX_TABLE,VFX_ID_GUNFLARE,ANIM_IDLE_R);
 	}else if(c->direction == GUN_W){
-		_vfx.back().getAnimation().setState(ANIM_IDLE_L);
+		_vfx.back().setAnimation(VFX_TABLE,VFX_ID_GUNFLARE,ANIM_IDLE_L);
 	}else if(c->direction == GUN_N){
-		_vfx.back().getAnimation().setState(ANIM_IDLE_U);
+		_vfx.back().setAnimation(VFX_TABLE,VFX_ID_GUNFLARE,ANIM_IDLE_U);
 	}else if(c->direction == GUN_S){
-		_vfx.back().getAnimation().setState(ANIM_IDLE_D);
+		_vfx.back().setAnimation(VFX_TABLE,VFX_ID_GUNFLARE,ANIM_IDLE_D);
 	}
 	}
 	for(int k=1;;++k){
@@ -478,18 +475,16 @@ void Stage::checkGunfire(Character* c, vector<Actors*>& out){
 			*/
 
 			_vfx.push_back(fx);
-			_vfx.back().getAnimation().init(VFX_gunfire);
 			if(c->direction == GUN_E){
-				_vfx.back().getAnimation().setState(ANIM_IDLE_R);
+				_vfx.back().setAnimation(VFX_TABLE,VFX_ID_GUNFIRE,ANIM_IDLE_R);
 			}else if(c->direction == GUN_W){
-				_vfx.back().getAnimation().setState(ANIM_IDLE_L);
+				_vfx.back().setAnimation(VFX_TABLE,VFX_ID_GUNFIRE,ANIM_IDLE_L);
 			}else if(c->direction == GUN_N){
-				_vfx.back().getAnimation().setState(ANIM_IDLE_U);
+				_vfx.back().setAnimation(VFX_TABLE,VFX_ID_GUNFIRE,ANIM_IDLE_U);
 			}else if(c->direction == GUN_S){
-				_vfx.back().getAnimation().setState(ANIM_IDLE_D);
+				_vfx.back().setAnimation(VFX_TABLE,VFX_ID_GUNFIRE,ANIM_IDLE_D);
 			}
-			//_vfx.back().getAnimation().loadAnim("resources/VFX_gunfire.txt");
-			//_vfx.back().getAnimation().setState("gunfire");
+			
 		}/*else if(strcmp(_vfx[ap].getAnimation().getState(),"gunfire")!=0){
 			//fx.setSprite("explosao.png");
 			_vfx.push_back(fx);

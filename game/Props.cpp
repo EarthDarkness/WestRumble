@@ -13,6 +13,13 @@ animation VFX_gunfire;
 animation VFX_gunflare;
 animation VFX_explosion;
 
+animation* VFX_TABLE[] = {
+	NULL,
+	&VFX_gunfire,
+	&VFX_gunflare,
+	&VFX_explosion
+};
+
 animation CHR_char_P1;
 animation CHR_char_P2;
 
@@ -26,29 +33,40 @@ animation PWP_gunpowder;
 animation PWP_rope;
 animation PWP_star;
 
-animation BMB_S_0;
-animation BMB_S_30;
-animation BMB_S_80;
-animation BMB_S_180;
-animation BMB_S_250;
-animation BMB_S_300;
+animation* PWP_TABLE[] = {
+	NULL,
+	&PWP_barrel,
+	&PWP_boot,
+	&PWP_detonator,
+	&PWP_dynamite,
+	&PWP_fuse,
+	&PWP_glove,
+	&PWP_gunpowder,
+	&PWP_rope,
+	&PWP_star
+};
 
-animation BMB_T_0;
-animation BMB_T_30;
-animation BMB_T_80;
-animation BMB_T_180;
-animation BMB_T_250;
-animation BMB_T_300;
 
-animation BMB_H_0;
-animation BMB_H_30;
-animation BMB_H_80;
-animation BMB_H_180;
-animation BMB_H_250;
-animation BMB_H_300;
+animation BMB_SINGLE;
+animation BMB_TRIPLE;
+animation BMB_SEPTUPLE;
+
+animation* BMB_TABLE[]={
+	NULL,
+	&BMB_SINGLE,
+	&BMB_TRIPLE,
+	&BMB_SEPTUPLE
+};
+
 
 animation BLK_box;
 animation BLK_barrel;
+
+animation* BLK_TABLE[]={
+	NULL,
+	&BLK_box,
+	&BLK_barrel
+};
 
 animation UI_action;
 animation UI_ovelay;
@@ -253,27 +271,26 @@ void intLoadAnimations(resources& res){
 	loadAnimation("resources/PWP_star.txt",PWP_star,ANIM_IDLE,res);
 
 
+	loadAnimation("resources/BMB_S_0.txt",BMB_SINGLE,ANIM_0,res);
+	loadAnimation("resources/BMB_S_30.txt",BMB_SINGLE,ANIM_30,res);
+	loadAnimation("resources/BMB_S_80.txt",BMB_SINGLE,ANIM_80,res);
+	loadAnimation("resources/BMB_S_180.txt",BMB_SINGLE,ANIM_180,res);
+	loadAnimation("resources/BMB_S_250.txt",BMB_SINGLE,ANIM_250,res);
+	loadAnimation("resources/BMB_S_300.txt",BMB_SINGLE,ANIM_300,res);
 
-	loadAnimation("resources/BMB_S_0.txt",BMB_S_0,ANIM_IDLE,res);
-	loadAnimation("resources/BMB_S_30.txt",BMB_S_30,ANIM_IDLE,res);
-	loadAnimation("resources/BMB_S_80.txt",BMB_S_80,ANIM_IDLE,res);
-	loadAnimation("resources/BMB_S_180.txt",BMB_S_180,ANIM_IDLE,res);
-	loadAnimation("resources/BMB_S_250.txt",BMB_S_250,ANIM_IDLE,res);
-	loadAnimation("resources/BMB_S_300.txt",BMB_S_300,ANIM_IDLE,res);
+	loadAnimation("resources/BMB_T_0.txt",BMB_TRIPLE,ANIM_0,res);
+	loadAnimation("resources/BMB_T_30.txt",BMB_TRIPLE,ANIM_30,res);
+	loadAnimation("resources/BMB_T_80.txt",BMB_TRIPLE,ANIM_80,res);
+	loadAnimation("resources/BMB_T_180.txt",BMB_TRIPLE,ANIM_180,res);
+	loadAnimation("resources/BMB_T_250.txt",BMB_TRIPLE,ANIM_250,res);
+	loadAnimation("resources/BMB_T_300.txt",BMB_TRIPLE,ANIM_300,res);
 
-	loadAnimation("resources/BMB_T_0.txt",BMB_T_0,ANIM_IDLE,res);
-	loadAnimation("resources/BMB_T_30.txt",BMB_T_30,ANIM_IDLE,res);
-	loadAnimation("resources/BMB_T_80.txt",BMB_T_80,ANIM_IDLE,res);
-	loadAnimation("resources/BMB_T_180.txt",BMB_T_180,ANIM_IDLE,res);
-	loadAnimation("resources/BMB_T_250.txt",BMB_T_250,ANIM_IDLE,res);
-	loadAnimation("resources/BMB_T_300.txt",BMB_T_300,ANIM_IDLE,res);
-
-	loadAnimation("resources/BMB_H_0.txt",BMB_H_0,ANIM_IDLE,res);
-	loadAnimation("resources/BMB_H_30.txt",BMB_H_30,ANIM_IDLE,res);
-	loadAnimation("resources/BMB_H_80.txt",BMB_H_80,ANIM_IDLE,res);
-	loadAnimation("resources/BMB_H_180.txt",BMB_H_180,ANIM_IDLE,res);
-	loadAnimation("resources/BMB_H_250.txt",BMB_H_250,ANIM_IDLE,res);
-	loadAnimation("resources/BMB_H_300.txt",BMB_H_300,ANIM_IDLE,res);
+	loadAnimation("resources/BMB_H_0.txt",BMB_SEPTUPLE,ANIM_0,res);
+	loadAnimation("resources/BMB_H_30.txt",BMB_SEPTUPLE,ANIM_30,res);
+	loadAnimation("resources/BMB_H_80.txt",BMB_SEPTUPLE,ANIM_80,res);
+	loadAnimation("resources/BMB_H_180.txt",BMB_SEPTUPLE,ANIM_180,res);
+	loadAnimation("resources/BMB_H_250.txt",BMB_SEPTUPLE,ANIM_250,res);
+	loadAnimation("resources/BMB_H_300.txt",BMB_SEPTUPLE,ANIM_300,res);
 
 
 
