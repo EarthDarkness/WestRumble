@@ -79,3 +79,15 @@ PowerUp* Actors::getPowerUp(){
 	return NULL;
 }
 
+void Actors::encode(char* data, int& len){
+	/*int p=-1;
+	data[++p] = 0;
+	data[++p] = _class;
+	data[++p] = _x & 0xff;
+	data[++p] = _y & 0xff;
+*/
+}
+void Actors::decode(char* data){
+
+}
+

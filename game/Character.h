@@ -25,7 +25,7 @@ private:
 	int _capacity;//number of max bombs
 	int _power;//dynamite power
 	int _shield;
-	bool alive;
+	bool _alive;
 
 	bool _effects[ACTIVE_POWUP_SIZE];//power-ups that have active effect 
 	int _bombs[MAX_BOMBS];//index of bombs instanced]
@@ -33,8 +33,7 @@ private:
 
 
 public:
-	int direction;
-	bool shot;//Unused?
+	int _dir;
 
 	Character();
 	~Character();
@@ -64,5 +63,7 @@ public:
 
 	Character* getCharacter();
 
+	void encode(char* data, int& len);
+	void decode(char* data);
 };
 #endif

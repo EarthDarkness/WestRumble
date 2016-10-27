@@ -35,6 +35,10 @@ public:
 
 	PowerUp* getPowerUp();
 
+	void encode(char* data, int& len);
+	void decode(char* data);
+
+
 };
 
 #endif

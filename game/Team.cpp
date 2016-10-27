@@ -113,3 +113,49 @@ void Team::reset(){
 }
 
 
+void Team::encode(char* data, int& len){
+	int p=-1;
+	data[++p] = 0;//2byte size
+	data[++p] = 0;//2byte size
+
+	data[++p] = count & 0xff;
+
+	for(int i=0;i<5;++i)
+		data[++p] = actions[i] & 0xff;
+
+	for(int i=0;i<5;++i)
+		for(int j=0;j<ACTIONSIZE;++j)
+			data[++p] = _state[i]._state[j] & 0xff;
+
+	for(int i=0;i<5;++i){
+		int l=0;
+		_characters[i].encode(&(data[++p]),l);
+		p+=l-1;
+	}
+
+	short* ss=(short*)data;
+	(*ss) = ++p;
+	len = p;
+}
+void Team::decode(char* data, TileMap* tm){
+	int p=1;
+
+	count = data[++p];
+
+	for(int i=0;i<5;++i)
+		actions[i] = data[++p];
+
+	for(int i=0;i<5;++i)
+		for(int j=0;j<ACTIONSIZE;++j)
+			_state[i]._state[j] = data[++p];
+
+	for(int i=0;i<5;++i){
+		int l = data[++p];
+		_characters[i].decode(&(data[p]));
+		p+=l-1;
+	}
+
+}
+
+
+

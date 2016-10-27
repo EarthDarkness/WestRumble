@@ -55,6 +55,8 @@ public:
 	virtual Character* getCharacter();
 	virtual PowerUp* getPowerUp();
 	
+	virtual void encode(char* data, int& len);
+	virtual void decode(char* data);
 
 };
 #endif

@@ -227,6 +227,18 @@ void Game::updateStage(){
 					field = false;
 	}*/
 
+	/*if(stage._turn == 4){
+		stage.encode(en,ll);
+		//for(int i=0;i<len;++i)
+		//	printf("%02x ",buf[i]);
+		int a = 0;
+	}
+	if(stage._turn == 8){
+		stage.clear();
+		stage.decode(en);
+	}*/
+
+
 	if(!field)
 		turnPlayer();
 
@@ -564,20 +576,19 @@ void Game::proccessMessages(){
 			Character* act = &(curteam->getCharacter(pid));
 
 			if(dir == WRP_RIGHT){
-				act->direction = GUN_E;
+				act->_dir = GUN_E;
 				act->setState(ANIM_READY_R);
 			}else if(dir == WRP_LEFT){
-				act->direction = GUN_W;
+				act->_dir = GUN_W;
 				act->setState(ANIM_READY_L);
 			}else if(dir == WRP_DOWN){
-				act->direction = GUN_S;
+				act->_dir = GUN_S;
 				act->setState(ANIM_READY_D);
 			}else if(dir == WRP_UP){
-				act->direction = GUN_N;
+				act->_dir = GUN_N;
 				act->setState(ANIM_READY_U);
 			}
 
-			act->shot = false;
 			curteam->_state[pid].addCooldown(ACTIONGUNFIRE,3);
 			curteam->actions[pid] = CHAR_END;
 
@@ -738,13 +749,13 @@ void Game::turnField(){
 		stage.checkGunfire(&tbuf->getCharacter(j),hits);
 		//tbuf->_state[j].setState(ACTIONGUNFIRE,STATE_STAGE2);
 
-		if(tbuf->getCharacter(j).direction == GUN_N){
+		if(tbuf->getCharacter(j)._dir == GUN_N){
 			tbuf->getCharacter(j).setState(ANIM_SHOT_U);
-		}else if(tbuf->getCharacter(j).direction == GUN_S){
+		}else if(tbuf->getCharacter(j)._dir == GUN_S){
 			tbuf->getCharacter(j).setState(ANIM_SHOT_D);
-		}else if(tbuf->getCharacter(j).direction == GUN_W){
+		}else if(tbuf->getCharacter(j)._dir == GUN_W){
 			tbuf->getCharacter(j).setState(ANIM_SHOT_L);
-		}else if(tbuf->getCharacter(j).direction == GUN_E){
+		}else if(tbuf->getCharacter(j)._dir == GUN_E){
 			tbuf->getCharacter(j).setState(ANIM_SHOT_R);
 		}
 	}
@@ -777,13 +788,13 @@ void Game::turnField(){
 	for(int i=0;i<5;++i){
 		if(stage.getTeam(player).getCharacter(i).getAlive()){
 			if(stage.getTeam(player)._state[i].getState(ACTIONGUNFIRE) == 1){
-				if(stage.getTeam(player).getCharacter(i).direction == GUN_E){
+				if(stage.getTeam(player).getCharacter(i)._dir == GUN_E){
 					stage.getTeam(player).getCharacter(i).setState(ANIM_IDLE_R);
-				}else if(stage.getTeam(player).getCharacter(i).direction == GUN_W){
+				}else if(stage.getTeam(player).getCharacter(i)._dir == GUN_W){
 					stage.getTeam(player).getCharacter(i).setState(ANIM_IDLE_L);
-				}else if(stage.getTeam(player).getCharacter(i).direction == GUN_N){
+				}else if(stage.getTeam(player).getCharacter(i)._dir == GUN_N){
 					stage.getTeam(player).getCharacter(i).setState(ANIM_IDLE_U);
-				}else if(stage.getTeam(player).getCharacter(i).direction == GUN_S){
+				}else if(stage.getTeam(player).getCharacter(i)._dir == GUN_S){
 					stage.getTeam(player).getCharacter(i).setState(ANIM_IDLE_D);
 				}
 			}

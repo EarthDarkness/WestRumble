@@ -11,15 +11,14 @@ Character::Character(){
 	_capacity = 1;
 	_power = 2;
 	_shield = 0;
-	alive = true;
+	_alive = true;
 
 	for(int i=0;i<ACTIVE_POWUP_SIZE;++i)
 		_effects[i] = false;
 	for(int i=0;i<MAX_BOMBS;++i)
 		_bombs[i] = -1;
 
-	direction = GUN_NONE;
-	shot = false;
+	_dir = GUN_NONE;
 }
 Character::~Character(){
 }
@@ -31,15 +30,14 @@ void Character::reset(){
 	_capacity = 1;
 	_power = 2;
 	_shield = 0;
-	alive = true;
+	_alive = true;
 
 	for(int i=0;i<ACTIVE_POWUP_SIZE;++i)
 		_effects[i] = false;
 	for(int i=0;i<MAX_BOMBS;++i)
 		_bombs[i] = -1;
 
-	direction = GUN_NONE;
-	shot = false;
+	_dir = GUN_NONE;
 }
 void Character::init(int t){
 	if(t==0)
@@ -125,12 +123,66 @@ void Character::detonate(int* child){
 }
 
 void Character::setAlive(bool b){
-	alive = b;
+	_alive = b;
 }
 bool Character::getAlive(){
-	return alive;
+	return _alive;
 }
 
 Character* Character::getCharacter(){
 	return reinterpret_cast<Character*>(this);
+}
+
+
+void Character::encode(char* data, int& len){
+	int p=-1;
+	data[++p] = 0;
+
+	data[++p] = _class & 0xff;
+	data[++p] = _x & 0xff;
+	data[++p] = _y & 0xff;
+	data[++p] = _sprite.getState() & 0xff;
+
+
+	data[++p] = _speed & 0xff;
+	data[++p] = _capacity & 0xff;
+	data[++p] = _power & 0xff;
+	data[++p] = _shield & 0xff;
+	data[++p] = _alive & 0xff;
+
+	for(int i=0;i<ACTIVE_POWUP_SIZE;++i)
+		data[++p] = _effects[i] & 0xff;
+
+	data[++p] = _size & 0xff;
+	for(int i=0;i<MAX_BOMBS;++i)
+		data[++p] = _bombs[i] & 0xff;
+
+	data[++p] = _dir & 0xff;
+	data[0] = ++p;
+	len = p;
+}
+void Character::decode(char* data){
+	int p=0;
+	if(data[1] != ACTOR_CHAR)
+		return;
+
+	_class = data[++p];
+	_x = data[++p];
+	_y = data[++p];
+	_sprite.setState(data[++p]);
+
+	_speed = data[++p];
+	_capacity = data[++p];
+	_power = data[++p];
+	_shield = data[++p];
+	_alive = data[++p];
+
+	for(int i=0;i<ACTIVE_POWUP_SIZE;++i)
+		_effects[i] = data[++p];
+
+	_size = data[++p];
+	for(int i=0;i<MAX_BOMBS;++i)
+		_bombs[i] = data[++p];
+
+	_dir = data[++p];
 }

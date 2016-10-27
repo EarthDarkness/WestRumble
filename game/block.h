@@ -15,5 +15,8 @@ public:
 	int getData();
 
 	block* getBlock();
+
+	void encode(char* data, int& len);
+	void decode(char* data);
 };
 #endif

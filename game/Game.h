@@ -19,9 +19,14 @@
 
 using namespace std;
 
+
+
 class Game
 {
 private:
+	char en[4096];
+	int ll;
+
 
 	const char* title;
 	int width_screen;

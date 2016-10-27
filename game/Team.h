@@ -3,6 +3,7 @@
 
 #include "Character.h"
 #include "enum.h"
+#include "TileMap.h"
 
 enum CharacterAction{
 	CHAR_NONE = 0,
@@ -18,6 +19,7 @@ enum stateValues{
 };
 class charState
 {
+	friend class Team;
 private:
 	int _state[ACTIONSIZE];
 
@@ -68,6 +70,9 @@ public:
 	int isMember(Character* c);
 
 	void reset();
+
+	void encode(char* data, int& len);
+	void decode(char* data, TileMap* tm);
 
 };
 #endif

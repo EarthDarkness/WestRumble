@@ -34,7 +34,7 @@ struct Tile{
 	Actors* actor;//to index
 
 };
-
+class Stage;
 class TileMap
 {
 public:
@@ -49,7 +49,9 @@ public:
 	bool inBound(int x, int y);
 
 	matMN<Tile> _map;
-private:
+
+	void encode(char* data, int& len);
+	void decode(char* data, Stage* stg);
 };
 
 #endif

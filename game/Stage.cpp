@@ -454,13 +454,13 @@ void Stage::checkGunfire(Character* c, vector<Actors*>& out){
 	int i=0;
 	int j=0;
 
-	if(c->direction == GUN_N)
+	if(c->_dir == GUN_N)
 		j=-1;
-	else if(c->direction == GUN_S)
+	else if(c->_dir == GUN_S)
 		j=1;
-	else if(c->direction == GUN_W)
+	else if(c->_dir == GUN_W)
 		i=-1;
-	else if(c->direction == GUN_E)
+	else if(c->_dir == GUN_E)
 		i=1;
 
 	{
@@ -468,13 +468,13 @@ void Stage::checkGunfire(Character* c, vector<Actors*>& out){
 	fx.setPos(c->getX(), c->getY());
 	
 	_vfx.push_back(fx);
-	if(c->direction == GUN_E){
+	if(c->_dir == GUN_E){
 		_vfx.back().setAnimation(VFX_TABLE,VFX_ID_GUNFLARE,ANIM_IDLE_R);
-	}else if(c->direction == GUN_W){
+	}else if(c->_dir == GUN_W){
 		_vfx.back().setAnimation(VFX_TABLE,VFX_ID_GUNFLARE,ANIM_IDLE_L);
-	}else if(c->direction == GUN_N){
+	}else if(c->_dir == GUN_N){
 		_vfx.back().setAnimation(VFX_TABLE,VFX_ID_GUNFLARE,ANIM_IDLE_U);
-	}else if(c->direction == GUN_S){
+	}else if(c->_dir == GUN_S){
 		_vfx.back().setAnimation(VFX_TABLE,VFX_ID_GUNFLARE,ANIM_IDLE_D);
 	}
 	}
@@ -501,13 +501,13 @@ void Stage::checkGunfire(Character* c, vector<Actors*>& out){
 			*/
 
 			_vfx.push_back(fx);
-			if(c->direction == GUN_E){
+			if(c->_dir == GUN_E){
 				_vfx.back().setAnimation(VFX_TABLE,VFX_ID_GUNFIRE,ANIM_IDLE_R);
-			}else if(c->direction == GUN_W){
+			}else if(c->_dir == GUN_W){
 				_vfx.back().setAnimation(VFX_TABLE,VFX_ID_GUNFIRE,ANIM_IDLE_L);
-			}else if(c->direction == GUN_N){
+			}else if(c->_dir == GUN_N){
 				_vfx.back().setAnimation(VFX_TABLE,VFX_ID_GUNFIRE,ANIM_IDLE_U);
-			}else if(c->direction == GUN_S){
+			}else if(c->_dir == GUN_S){
 				_vfx.back().setAnimation(VFX_TABLE,VFX_ID_GUNFIRE,ANIM_IDLE_D);
 			}
 			
@@ -626,3 +626,104 @@ void Stage::hitBlock(block* b){
 	spawn(b->getX(),b->getY());
 	remove(_blocks,b->getIndex());
 }
+
+
+void Stage::encode(char* data, int& len){
+	int p = -1;
+	char* n;
+	data[++p] = 0;//2byte total size
+	data[++p] = 0;//2byte total size
+
+	data[++p] = _turn & 0xff;
+	data[++p] = _suddenDeath & 0xff;
+
+	n = &(data[++p]);//num of bombs
+	(*n) = 0;
+	for(int i=0;i<_bombs.size();++i){
+		if(_bombs[i]->isActive()){
+			++(*n);
+			int l=0;
+			_bombs[i]->encode(&(data[++p]),l);
+			p+=l-1;
+		}
+	}
+	n = &(data[++p]);//num of locks
+	(*n) = 0;
+	for(int i=0;i<_blocks.size();++i){
+		if(_blocks[i]->isActive()){
+			++(*n);
+			int l=0;
+			_blocks[i]->encode(&(data[++p]),l);
+			p+=l-1;
+		}
+	}
+	n = &(data[++p]);//num of powerups
+	(*n) = 0;
+	for(int i=0;i<_powerUps.size();++i){
+		if(_powerUps[i]->isActive()){
+			++(*n);
+			int l=0;
+			_powerUps[i]->encode(&(data[++p]),l);
+			p+=l-1;
+		}
+	}
+
+	for(int i=0;i<2;++i){
+		int l=0;
+		_teams[i]->encode(&(data[++p]),l);
+		p+=l-1;
+	}
+
+	int l=0;
+	_tileMap.encode(&(data[++p]),l);
+	p+=l-1;
+
+	data[++p] = '\0';
+
+	short* ss=(short*)data;
+	(*ss) = ++p;
+	len = p;
+}
+void Stage::decode(char* data){
+	int p = 1;
+	int n;
+
+	_turn = data[++p];
+	_suddenDeath = data[++p];
+
+	n = data[++p];
+	for(int i=0;i<n;++i){
+		int index = insert(_bombs);
+		bomb* b = _bombs[index];
+		int s = data[++p];
+		b->decode(&(data[p]));
+		p+=s-1;
+	}
+	n = data[++p];
+	for(int i=0;i<n;++i){
+		int index = insert(_blocks);
+		block* b = _blocks[index];
+		int s = data[++p];
+		b->decode(&(data[p]));
+		p+=s-1;
+	}
+	n = data[++p];
+	for(int i=0;i<n;++i){
+		int index = insert(_powerUps);
+		PowerUp* b = _powerUps[index];
+		int s = data[++p];
+		b->decode(&(data[p]));
+		p+=s-1;
+	}
+	int l;
+	for(int i=0;i<2;++i){
+		l = *((short*)&(data[++p]));
+		_teams[i]->decode(&(data[p]),&_tileMap);
+		p+=l-1;
+	}
+
+	l = l = *((short*)&(data[++p]));
+	_tileMap.decode(&(data[p]),this);
+	p+=l-1;
+}
+

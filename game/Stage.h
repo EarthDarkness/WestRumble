@@ -64,18 +64,22 @@ private:
 	camera _camera;
 	font* _font;
 
-	int _turn;
 	int _suddenDeath;
 
 	vector<Actors> _vfx;
 
 public:
+	int _turn;
 	TileMap _tileMap;	
+
+	vector<bomb*> _bombs;
+	vector<block*> _blocks;
+	vector<PowerUp*> _powerUps;	
+
 	Stage();
 	~Stage();
 
 	void init(font* f);
-	//void setGUI(int width, int height);
 
 	int loadStage(const char* path, resources& resources);
 	void start(Team *teamA, Team *teamB);
@@ -107,19 +111,6 @@ public:
 	void hitPowUp(PowerUp* p);
 	void hitBlock(block* b);
 
-	vector<bomb*> _bombs;
-	vector<block*> _blocks;
-	vector<PowerUp*> _powerUps;
-
-	//bombas desenhadas
-	//list<bomb> bombs;
-	
-	//blocks desenhados
-	//list<block> blocks;
-
-	//power ups
-	//list<PowerUp> power_ups;
-	
 	
 	int findActorsPtr(Actors* entry, vector<Actors*>& data);
 	int findActorsPos(Actors& entry, vector<Actors>& data);
@@ -129,6 +120,8 @@ public:
 
 	bool waitForVFX();
 
+	void encode(char* data, int& len);
+	void decode(char* data);
 
 };
 #endif

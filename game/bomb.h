@@ -42,5 +42,8 @@ public:
 	int getOwner();
 
 	bomb* getBomb();
+
+	void encode(char* data, int& len);
+	void decode(char* data);
 };
 #endif

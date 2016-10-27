@@ -88,6 +88,8 @@ void userInterface::update(int xm, int ym, int val){
 			clearOverlays();
 			setOHI(ANIM_NONE,0,0);
 		}else{
+			char buf[256];
+			int len;
 			updateCommand(xm,ym);
 		}
 	}
