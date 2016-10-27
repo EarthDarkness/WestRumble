@@ -119,6 +119,8 @@ int Stage::loadStage(const char* path, resources& res){
 			//caregar posicao 
 			stage >> _initPos[i][j][0];
 			stage >> _initPos[i][j][1];
+
+			_tileMap._map.at(_initPos[i][j][0],_initPos[i][j][1]).actor = (Actors*)(-1);
 		}
 	}
 
@@ -144,7 +146,7 @@ void Stage::start(Team *teamA, Team *teamB)
 			_teams[i]->getCharacter(j).setPos(_initPos[i][j][0], _initPos[i][j][1]);
 			_teams[i]->getCharacter(j).init(i);
 			//setar no tile map, os actors de cada team
-			_tileMap._map.at(_initPos[i][j][0], _initPos[i][j][1]).setActor( dynamic_cast<Actors*>(&(_teams[i]->getCharacter(j))) );
+			_tileMap._map.at(_initPos[i][j][0], _initPos[i][j][1]).setActor(&(_teams[i]->getCharacter(j)));
 		}
 	}
 
@@ -278,9 +280,18 @@ void Stage::clear(){
 
 	_vfx.clear();
 
-	_bombs.clear();
-	_blocks.clear();
-	_powerUps.clear();
+	while(!_bombs.empty()){
+		delete _bombs.back();
+		_bombs.pop_back();
+	}
+	while(!_blocks.empty()){
+		delete _blocks.back();
+		_blocks.pop_back();
+	}
+	while(!_powerUps.empty()){
+		delete _powerUps.back();
+		_powerUps.pop_back();
+	}
 }
 
 
@@ -307,7 +318,7 @@ void Stage::dropBomb(int num){
 			continue;
 
 		int index = insert(_bombs);
-		bomb* b = &(_bombs[index]);
+		bomb* b = _bombs[index];
 		b->init(2,index);
 		b->setTurn(2);
 		instantiateActor(b,xx,yy);
@@ -350,15 +361,13 @@ void Stage::polulate(){
 		if(_tileMap._map.at(pos[r]).actor != NULL)
 			continue;
 
-
 		int index = insert(_blocks);
-		block* b = &(_blocks[index]);
+		block* b = _blocks[index];
 
 		b->setAnimation(BLK_TABLE,BLK_ID_BOX);
 		instantiateActor(b,pos[r]%w,pos[r]/w);
-
+		cout << "block at: " << pos[r]%w << "," << pos[r]/w << endl;
 	}
-
 
 }
 void Stage::spawn(int x, int y){
@@ -368,7 +377,7 @@ void Stage::spawn(int x, int y){
 			powup.push_back(i);
 
 	int index = insert(_powerUps);
-	PowerUp* p = &(_powerUps[index]);
+	PowerUp* p = _powerUps[index];
 	p->init(powup[rand()%powup.size()]);
 
 	instantiateActor(p,x,y);
@@ -539,30 +548,13 @@ bool Stage::waitForVFX(){
 void Stage::moveActor(int x0, int y0, int x, int y){
 	Actors* dst = _tileMap._map.at(x, y).actor;
 
-	if(dst != NULL){
-		if(dst->getClass() == ACTOR_POWUP){
-			//powerup applied outside this method
+	if(dst != NULL)
+	if(dst->getClass() == ACTOR_POWUP)
+		_powerUps[dst->getIndex()]->deactivate();
 
-			//remove power up da lista de renderizados
-			_powerUps[dst->getIndex()].deactivate();
-
-			_tileMap._map.at(x0, y0).actor->setPos(x, y);
-			_tileMap._map.at(x, y).actor = _tileMap._map.at(x0, y0).actor;
-			_tileMap._map.at(x0, y0).actor = NULL;
-
-
-		}
-
-	}else{ // actor == null 
-
-		//nova posicao
-		_tileMap._map.at(x0, y0).actor->setPos(x, y);
-
-		//
-		_tileMap._map.at(x, y).actor = _tileMap._map.at(x0, y0).actor;
-
-		_tileMap._map.at(x0, y0).actor = NULL;
-	}
+	_tileMap._map.at(x0, y0).actor->setPos(x, y);
+	_tileMap._map.at(x, y).actor = _tileMap._map.at(x0, y0).actor;
+	_tileMap._map.at(x0, y0).actor = NULL;
 
 	if(_tileMap._map.at(x, y).actor->getClass() == ACTOR_CHAR){
 		int dx, dy;
@@ -624,7 +616,7 @@ void Stage::hitPowUp(PowerUp* p){
 		return;
 
 	_tileMap._map.at(p->getX(),p->getY()).setActor(NULL);
-	_powerUps[p->getIndex()].deactivate();
+	remove(_powerUps,p->getIndex());
 }
 void Stage::hitBlock(block* b){
 	if(b == NULL)
@@ -632,5 +624,5 @@ void Stage::hitBlock(block* b){
 
 	_tileMap._map.at(b->getX(),b->getY()).setActor(NULL);
 	spawn(b->getX(),b->getY());
-	_blocks[b->getIndex()].deactivate();
+	remove(_blocks,b->getIndex());
 }

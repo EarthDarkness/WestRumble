@@ -25,7 +25,7 @@ protected:
 	int _class;
 	int _x,_y;
 
-	bool _index;
+	int _index;
 
 	int _anim;	
 	animation _sprite;

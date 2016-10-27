@@ -510,10 +510,10 @@ void Game::proccessMessages(){
 		const char* msg = _actionMsg.front().c_str();
 		Team* curteam = &stage.getTeam(player);
 
-		if(msg[0] == WRP_END_TURN){
+		if(msg[1] == WRP_END_TURN){
 			field = true;
 
-		}else if(msg[0] == WRP_MOVE){
+		}else if(msg[1] == WRP_MOVE){
 			int pid = 0;
 			int xx = 0;
 			int yy = 0;
@@ -525,6 +525,7 @@ void Game::proccessMessages(){
 			Actors* tgt = stage.getActorAt(xx,yy);
 			if(tgt != NULL){
 				if(tgt->getClass() == ACTOR_POWUP) act->AddPowerUp(tgt->getPowerUp());
+				else cout << "something on the way: " << tgt->getClass() << endl;
 			}
 
 			stage.moveActor(act->getX(), act->getY(), xx, yy);//TODO validate movment
@@ -532,7 +533,7 @@ void Game::proccessMessages(){
 			curteam->actions[pid] = CHAR_MOVED;
 			curteam->_state[pid].addCooldown(ACTIONMOVE,1);
 
-		}else if(msg[0] == WRP_DYNAMITE){
+		}else if(msg[1] == WRP_DYNAMITE){
 			int pid = 0;
 			int xx = 0;
 			int yy = 0;
@@ -542,7 +543,8 @@ void Game::proccessMessages(){
 			Character* act = &(curteam->getCharacter(pid));
 
 			int index = insert(stage._bombs);
-			bomb* b = &(stage._bombs[index]);
+			bomb* b = stage._bombs[index];
+
 
 			b->init(act->getFire(),player,pid);
 
@@ -553,7 +555,7 @@ void Game::proccessMessages(){
 
 			curteam->actions[pid] = CHAR_END;
 
-		}else if(msg[0] == WRP_SHOT){
+		}else if(msg[1] == WRP_SHOT){
 			int pid = 0;
 			int dir = 0;
 
@@ -579,7 +581,7 @@ void Game::proccessMessages(){
 			curteam->_state[pid].addCooldown(ACTIONGUNFIRE,3);
 			curteam->actions[pid] = CHAR_END;
 
-		}else if(msg[0] == WRP_TIME_UP){
+		}else if(msg[1] == WRP_TIME_UP){
 			int pid = 0;
 			int xx = 0;
 			int yy = 0;
@@ -591,7 +593,7 @@ void Game::proccessMessages(){
 
 			curteam->actions[pid] = CHAR_END;
 
-		}else if(msg[0] == WRP_TIME_DOWN){
+		}else if(msg[1] == WRP_TIME_DOWN){
 			int pid = 0;
 			int xx = 0;
 			int yy = 0;
@@ -603,7 +605,7 @@ void Game::proccessMessages(){
 
 			curteam->actions[pid] = CHAR_END;
 
-		}else if(msg[0] == WRP_THROW){
+		}else if(msg[1] == WRP_THROW){
 			int pid = 0;
 			int xi = 0;
 			int yi = 0;
@@ -621,7 +623,7 @@ void Game::proccessMessages(){
 
 			curteam->actions[pid] = CHAR_END;
 
-		}else if(msg[0] == WRP_BARREL){
+		}else if(msg[1] == WRP_BARREL){
 			int pid = 0;
 			int xx = 0;
 			int yy = 0;
@@ -629,12 +631,12 @@ void Game::proccessMessages(){
 			WrpDecodeBarrel(msg,pid,xx,yy);
 
 			int index = insert(stage._blocks);
-			block* b = &(stage._blocks[index]);
+			block* b = stage._blocks[index];
 			stage.instantiateActor(b, xx, yy);
 
 			curteam->actions[pid] = CHAR_END;
 
-		}else if(msg[0] == WRP_ROPE){
+		}else if(msg[1] == WRP_ROPE){
 			int pid = 0;
 			int xx = 0;
 			int yy = 0;
@@ -652,14 +654,19 @@ void Game::proccessMessages(){
 			curteam->_state[pid].addCooldown(ACTIONSTUN,1);
 			curteam->actions[pid] = CHAR_END;
 
-		}else if(msg[0] == WRP_DETONATE){
+		}else if(msg[1] == WRP_DETONATE){
 			int pid = 0;
 
 			WrpDecodeDetonate(msg,pid);
 
 			Character* act = &(curteam->getCharacter(pid));
 
-			//FIX//act->detonate();
+			int exp[MAX_BOMBS];
+			act->detonate(exp);
+
+			for(int i=0;i<MAX_BOMBS;++i)
+				stage._bombs[exp[i]]->setTurn(1);
+			
 			curteam->actions[pid] = CHAR_END;
 		}
 		_actionMsg.pop();
@@ -696,51 +703,21 @@ void Game::centerTeam(int t){
 }
 
 void Game::turnPlayer(){
-	/*int mapx, mapy;
-	winToMat(engine._input.getX(), engine._input.getY(), stage.getCamera().getX(), stage.getCamera().getY(), stage.getCamera().getScale(), mapx, mapy);
-
-	Actors* clicked = stage.getActorAt(mapx,mapy);
-	visualized = clicked;
-
-	if(selected != NULL){
-		if(_selectedActions.empty()){
-			selected = NULL;
-			//stage.clearOverlays();
-			stage.setAction("NULL",0,0);
-		}else{
-			updateAction(mapx,mapy);
-		}
-	}
-
-	if(stage.getOverlayAt(mapx,mapy) == NULL){//não clicou em tile marcado
-		if(selected != clicked){
-			selected = NULL;
-			stage.setAction("NULL",0,0);
-			if(clicked != NULL)
-			if(clicked->getClass() == ACTOR_CHAR)
-			if(stage.getTeam(player).checkSelected((Character*)clicked) != -1){
-				selected = clicked;
-				centerAt(selected);
-			}
-			calcActions();
-		}
-	}
-	initAction();*/
 	if(engine._input.isPress()){
 		int val = 0;
 		if(button_end_turn.checkCollision(engine._input.getX(),engine._input.getY()))
 			val = 1;
 		int xm,ym;
 		winToMat(engine._input.getX(), engine._input.getY(), stage.getCamera().getX(), stage.getCamera().getY(), stage.getCamera().getScale(), xm, ym);
+		cout << "clicked at: " << xm << "," << ym << endl;
 		_ui.update(xm,ym,val);
 	}
 }
 void Game::turnField(){
 	vector<Actors*> hits;
 	//calc bomb to explode
-	//for (list<bomb>::iterator it = stage._bombs.begin(); it != stage.bombs.end(); it++){
 	for(int i=0;i<stage._bombs.size();++i){
-		bomb* b = &(stage._bombs[i]);
+		bomb* b = stage._bombs[i];
 		if(b->isActive())
 		if(b->getTurn() != -1){
 			b->addTurn(-1);
@@ -751,7 +728,6 @@ void Game::turnField(){
 	}
 
 	//calc gunfire
-	//for(int i=0;i<2;++i){
 	{
 	Team* tbuf = &stage.getTeam(player);
 	for(int j=0;j<5;++j){
@@ -776,20 +752,18 @@ void Game::turnField(){
 	//calc chain explosion
 	for(int i=0;i<hits.size();++i){
 		if(hits[i]->getClass() == ACTOR_BOMB)
-			stage.checkExplosion(static_cast<bomb*>(hits[i]),hits);
+			stage.checkExplosion(hits[i]->getBomb(),hits);
 	}
 	//apply damage
 	while(!hits.empty()){
 		if(hits.back()->getClass() == ACTOR_BOMB){
 			bomb* b = hits.back()->getBomb();
 
-			if(b->getOwner() != -1){
-				stage.getTeam(b->getTeam()).getCharacter(b->getOwner()).RemoveEntry(b->getIndex());
-			}
+			if(b->getOwner() != -1) stage.getTeam(b->getTeam()).getCharacter(b->getOwner()).RemoveEntry(b->getIndex());
 
 			stage.getTileMap().at(hits.back()->getX(),hits.back()->getY()).actor = NULL;
-			remove(stage._bombs,b->getIndex());
 
+			remove(stage._bombs,b->getIndex());
 		}else if(hits.back()->getClass() == ACTOR_CHAR){
 			stage.hitChar(hits.back()->getCharacter());
 		}else if(hits.back()->getClass() == ACTOR_POWUP){
@@ -827,10 +801,6 @@ void Game::turnField(){
 	stage.getTeam(player).beginTurn();
 	centerTeam(player);
 
-	/*player = 0;
-	stage.getTeam(player).beginTurn();
-	centerTeam(player);
-	return;*/
 }
 
 void Game::checkEnd(){

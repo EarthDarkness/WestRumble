@@ -17,6 +17,7 @@ private:
 
 	int _player;
 	Actors* _selected;
+	Actors* _target;
 	queue<int> _commands;
 
 
@@ -50,6 +51,7 @@ public:
 	void initCommand();
 	void fillCommands();
 	void clearCommands();
+	void placeCommands(int cmd);
 
 	void setOHI(int name, int x, int y);
 

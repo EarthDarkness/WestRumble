@@ -23,20 +23,20 @@
 using namespace std;
 
 template<class T>
-int insert(vector<T>& dst){
+int insert(vector<T*>& dst){
 	for(int i=0;i<dst.size();++i){
-		if(dst[i].isActive()){
-			dst[i].activate(i);
+		if(!dst[i]->isActive()){
+			dst[i]->activate(i);
 			return i;
 		}
 	}
-	dst.push_back(T());
-	dst.back().activate(dst.size()-1);
+	dst.push_back(new T());
+	dst.back()->activate(dst.size()-1);
 	return dst.size()-1;
 }
 template<class T>
-void remove(vector<T>& src, int pos){
-	src[pos].deactivate();
+void remove(vector<T*>& src, int pos){
+	src[pos]->deactivate();
 }
 
 //int rand();
@@ -107,9 +107,9 @@ public:
 	void hitPowUp(PowerUp* p);
 	void hitBlock(block* b);
 
-	vector<bomb> _bombs;
-	vector<block> _blocks;
-	vector<PowerUp> _powerUps;
+	vector<bomb*> _bombs;
+	vector<block*> _blocks;
+	vector<PowerUp*> _powerUps;
 
 	//bombas desenhadas
 	//list<bomb> bombs;

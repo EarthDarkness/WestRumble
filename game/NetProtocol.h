@@ -28,11 +28,13 @@ enum NetDir{
 
 inline void WrpEncodeEndTurn(char* msg){
 	int p=-1;
+	msg[++p] = 3;
 	msg[++p] = (char)(WRP_END_TURN);
 	msg[++p] = '\0';
 }
 inline void WrpEncodeMove(char* msg, int pid, int x, int y){
 	int p=-1;
+	msg[++p] = 6;
 	msg[++p] = (char)(WRP_MOVE);
 	msg[++p] = (char)(pid & 0xFF);
 	msg[++p] = (char)(x & 0xFF);
@@ -41,6 +43,7 @@ inline void WrpEncodeMove(char* msg, int pid, int x, int y){
 }
 inline void WrpEncodeDynamite(char* msg, int pid, int x, int y){
 	int p=-1;
+	msg[++p] = 6;
 	msg[++p] = (char)(WRP_DYNAMITE);
 	msg[++p] = (char)(pid & 0xFF);
 	msg[++p] = (char)(x & 0xFF);
@@ -49,6 +52,7 @@ inline void WrpEncodeDynamite(char* msg, int pid, int x, int y){
 }
 inline void WrpEncodeShot(char* msg, int pid, int dir){
 	int p=-1;
+	msg[++p] = 5;
 	msg[++p] = (char)(WRP_SHOT);
 	msg[++p] = (char)(pid & 0xFF);
 	msg[++p] = (char)(dir);
@@ -56,6 +60,7 @@ inline void WrpEncodeShot(char* msg, int pid, int dir){
 }
 inline void WrpEncodeTimeUp(char* msg, int pid, int x, int y){
 	int p=-1;
+	msg[++p] = 6;
 	msg[++p] = (char)(WRP_TIME_UP);
 	msg[++p] = (char)(pid & 0xFF);
 	msg[++p] = (char)(x & 0xFF);
@@ -64,6 +69,7 @@ inline void WrpEncodeTimeUp(char* msg, int pid, int x, int y){
 }
 inline void WrpEncodeTimeDown(char* msg, int pid, int x, int y){
 	int p=-1;
+	msg[++p] = 6;
 	msg[++p] = (char)(WRP_TIME_DOWN);
 	msg[++p] = (char)(pid & 0xFF);
 	msg[++p] = (char)(x & 0xFF);
@@ -72,6 +78,7 @@ inline void WrpEncodeTimeDown(char* msg, int pid, int x, int y){
 }
 inline void WrpEncodeThrow(char* msg, int pid, int xi, int yi, int x, int y){
 	int p=-1;
+	msg[++p] = 8;
 	msg[++p] = (char)(WRP_THROW);
 	msg[++p] = (char)(pid & 0xFF);
 	msg[++p] = (char)(xi & 0xFF);
@@ -82,6 +89,7 @@ inline void WrpEncodeThrow(char* msg, int pid, int xi, int yi, int x, int y){
 }
 inline void WrpEncodeBarrel(char* msg, int pid, int x, int y){
 	int p=-1;
+	msg[++p] = 6;
 	msg[++p] = (char)(WRP_BARREL);
 	msg[++p] = (char)(pid & 0xFF);
 	msg[++p] = (char)(x & 0xFF);
@@ -90,6 +98,7 @@ inline void WrpEncodeBarrel(char* msg, int pid, int x, int y){
 }
 inline void WrpEncodeRope(char* msg, int pid, int x, int y){
 	int p=-1;
+	msg[++p] = 6;
 	msg[++p] = (char)(WRP_ROPE);
 	msg[++p] = (char)(pid & 0xFF);
 	msg[++p] = (char)(x & 0xFF);
@@ -98,6 +107,7 @@ inline void WrpEncodeRope(char* msg, int pid, int x, int y){
 }
 inline void WrpEncodeDetonate(char* msg, int pid){
 	int p=-1;
+	msg[++p] = 4;
 	msg[++p] = (char)(WRP_BARREL);
 	msg[++p] = (char)(pid & 0xFF);
 	msg[++p] = '\0';
@@ -110,6 +120,7 @@ inline bool WrpDecodeEndTurn(const char* msg){
 		return false;
 
 	int p=-1;
+	++p;
 	if(msg[++p] != WRP_END_TURN)
 		return false;
 
@@ -120,6 +131,7 @@ inline bool WrpDecodeMove(const char* msg, int& pid, int& x, int& y){
 		return false;
 
 	int p=-1;
+	++p;
 	if(msg[++p] != WRP_MOVE)
 		return false;
 
@@ -134,6 +146,7 @@ inline bool WrpDecodeDynamite(const char* msg, int& pid, int& x, int& y){
 		return false;
 
 	int p=-1;
+	++p;
 	if(msg[++p] != WRP_DYNAMITE)
 		return false;
 
@@ -148,6 +161,7 @@ inline bool WrpDecodeShot(const char* msg, int& pid, int& dir){
 		return false;
 
 	int p=-1;
+	++p;
 	if(msg[++p] != WRP_SHOT)
 		return false;
 
@@ -161,6 +175,7 @@ inline bool WrpDecodeTimeUp(const char* msg, int& pid, int& x, int& y){
 		return false;
 
 	int p=-1;
+	++p;
 	if(msg[++p] != WRP_TIME_UP)
 		return false;
 
@@ -175,6 +190,7 @@ inline bool WrpDecodeTimeDown(const char* msg, int& pid, int& x, int& y){
 		return false;
 
 	int p=-1;
+	++p;
 	if(msg[++p] != WRP_TIME_DOWN)
 		return false;
 
@@ -189,6 +205,7 @@ inline bool WrpDecodeThrow(const char* msg, int& pid, int& xi, int& yi, int& x, 
 		return false;
 
 	int p=-1;
+	++p;
 	if(msg[++p] != WRP_THROW)
 		return false;
 
@@ -205,6 +222,7 @@ inline bool WrpDecodeBarrel(const char* msg, int& pid, int& x, int& y){
 		return false;
 
 	int p=-1;
+	++p;
 	if(msg[++p] != WRP_BARREL)
 		return false;
 
@@ -219,6 +237,7 @@ inline bool WrpDecodeRope(const char* msg, int& pid, int& x, int& y){
 		return false;
 
 	int p=-1;
+	++p;
 	if(msg[++p] != WRP_ROPE)
 		return false;
 
@@ -233,6 +252,7 @@ inline bool WrpDecodeDetonate(const char* msg, int& pid){
 		return false;
 
 	int p=-1;
+	++p;
 	if(msg[++p] != WRP_DETONATE)
 		return false;
 

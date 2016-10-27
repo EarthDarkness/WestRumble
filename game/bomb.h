@@ -17,7 +17,6 @@ private:
 	int _turns;
 	int _fire;
 
-	int _index;//index on the list of bombs
 	int _team;//team of the owner of this bomb, -1 = nature forces of destruction
 	int _owner;//owner id
 
@@ -34,6 +33,8 @@ public:
 	
 	bool checkTurnUp();
 	bool checkTurnDown();
+
+	void reset();
 
 	void init(int fire, int team = -1, int owner = -1);
 

@@ -2,26 +2,28 @@
 #include "enum.h"
 #include "Props.h"
 
-extern animation BMB_H_300;
-
 bomb::bomb(){
 	_class = ACTOR_BOMB;
 
 	_turns = DEF_BOMB_TIMER;
 	_fire = 0;
 
-	_index = -1;
 	_team = -1;
 	_owner = -1;
 }
 bomb::~bomb(){
 }
 
+void bomb::reset(){
+	_turns = DEF_BOMB_TIMER;
+	_fire = 0;
+
+	_team = -1;
+	_owner = -1;
+}
 
 void bomb::init(int fire, int team, int owner){
-	if(_index != 0)//already in use
-		return;
-
+	reset();
 	_fire = fire;
 
 	_team = team;

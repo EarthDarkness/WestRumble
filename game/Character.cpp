@@ -105,11 +105,13 @@ bool Character::AddDynamite(int index){
 	return false;
 }
 void Character::RemoveEntry(int index){
-	if(_bombs[index] == -1)
-		return;
-
-	_bombs[index] = -1;
-	--_size;
+	for(int i=0;i<MAX_BOMBS;++i){
+		if(_bombs[i] == index){
+			_bombs[i] = -1;
+			--_size;
+			return;
+		}
+	}
 }
 
 bool Character::haveBomb(){

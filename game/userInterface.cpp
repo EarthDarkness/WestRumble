@@ -9,6 +9,9 @@ userInterface::userInterface(){
 	_teams[0] = NULL;
 	_teams[1] = NULL;
 
+	Actors* _selected = NULL;
+	Actors* _target = NULL;
+
 	_player = 0;
 }
 userInterface::~userInterface(){
@@ -154,16 +157,13 @@ void userInterface::updateCommand(int xm, int ym){
 	}else if (act == ACTIONTIMER_DOWN){
 		WrpEncodeTimeDown(buf,pid,xm,ym);		
 	}else if (act == ACTIONRELAUNCHSELECT){
-		/*special = (bomb*)stage.getActorAt(x, y);
-		_selectedActions.pop();
-		_selectedActions.push(ACTIONRELAUNCHSELECT);
-		_selectedActions.push(ACTIONRELAUNCH);
-		while(_selectedActions.front() != ACTIONRELAUNCHSELECT){
-			_selectedActions.push(_selectedActions.front());
-			_selectedActions.pop();
-		}*/
+		_target = _tileMap->_map.at(xm,ym).actor;
+		placeCommands(ACTIONRELAUNCH);
+		_commands.pop();
+		return;
 	}else if (act == ACTIONRELAUNCH){
-
+		WrpEncodeThrow(buf,pid,_target->getX(),_target->getY(),xm,ym);
+		_target = NULL;
 	}else if (act == ACTIONBARRIER){
 		WrpEncodeBarrel(buf,pid,xm,ym);
 	}else if (act == ACTIONSTUN){
@@ -172,8 +172,8 @@ void userInterface::updateCommand(int xm, int ym){
 		WrpEncodeDetonate(buf,pid);
 	}
 
-	if(strlen(buf) > 0)
-		_actionMsg.push(string(buf));
+	if(buf[0] > '\0')
+		_actionMsg.push(string(buf,buf[0]));
 
 	_selected = NULL;
 	clearOverlays();
@@ -277,7 +277,18 @@ void userInterface::clearCommands(){
 	while(!_commands.empty())
 		_commands.pop();
 }
+void userInterface::placeCommands(int cmd){
+	int f = _commands.front();
+	_commands.push(_commands.front());
+	_commands.pop();
+	_commands.push(cmd);
 
+	while(_commands.front() != f){
+		_commands.push(_commands.front());
+		_commands.pop();
+	}
+
+}
 
 void userInterface::setOHI(int name, int x, int y){
 	_ohi.getAnimation().setState(name);
