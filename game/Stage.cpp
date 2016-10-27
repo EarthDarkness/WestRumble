@@ -149,9 +149,6 @@ void Stage::start(Team *teamA, Team *teamB)
 			_tileMap._map.at(_initPos[i][j][0], _initPos[i][j][1]).setActor(&(_teams[i]->getCharacter(j)));
 		}
 	}
-
-	//TODO
-	//instanciar randomicamente blocos, com power ups
 	
 //#define DEBUG_MAP
 	

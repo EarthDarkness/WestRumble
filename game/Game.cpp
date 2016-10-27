@@ -38,6 +38,10 @@ void Game::init(){
 	loadResources();
 
 	menu.init();
+	_server.setPos(50,300,64,64);
+	_server.image_id = 0;
+	_client.setPos(200,300,64,64);
+	_client.image_id = 0;
 
 	setGUI();
 
@@ -46,8 +50,13 @@ void Game::init(){
 
 	reset();
 
+	_net.init();
 
 }
+void Game::quit(){
+	_net.quit();
+}
+
 void Game::setGUI(){
 	int dpi = 20;
 	int ss = (height_screen<width_screen?height_screen:width_screen)/dpi;
@@ -86,7 +95,6 @@ void Game::loadResources(){
 	_bombs = IMG_GFX::bomb;
 	_fire = IMG_GFX::gunpowder;
 	_turn = IMG_GFX::timer;
-		
 }
 
 void Game::reset(){
@@ -179,6 +187,10 @@ void Game::updateMenu(){
 			}else if(menu._tutorial.checkCollision(engine._input.getX(), engine._input.getY())){
 				menu._state = TUTORIALMENU;
 				menu._page = 0;
+			}else if(_server.checkCollision(engine._input.getX(), engine._input.getY())){
+				_net.initServer(2332);
+			}else if(_client.checkCollision(engine._input.getX(), engine._input.getY())){
+				_net.initClient("127.0.0.1",2332);
 			}
 		}
 	}else if(menu._state == STAGEMENU){
@@ -205,6 +217,7 @@ void Game::updateMenu(){
 			menu._page = (menu._page+4)%4;
 		}
 	}
+
 
 }
 void Game::updateShop(){
@@ -236,6 +249,12 @@ void Game::updateStage(){
 	if(stage._turn == 8){
 		stage.clear();
 		stage.decode(en);
+	}*/
+
+	/*if(stage._turn == 2){
+		_net.initServer(2332);
+	}else if(stage._turn == 3){
+		_net.initClient(INADDR_ANY,2332);
 	}*/
 
 
@@ -422,6 +441,9 @@ void Game::render()
 	//SDL_Delay(16);
 }
 void Game::renderMenu(){
+	engine._render.renderSprite(_server.image_id,_server.rect.x,_server.rect.y,_server.rect.w,_server.rect.h);
+	engine._render.renderSprite(_client.image_id,_client.rect.x,_client.rect.y,_client.rect.w,_client.rect.h);
+
 	if(menu._state == MAINMENU){
 		engine._render.renderSprite(menu._logo.image_id,menu._logo.rect.x,menu._logo.rect.y,menu._logo.rect.w,menu._logo.rect.h);
 			

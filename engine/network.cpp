@@ -50,8 +50,13 @@ int network::listenRoutine(){
 				break;
 			}
 		}
-		if(spot == 0)
+		if(spot == 0){
 			SDL_Delay(250);
+			continue;
+		}
+		if(_socket[NET_SERVER] == NULL){
+			int a = 0;
+		}
 
 		_socket[spot] = SDLNet_TCP_Accept(_socket[NET_SERVER]);
 
@@ -61,8 +66,10 @@ int network::listenRoutine(){
 		if(SDLNet_TCP_Send(_socket[spot],reinterpret_cast<char*>(&spot),sizeof(int)) < sizeof(int)){
 			SDLNet_TCP_Close(_socket[spot]);
 			_socket[spot] = NULL;
+			continue;
 		}
-
+		
+		launchReceiveThread(spot);
 
 	}
 	return 0;
@@ -70,8 +77,14 @@ int network::listenRoutine(){
 int network::receiveRoutine(int id){
 	TCPsocket sock = _socket[id];
 	while(_signal == 0){
-		if(_hear == 0 && _netId == NET_SERVER)
+		if(sock == NULL){
 			SDL_Delay(100);
+			continue;
+		}
+		/*if(_hear == 0 && _netId == NET_SERVER){
+			SDL_Delay(100);
+			continue;
+		}*/
 		char buf[LEN];
 
 		if(SDLNet_TCP_Recv(sock,(void*)buf,LEN) <= 0){
@@ -104,9 +117,6 @@ network::network(){
 	_netId = -1;
 	_working = false;
 
-	if(SDLNet_Init() != -1)
-		_working = true;
-
 	for(int i=0;i<WSIZE;++i)
 		memset(_window[i],0,LEN);
 
@@ -118,8 +128,19 @@ network::network(){
 		//_sockets = SDLNet_AllocSocketSet(NET_MAXUSERSIZE);
 }
 network::~network(){
+	quit();
+}
+
+int network::init(){
+	if(SDLNet_Init() != -1){
+		_working = true;
+		return 0;
+	}
+	return -1;
+}
+int network::quit(){
 	if(!_working)
-		return;
+		return -1;
 
 	_signal = 1;
 
@@ -133,6 +154,9 @@ network::~network(){
 	}
 
 	SDLNet_Quit();
+
+	_working = false;
+	return 0;
 }
 
 int network::initServer(uint16_t port){
@@ -150,8 +174,8 @@ int network::initServer(uint16_t port){
 	_netId = NET_SERVER;
 
 	launchListenThread();
-	for(int i=NET_CLIENT1;i<NET_MAXUSERSIZE;++i)
-		launchReceiveThread(i);
+	//for(int i=NET_CLIENT1;i<NET_MAXUSERSIZE;++i)
+		//launchReceiveThread(i);
 
 	return 0;
 }

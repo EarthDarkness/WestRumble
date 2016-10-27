@@ -5,12 +5,14 @@
 #include "Stage.h"
 #include "../engine/core.h"
 #include "../engine/translator.h"
+#include "../engine/network.h"
 #include "Button.h"
 #include "Character.h"
 #include "bomb.h"
 #include "store.h"
 #include "enum.h"
 #include "userInterface.h"
+
 
 #include <stack>
 #include <queue>
@@ -24,8 +26,8 @@ using namespace std;
 class Game
 {
 private:
-	char en[4096];
-	int ll;
+	//char en[4096];
+	//int ll;
 
 
 	const char* title;
@@ -37,7 +39,7 @@ private:
 	Stage stage;
 	int state;
 	Actors *selected;
-	Actors *visualized;
+	Actors *visualized;//TODO reimplement this
 	
 	Actors *special;
 
@@ -50,6 +52,10 @@ private:
 	queue<int> _selectedActions;
 	queue<string> _actionMsg;
 	userInterface _ui;
+
+	network _net;
+	Button _server;
+	Button _client;
 
 	int player;
 	bool field;
@@ -106,6 +112,8 @@ public:
 
 
 	void init();
+	void quit();
+
 	void setGUI();
 
 	void loadResources();

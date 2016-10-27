@@ -11,6 +11,7 @@ int main(int argc, char** argv) {
 		gm.update();
 		gm.render();
 	}
+	gm.quit();
 
 	return 0;
 }

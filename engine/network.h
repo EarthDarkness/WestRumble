@@ -13,7 +13,7 @@ enum NETID{
 	NET_MAXUSERSIZE
 };
 
-const int LEN = 1024;
+const int LEN = 2048;
 const int WSIZE = 64;
 class network {
 private:
@@ -46,6 +46,9 @@ public:
 
 	network();
 	~network();
+
+	int init();
+	int quit();
 
 	int initServer(uint16_t port);
 	int initClient(const char* addr, uint16_t port);
