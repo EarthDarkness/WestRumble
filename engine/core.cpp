@@ -45,6 +45,11 @@ int core::init(){
 		cerr << "Error opening audio mixer." << endl;
 		return -1;
 	}
+	error = _com.init();
+	if(error != 0){
+		cerr << "Unable to launch network. Continuing withotu network." << endl;
+	}
+
 	return 0;
 }
 int core::createWindow(const char* name, int w, int h){
@@ -119,5 +124,6 @@ bool core::isRunning(){
 }
 void core::quit(){
 	_running = false;
+	_com.quit();
 }
 

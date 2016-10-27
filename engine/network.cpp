@@ -85,6 +85,10 @@ int network::receiveRoutine(int id){
 			SDL_Delay(100);
 			continue;
 		}*/
+		if(_hear != id){
+			SDL_Delay(250);
+			continue;
+		}
 		char buf[LEN];
 
 		if(SDLNet_TCP_Recv(sock,(void*)buf,LEN) <= 0){

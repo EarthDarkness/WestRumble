@@ -53,7 +53,7 @@ private:
 	queue<string> _actionMsg;
 	userInterface _ui;
 
-	network _net;
+	//network _net;
 	Button _server;
 	Button _client;
 
@@ -71,13 +71,9 @@ private:
 	void turnPlayer();
 	void turnField();
 
-	void updateMenu();
-	void updateShop();
 	void updateStage();
 	void updateEnd();
 
-	void renderMenu();
-	void renderShop();
 	void renderStage();
 	void renderEnd();
 
@@ -112,7 +108,6 @@ public:
 
 
 	void init();
-	void quit();
 
 	void setGUI();
 

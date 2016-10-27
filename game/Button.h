@@ -7,7 +7,6 @@ using namespace std;
 
 class Button
 {
-
 public:
 	int image_id;
 	int image_press_id;

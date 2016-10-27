@@ -50,11 +50,6 @@ void Game::init(){
 
 	reset();
 
-	_net.init();
-
-}
-void Game::quit(){
-	_net.quit();
 }
 
 void Game::setGUI(){
@@ -106,7 +101,7 @@ void Game::reset(){
 
 	player = 0;
 
-	menu._state = MAINMENU;
+	menu._state = MAIN_MENU;
 	state = STATEMENU;
 	cout << "END GAME!!!" << endl;
 
@@ -138,12 +133,30 @@ void Game::update(){
 	switch (state)
 	{
 	case STATEMENU:{
-		updateMenu();
+		if(engine._input.isPress()){
+			menu.udpdate(engine._input.getX(),engine._input.getY());
+			if(menu.isDone()){
+				if (stage.loadStage("resources/stage/stage1.txt", engine._res)){
+					cout << "stage1.txt loaded" << endl;
+				}
+
+				stage.start(&A, &B);
+				centerTeam(0);
+				state = STATESHOP_A;
+
+				shop.init(&A,0);
+
+				if(menu._net == 1){
+					engine._com.initServer(2332);
+				}else if(menu._net == 2){
+					engine._com.initClient("127.0.0.1",2332);
+				}
+			}
+		}
 		break;
 				   }
 	case STATESHOP_A:{
-		updateShop();
-		//cout << "Shop A" << endl;
+		shop.update(engine);
 
 		if (shop.isDone()){
 			state = STATESHOP_B;
@@ -153,13 +166,14 @@ void Game::update(){
 		break;
 					 }
 	case STATESHOP_B:{
-		updateShop();
-		//cout << "Shop B" << endl;
+		shop.update(engine);
 
 		if (shop.isDone()){
 			state = STATEGAME;
 			//engine._render.playMusic("BGM",true,false);
 			_ui.init(&stage);
+			if(menu._net == 1)
+				engine._com._hear = 1;
 		}
 		break;
 					 }
@@ -177,52 +191,6 @@ void Game::update(){
 		break;
 					}
 	}
-}
-void Game::updateMenu(){
-
-	if(menu._state == MAINMENU){
-		if(engine._input.isPress()){
-			if(menu._play.checkCollision(engine._input.getX(), engine._input.getY())){
-				menu._state = STAGEMENU;
-			}else if(menu._tutorial.checkCollision(engine._input.getX(), engine._input.getY())){
-				menu._state = TUTORIALMENU;
-				menu._page = 0;
-			}else if(_server.checkCollision(engine._input.getX(), engine._input.getY())){
-				_net.initServer(2332);
-			}else if(_client.checkCollision(engine._input.getX(), engine._input.getY())){
-				_net.initClient("127.0.0.1",2332);
-			}
-		}
-	}else if(menu._state == STAGEMENU){
-		cout << "Select Stage" << endl;
-
-		if (stage.loadStage("resources/stage/stage1.txt", engine._res)){
-			cout << "stage1.txt loaded" << endl;
-		}
-
-		stage.start(&A, &B);
-		centerTeam(0);
-		state = STATESHOP_A;
-
-		shop.init(&A,0);
-	}else if(menu._state == TUTORIALMENU){
-		if(engine._input.isPress()){
-			if(menu._next.checkCollision(engine._input.getX(), engine._input.getY())){
-				++menu._page;
-			}else if(menu._prev.checkCollision(engine._input.getX(), engine._input.getY())){
-				--menu._page;
-			}else if(menu._back.checkCollision(engine._input.getX(), engine._input.getY())){
-				menu._state = MAINMENU;
-			}
-			menu._page = (menu._page+4)%4;
-		}
-	}
-
-
-}
-void Game::updateShop(){
-	shop.update(engine);
-
 }
 void Game::updateStage(){
 	if(stage.waitForVFX())
@@ -260,12 +228,29 @@ void Game::updateStage(){
 
 	if(!field)
 		turnPlayer();
+		
 
 	while(!_ui._actionMsg.empty()){
-		_actionMsg.push(_ui._actionMsg.front());
-		_ui._actionMsg.pop();
+		if(menu._net == 0){
+			_actionMsg.push(_ui._actionMsg.front());
+			_ui._actionMsg.pop();
+		}else if(menu._net == 2){
+			engine._com.send((void*)(_ui._actionMsg.front().c_str()),_ui._actionMsg.front().size());
+			_ui._actionMsg.pop();
+		}
 	}
-	proccessMessages();
+	char buf[2048];
+	if(menu._net == 0){
+		proccessMessages();
+	}else if(menu._net == 1){
+		while(engine._com.recv(buf,2048)>0){
+			_actionMsg.push(string(buf,2048));
+		}
+		proccessMessages();
+	}else if(menu._net == 2){
+		engine._com.recv(buf,2048);
+		stage.decode(buf);
+	}
 
 	if(field)//one per turn end
 		turnField();
@@ -412,7 +397,7 @@ void Game::render()
 	{
 	case STATEMENU:{
 		engine._render.renderSprite(IMG_GFX::wood,0,0,width_screen,height_screen);
-		renderMenu();
+		menu.render(engine._render);
 		break;
 				   }
 	case STATESHOP_A:{
@@ -439,27 +424,6 @@ void Game::render()
 
 	engine.flush();
 	//SDL_Delay(16);
-}
-void Game::renderMenu(){
-	engine._render.renderSprite(_server.image_id,_server.rect.x,_server.rect.y,_server.rect.w,_server.rect.h);
-	engine._render.renderSprite(_client.image_id,_client.rect.x,_client.rect.y,_client.rect.w,_client.rect.h);
-
-	if(menu._state == MAINMENU){
-		engine._render.renderSprite(menu._logo.image_id,menu._logo.rect.x,menu._logo.rect.y,menu._logo.rect.w,menu._logo.rect.h);
-			
-		engine._render.renderSprite(menu._play.image_id, menu._play.rect.x, menu._play.rect.y, menu._play.rect.w, menu._play.rect.h);
-		engine._render.renderSprite(menu._tutorial.image_id, menu._tutorial.rect.x, menu._tutorial.rect.y, menu._tutorial.rect.w, menu._tutorial.rect.h);
-		engine._render.renderSprite(menu._credits.image_id, menu._credits.rect.x, menu._credits.rect.y, menu._credits.rect.w, menu._credits.rect.h);
-	}else if(menu._state == STAGEMENU){
-
-	}else if(menu._state == TUTORIALMENU){
-		engine._render.renderSprite(menu._next.image_id, menu._next.rect.x, menu._next.rect.y, menu._next.rect.w, menu._next.rect.h);
-		engine._render.renderSprite(menu._prev.image_id, menu._prev.rect.x, menu._prev.rect.y, menu._prev.rect.w, menu._prev.rect.h);
-		engine._render.renderSprite(menu._back.image_id, menu._back.rect.x, menu._back.rect.y, menu._back.rect.w, menu._back.rect.h);
-
-		engine._render.renderSprite(menu._info[menu._page].image_id, menu._info[menu._page].rect.x, menu._info[menu._page].rect.y, menu._info[menu._page].rect.w, menu._info[menu._page].rect.h);
-	}
-	
 }
 void Game::renderStage()
 {

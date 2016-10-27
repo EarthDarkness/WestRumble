@@ -77,6 +77,8 @@ int IMG_TRANSPARENT = 1;
 int IMG_UI::endturn = 0;
 int IMG_UI::move = 0;
 int IMG_UI::play = 0;
+int IMG_UI::server = 0;
+int IMG_UI::client = 0;
 int IMG_UI::tutorial = 0;
 int IMG_UI::credits = 0;
 int IMG_UI::exit = 0;
@@ -195,6 +197,8 @@ void intLoadImages(resources& res){
 	IMG_GFX::wood = res.loadImage("resources/image/BGN_title.png");
 
 	IMG_UI::play = res.loadImage("resources/image/UI_play.png");
+	IMG_UI::server = res.loadImage("resources/image/UI_server.png");
+	IMG_UI::client = res.loadImage("resources/image/UI_client.png");
 	IMG_UI::tutorial = res.loadImage("resources/image/UI_tutorial.png");
 	IMG_UI::credits = res.loadImage("resources/image/UI_credits.png");
 

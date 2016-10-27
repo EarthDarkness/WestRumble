@@ -3,7 +3,9 @@
 #include "Props.h"
 
 Menu::Menu(){
-	_state = MAINMENU;
+	_state = MAIN_MENU;
+
+	_done = false;
 
 	_logo.image_id = 0;
 
@@ -22,16 +24,31 @@ Menu::Menu(){
 
 	_page = 0;
 
+	_net = 0;//0 no, 1 server, 2 client
+
 }
 Menu::~Menu(){
 }
 
 void Menu::init(){
-	_state = MAINMENU;
+	_state = MAIN_MENU;
+
+	_itemTable[MAIN_MENU].push_back(&_logo);
+	_itemTable[MAIN_MENU].push_back(&_play);
+	_itemTable[MAIN_MENU].push_back(&_server);
+	_itemTable[MAIN_MENU].push_back(&_client);
+	_itemTable[MAIN_MENU].push_back(&_tutorial);
+	_itemTable[MAIN_MENU].push_back(&_credits);
+
+	_itemTable[TUTORIAL_MENU].push_back(&_next);
+	_itemTable[TUTORIAL_MENU].push_back(&_prev);
+	_itemTable[TUTORIAL_MENU].push_back(&_back);
 
 	_logo.image_id = IMG_GFX::logo;
 
 	_play.image_id = IMG_UI::play;
+	_server.image_id = IMG_UI::server;
+	_client.image_id = IMG_UI::client;
 	_tutorial.image_id = IMG_UI::tutorial;
 	_credits.image_id = IMG_UI::credits;
 
@@ -43,6 +60,8 @@ void Menu::init(){
 	_info[1].image_id = IMG_TUT::controls;
 	_info[2].image_id = IMG_TUT::rules;
 	_info[3].image_id = IMG_TUT::actions;
+
+
 
 	_page = 0;
 }
@@ -57,7 +76,7 @@ void Menu::setGUI(int width, int height){
 
 	int ss;//space size
 	int is;//item size
-	fitInSpace(height/2,3,0.9f,ss,is);
+	fitInSpace(height/2,4,0.9f,ss,is);
 
 	lw = 450;
 	lh = 180;
@@ -68,8 +87,10 @@ void Menu::setGUI(int width, int height){
 	int xx = width/2-lw/2;
 
 	_play.setPos(xx,height/2+ss/2+0*(lh+ss),lw,lh);
-	_tutorial.setPos(xx,height/2+ss/2+1*(lh+ss),lw,lh);
-	_credits.setPos(xx,height/2+ss/2+2*(lh+ss),lw,lh);
+	_server.setPos(xx-lw/2,height/2+ss/2+1*(lh+ss),lw,lh);
+	_client.setPos(xx+lw/2,height/2+ss/2+1*(lh+ss),lw,lh);
+	_tutorial.setPos(xx,height/2+ss/2+2*(lh+ss),lw,lh);
+	_credits.setPos(xx,height/2+ss/2+3*(lh+ss),lw,lh);
 	
 	bool portrait = (width<height);
 	
@@ -86,4 +107,48 @@ void Menu::setGUI(int width, int height){
 
 
 }
+
+void Menu::udpdate(int mx, int my){
+	if(_state == MAIN_MENU){
+		if(_play.checkCollision(mx,my)){
+			_done = true;
+			//_state = STAGE_MENU;
+		}else if(_tutorial.checkCollision(mx,my)){
+			_state = TUTORIAL_MENU;
+			_page = 0;
+		}else if(_server.checkCollision(mx,my)){
+			if(_net == 0){
+				_net = 1;
+			}
+		}else if(_client.checkCollision(mx,my)){
+			if(_net == 0){
+				_net = 2;
+			}
+		}
+	}else if(_state == STAGE_MENU){
+		//_done = true;
+	}else if(_state == TUTORIAL_MENU){
+		if(_next.checkCollision(mx,my)){
+			++_page;
+		}else if(_prev.checkCollision(mx,my)){
+			--_page;
+		}else if(_back.checkCollision(mx,my)){
+			_state = MAIN_MENU;
+		}
+		_page = (_page+4)%4;
+	}
+}
+void Menu::render(renderer& ren){
+	for(int i=0;i<_itemTable[_state].size();++i){
+		Button* ptr = _itemTable[_state][i];
+		ren.renderSprite(ptr->image_id,ptr->rect.x,ptr->rect.y,ptr->rect.w,ptr->rect.h);
+	}
+}
+
+bool Menu::isDone(){
+	return _done;
+}
+
+
+
 

@@ -7,6 +7,7 @@
 #include "input.h"
 #include "resources.h"
 #include "renderer.h"
+#include "network.h"
 
 
 class core
@@ -22,6 +23,7 @@ public:
 	renderer _render;
 	input _input;
 	font _font;
+	network _com;
 
 	bool _winChanged;
 	bool _back;

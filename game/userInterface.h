@@ -21,6 +21,7 @@ private:
 	queue<int> _commands;
 
 
+
 	vector<Actors> _overlay;
 	Actors _ohi;//Over Head Icon
 

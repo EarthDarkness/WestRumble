@@ -86,6 +86,8 @@ struct IMG_UI{
 	static int endturn;
 	static int move;
 	static int play;
+	static int server;
+	static int client;
 	static int tutorial;
 	static int credits;
 	static int exit;

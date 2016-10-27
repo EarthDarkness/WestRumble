@@ -176,6 +176,7 @@ void userInterface::updateCommand(int xm, int ym){
 
 	if(buf[0] > '\0')
 		_actionMsg.push(string(buf,buf[0]));
+	
 
 	_selected = NULL;
 	clearOverlays();
