@@ -15,7 +15,6 @@ private:
 	TileMap* _tileMap;
 	Team *_teams[2];
 
-	int _player;
 	Actors* _selected;
 	Actors* _target;
 	queue<int> _commands;
@@ -46,11 +45,11 @@ public:
 	Actors* getActorAt(int x, int y);
 	Actors* getOverlayAt(int x, int y);
 
-	void update(int xm, int ym, int val = 0);
+	void update(int xm, int ym, int player, int val = 0);
 
-	void updateCommand(int xm, int ym);
+	void updateCommand(int xm, int ym, int player);
 	void initCommand();
-	void fillCommands();
+	void fillCommands(int player);
 	void clearCommands();
 	void placeCommands(int cmd);
 

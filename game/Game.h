@@ -57,8 +57,8 @@ private:
 	Button _server;
 	Button _client;
 
-	int player;
-	bool field;
+	int _player;
+	bool _field;
 
 	bool endGame;
 	int winner;
@@ -68,7 +68,7 @@ private:
 
 	void checkEnd();
 
-	void turnPlayer();
+	void turnPlayer(int player);
 	void turnField();
 
 	void updateStage();

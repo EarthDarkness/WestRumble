@@ -11,8 +11,6 @@ userInterface::userInterface(){
 
 	Actors* _selected = NULL;
 	Actors* _target = NULL;
-
-	_player = 0;
 }
 userInterface::~userInterface(){
 }
@@ -60,10 +58,10 @@ Actors* userInterface::getOverlayAt(int x, int y){
 }
 
 
-void userInterface::update(int xm, int ym, int val){
+void userInterface::update(int xm, int ym, int player, int val){
 	Actors* clicked = getActorAt(xm,ym);
 
-	if(val != 0){
+	if((_stg->_turn%2)==player){
 		if(val == 1){
 			char buf[512] = "\0";
 
@@ -72,52 +70,56 @@ void userInterface::update(int xm, int ym, int val){
 			if(strlen(buf) > 0)
 				_actionMsg.push(string(buf));
 
-			++_player;
-			_player%=2;
-
 			_selected = NULL;
 			clearOverlays();
 			clearCommands();
-		}
-		return;
-	}
 
-	if(_selected != NULL){
-		if(_commands.empty()){
+			return;
+		}
+
+
+		if(getOverlayAt(xm,ym) != NULL){
+			updateCommand(xm,ym,player);
+			setOHI(ANIM_NONE,0,0);
+		}else if(clicked == NULL){
 			_selected = NULL;
+			setOHI(ANIM_NONE,0,0);
 			clearOverlays();
-			setOHI(ANIM_NONE,0,0);
-		}else{
-			char buf[256];
-			int len;
-			updateCommand(xm,ym);
+			clearCommands();
+		}else if(clicked == _selected){
+			if(_commands.empty()){
+				//_selected = NULL;
+				setOHI(ANIM_NONE,0,0);
+				clearOverlays();
+				fillCommands(player);
+			}else{
+				_commands.pop();
+			}
+			initCommand();
+		}else if(_teams[player]->checkSelected(clicked->getCharacter()) != -1){
+			clearOverlays();
+			_selected = clicked;
+			fillCommands(player);
+			initCommand();
 		}
-	}
+	}else{
 
-	if(getOverlayAt(xm,ym) == NULL){//não clicou em tile marcado
-		if(_selected != clicked){
-			_selected = NULL;
-			setOHI(ANIM_NONE,0,0);
-			if(clicked != NULL)
-				if(clicked->getClass() == ACTOR_CHAR)
-					if(_teams[_player]->checkSelected(clicked->getCharacter()) != -1){
-						_selected = clicked;
-					}
-			fillCommands();
-		}
+		//visualization
+
+
 	}
-	initCommand();
+	
 }
 
 
-void userInterface::updateCommand(int xm, int ym){
-	if(_commands.empty())
+void userInterface::updateCommand(int xm, int ym, int player){
+	/*if(_commands.empty())
 		return;
 
 	if(_selected == getActorAt(xm,ym)){
 		_commands.pop();
 		return;
-	}
+	}*/
 
 	Actors* mark = getOverlayAt(xm,ym);
 	if(mark == NULL)
@@ -126,13 +128,13 @@ void userInterface::updateCommand(int xm, int ym){
 	Character* chr = _selected->getCharacter();
 
 
-	Team* curteam = _teams[_player];
+	Team* curteam = _teams[player];
 	int pos = curteam->checkSelected(chr);
 
 	int act = _commands.front();
 
 	char buf[512] = "\0";
-	int pid = _teams[_player]->isMember(chr);
+	int pid = _teams[player]->isMember(chr);
 
 	if(act == ACTIONMOVE){
 		WrpEncodeMove(buf,pid,xm,ym);
@@ -226,7 +228,7 @@ void userInterface::initCommand(){
 	}
 	
 }
-void userInterface::fillCommands(){
+void userInterface::fillCommands(int player){
 	clearCommands();
 
 	if(_selected == NULL)
@@ -236,7 +238,7 @@ void userInterface::fillCommands(){
 		return;
 
 	Character* chr = _selected->getCharacter();
-	Team* curteam = _teams[_player];
+	Team* curteam = _teams[player];
 
 	int pos = curteam->checkSelected(chr);
 	if(pos == -1)

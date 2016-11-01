@@ -8,8 +8,8 @@ Game::Game(){
 
 	//stateActionCharacter = ACTIONNULL;
 	special = NULL;
-	player = 0;
-	field = false;
+	_player = 0;
+	_field = false;
 	width_screen = 1024;
 	height_screen = 768;
 	title = "West Rumble!!!";
@@ -93,13 +93,13 @@ void Game::loadResources(){
 }
 
 void Game::reset(){
-	player =0 ;
-	field = false;
+	_player =0 ;
+	_field = false;
 	endGame = false;
 	A.reset();
 	B.reset();
 
-	player = 0;
+	_player = 0;
 
 	menu._state = MAIN_MENU;
 	state = STATEMENU;
@@ -117,7 +117,7 @@ void Game::update(){
 		shop.setGUI(width_screen,height_screen);
 		setGUI();
 		if(state == STATEGAME)
-			centerTeam(player);
+			centerTeam(_player);
 		engine._winChanged = false;
 	}
 
@@ -138,6 +138,9 @@ void Game::update(){
 			if(menu.isDone()){
 				if (stage.loadStage("resources/stage/stage1.txt", engine._res)){
 					cout << "stage1.txt loaded" << endl;
+				}
+				if(menu._net == 0 || menu._net == 1){
+					stage.polulate();
 				}
 
 				stage.start(&A, &B);
@@ -199,39 +202,19 @@ void Game::updateStage(){
 	if(!_cam.isDone())
 		_cam.update();
 
-	//test no move left
-	/*if(!field){//if player turn
-		field = true;
-		for(int i=0;i<5;++i)
-			if(stage.getTeam(player).getCharacter(i).getAlive())
-				if(stage.getTeam(player).actions[i] != CHAR_END)
-					field = false;
-	}*/
-
-	/*if(stage._turn == 4){
-		stage.encode(en,ll);
-		//for(int i=0;i<len;++i)
-		//	printf("%02x ",buf[i]);
-		int a = 0;
+	if(!_field){
+		if(menu._net == 0){
+			turnPlayer(_player);
+		}else if(menu._net == 1){
+			turnPlayer(0);
+		}else if(menu._net == 2){
+			turnPlayer(1);
+		}
 	}
-	if(stage._turn == 8){
-		stage.clear();
-		stage.decode(en);
-	}*/
-
-	/*if(stage._turn == 2){
-		_net.initServer(2332);
-	}else if(stage._turn == 3){
-		_net.initClient(INADDR_ANY,2332);
-	}*/
-
-
-	if(!field)
-		turnPlayer();
 		
 
 	while(!_ui._actionMsg.empty()){
-		if(menu._net == 0){
+		if(menu._net == 0 || menu._net == 1){
 			_actionMsg.push(_ui._actionMsg.front());
 			_ui._actionMsg.pop();
 		}else if(menu._net == 2){
@@ -239,7 +222,9 @@ void Game::updateStage(){
 			_ui._actionMsg.pop();
 		}
 	}
+
 	char buf[2048];
+
 	if(menu._net == 0){
 		proccessMessages();
 	}else if(menu._net == 1){
@@ -248,11 +233,13 @@ void Game::updateStage(){
 		}
 		proccessMessages();
 	}else if(menu._net == 2){
-		engine._com.recv(buf,2048);
-		stage.decode(buf);
+		if(engine._com.recv(buf,2048)){
+			stage.decode(buf);
+			centerTeam(stage._turn%2);
+		}
 	}
 
-	if(field)//one per turn end
+	if(_field)//one per turn end
 		turnField();
 
 
@@ -272,116 +259,7 @@ void Game::updateStage(){
 			return;
 		}
 	}
-	
-	
-	
-	
-	//turn button
-	//if(engine._input.isPress()){
-	//	if(button_end_turn.checkCollision(engine._input.getX(), engine._input.getY())){
-	//		if(!field){
-	//			field = true;
-	//			stage.clearOverlays();
-	//			while(!_selectedActions.empty())
-	//				_selectedActions.pop();
-	//		}
-	//		
-	//			//return;
-	//		/*stage.clearOverlays();
-	//		selected = NULL;
-	//		stage.getTeam(player).beginTurn();
-	//		centerTeam(player);*/
-	//	}
-	//	if(!field)//player turn
-	//		turnPlayer();
-	//}
 
-	//if(field)//bomb turn
-	//	turnField();
-	
-
-	
-
-
-	//turno da bomba
-	//if(player == 2){
-	//	//dem
-	//	vector<Actors*> hits;
-	//	//calc bomb to explode
-	//	for (list<bomb>::iterator it = stage.bombs.begin(); it != stage.bombs.end(); it++){
-	//		if (it->getClass() == ACTOR_BOMB){
-	//			bomb* ptr = &*it;
-	//			if(ptr->getTurn() != -1){
-	//				ptr->addTurn(-1);
-	//				if(ptr->getTurn() < 1){
-	//					hits.push_back(ptr);
-	//				}
-	//			}
-	//		}
-	//	}
-	//	//calc gunfire
-	//	for(int i=0;i<2;++i){
-	//		Team* tbuf = &stage.getTeam(i);
-	//		for(int j=0;j<5;++j){
-	//			if(tbuf->_state[j].getState(ACTIONGUNFIRE) != STATE_FIRE)
-	//				continue;
-	//			stage.checkGunfire(&tbuf->getCharacter(j),hits);
-	//			tbuf->_state[j].setState(ACTIONGUNFIRE,STATE_STAGE2);
-
-	//			if(tbuf->getCharacter(j).direction == GUN_N){
-	//				tbuf->getCharacter(j).setState("shot_up");
-	//			}else if(tbuf->getCharacter(j).direction == GUN_S){
-	//				tbuf->getCharacter(j).setState("shot_down");
-	//			}else if(tbuf->getCharacter(j).direction == GUN_W){
-	//				tbuf->getCharacter(j).setState("shot_left");
-	//			}else if(tbuf->getCharacter(j).direction == GUN_E){
-	//				tbuf->getCharacter(j).setState("shot_right");
-	//			}
-	//		}
-	//	}
-	//	//calc chain explosion
-	//	for(int i=0;i<hits.size();++i){
-	//		if(hits[i]->getClass() == ACTOR_BOMB)
-	//			stage.checkExplosion(static_cast<bomb*>(hits[i]),hits);
-	//	}
-	//	//apply damage
-	//	while(!hits.empty()){
-	//		if(hits.back()->getClass() == ACTOR_BOMB){
-	//			//stage.bombs.erase(find(stage.bombs.begin(),stage.bombs.end(),*(static_cast<bomb*>(hits.back()))));
-	//			bomb* b = static_cast<bomb*>(hits.back());
-	//			if(b->getOwner() != NULL)
-	//				b->getOwner()->RemoveEntry(b->getX(),b->getY());
-	//			stage.getTileMap().at(hits.back()->getX(),hits.back()->getY()).actor = NULL;
-	//			for(list<bomb>::iterator it=stage.bombs.begin();it!=stage.bombs.end();++it){
-	//				if(&*it == hits.back()){
-	//					stage.bombs.erase(it);
-	//					break;
-	//				}
-	//			}
-
-	//		}else if(hits.back()->getClass() == ACTOR_CHAR){
-	//			stage.hitChar(static_cast<Character*>(hits.back()));
-	//		}else if(hits.back()->getClass() == ACTOR_POWUP){
-	//			stage.hitPowUp(static_cast<PowerUp*>(hits.back()));
-	//		}else if(hits.back()->getClass() == ACTOR_BLOCK){
-	//			stage.hitBlock(static_cast<block*>(hits.back()));
-	//		}
-	//		hits.pop_back();
-	//	}
-	//	cout << "Fim de turno bomba" << endl;
-
-	//	checkEnd();
-
-	//	if(stage.suddenDeath()){
-	//		stage.dropBomb(stage.suddenDeath());
-	//	}
-	//	stage.addTurn();
-
-	//	player = 0;
-	//	stage.getTeam(player).beginTurn();
-	//	centerTeam(player);
-	//	return;
-	//}
 }
 void Game::updateEnd(){
 	if (engine._input.isPress()){
@@ -478,13 +356,13 @@ void Game::renderStage()
 
 
 	//render player
-	if (player == 0){
+	if (_player == 0){
 		engine._render.renderSprite(IMG_GFX::win1, 0 + 20 + 200, 0);
 	}
-	else if (player == 1){
+	else if (_player == 1){
 		engine._render.renderSprite(IMG_GFX::win2, 0 + 20 + 200, 0);
 	}
-	else if (player == 2)
+	else if (_player == 2)
 	{
 
 	}
@@ -506,10 +384,10 @@ void Game::renderEnd(){
 void Game::proccessMessages(){
 	while(!_actionMsg.empty()){
 		const char* msg = _actionMsg.front().c_str();
-		Team* curteam = &stage.getTeam(player);
+		Team* curteam = &stage.getTeam(_player);
 
 		if(msg[1] == WRP_END_TURN){
-			field = true;
+			_field = true;
 
 		}else if(msg[1] == WRP_MOVE){
 			int pid = 0;
@@ -544,7 +422,7 @@ void Game::proccessMessages(){
 			bomb* b = stage._bombs[index];
 
 
-			b->init(act->getFire(),player,pid);
+			b->init(act->getFire(),_player,pid);
 
 			if(act->queryPowerUp(POWUP_DETONATOR)) b->setTurn(-1);
 
@@ -644,7 +522,7 @@ void Game::proccessMessages(){
 
 			if(tgt != NULL){
 				if(tgt->getClass() == ACTOR_CHAR){
-					Team* opo = &stage.getTeam((player+1)%2);
+					Team* opo = &stage.getTeam((_player+1)%2);
 					opo->_state[opo->checkSelected(tgt)].addCooldown(ACTIONMOVE,2);
 				}
 			}
@@ -699,15 +577,16 @@ void Game::centerTeam(int t){
 	_cam.goTo(-xx+width_screen/2-stage.getCamera().getScale()/2,-yy+height_screen/2-stage.getCamera().getScale()/4);
 }
 
-void Game::turnPlayer(){
+void Game::turnPlayer(int player){
 	if(engine._input.isPress()){
 		int val = 0;
-		if(button_end_turn.checkCollision(engine._input.getX(),engine._input.getY()))
+		if(button_end_turn.checkCollision(engine._input.getX(),engine._input.getY())){
 			val = 1;
+		}
 		int xm,ym;
 		winToMat(engine._input.getX(), engine._input.getY(), stage.getCamera().getX(), stage.getCamera().getY(), stage.getCamera().getScale(), xm, ym);
 		cout << "clicked at: " << xm << "," << ym << endl;
-		_ui.update(xm,ym,val);
+		_ui.update(xm,ym,player,val);
 	}
 }
 void Game::turnField(){
@@ -726,11 +605,11 @@ void Game::turnField(){
 
 	//calc gunfire
 	{
-	Team* tbuf = &stage.getTeam(player);
+	Team* tbuf = &stage.getTeam(_player);
 	for(int j=0;j<5;++j){
 		if(tbuf->_state[j].getState(ACTIONGUNFIRE) != 2)
 			continue;
-		if(!stage.getTeam(player).getCharacter(j).getAlive())
+		if(!stage.getTeam(_player).getCharacter(j).getAlive())
 			continue;
 		stage.checkGunfire(&tbuf->getCharacter(j),hits);
 		//tbuf->_state[j].setState(ACTIONGUNFIRE,STATE_STAGE2);
@@ -772,16 +651,16 @@ void Game::turnField(){
 	}
 	//after gun cooldown
 	for(int i=0;i<5;++i){
-		if(stage.getTeam(player).getCharacter(i).getAlive()){
-			if(stage.getTeam(player)._state[i].getState(ACTIONGUNFIRE) == 1){
-				if(stage.getTeam(player).getCharacter(i)._dir == GUN_E){
-					stage.getTeam(player).getCharacter(i).setState(ANIM_IDLE_R);
-				}else if(stage.getTeam(player).getCharacter(i)._dir == GUN_W){
-					stage.getTeam(player).getCharacter(i).setState(ANIM_IDLE_L);
-				}else if(stage.getTeam(player).getCharacter(i)._dir == GUN_N){
-					stage.getTeam(player).getCharacter(i).setState(ANIM_IDLE_U);
-				}else if(stage.getTeam(player).getCharacter(i)._dir == GUN_S){
-					stage.getTeam(player).getCharacter(i).setState(ANIM_IDLE_D);
+		if(stage.getTeam(_player).getCharacter(i).getAlive()){
+			if(stage.getTeam(_player)._state[i].getState(ACTIONGUNFIRE) == 1){
+				if(stage.getTeam(_player).getCharacter(i)._dir == GUN_E){
+					stage.getTeam(_player).getCharacter(i).setState(ANIM_IDLE_R);
+				}else if(stage.getTeam(_player).getCharacter(i)._dir == GUN_W){
+					stage.getTeam(_player).getCharacter(i).setState(ANIM_IDLE_L);
+				}else if(stage.getTeam(_player).getCharacter(i)._dir == GUN_N){
+					stage.getTeam(_player).getCharacter(i).setState(ANIM_IDLE_U);
+				}else if(stage.getTeam(_player).getCharacter(i)._dir == GUN_S){
+					stage.getTeam(_player).getCharacter(i).setState(ANIM_IDLE_D);
 				}
 			}
 		}
@@ -793,11 +672,19 @@ void Game::turnField(){
 	}
 	stage.addTurn();
 
-	field = false;
-	player = (player+1)%2;
-	stage.getTeam(player).beginTurn();
-	centerTeam(player);
+	_field = false;
+	_player = (_player+1)%2;
 
+	
+	stage.getTeam(_player).beginTurn();
+	centerTeam(_player);
+
+	if(menu._net == 1){
+		char buf[4096] = "\0";
+		int len;
+		stage.encode(buf,len);
+		engine._com.send(buf,len);
+	}
 }
 
 void Game::checkEnd(){

@@ -126,7 +126,7 @@ int Stage::loadStage(const char* path, resources& res){
 
 	//stage.close();
 
-	polulate();
+	//polulate();
 
 	return 1;
 }
@@ -665,15 +665,15 @@ void Stage::encode(char* data, int& len){
 		}
 	}
 
+	int l=0;
+	_tileMap.encode(&(data[++p]),l);
+	p+=l-1;
+
 	for(int i=0;i<2;++i){
 		int l=0;
 		_teams[i]->encode(&(data[++p]),l);
 		p+=l-1;
 	}
-
-	int l=0;
-	_tileMap.encode(&(data[++p]),l);
-	p+=l-1;
 
 	data[++p] = '\0';
 
@@ -712,15 +712,17 @@ void Stage::decode(char* data){
 		b->decode(&(data[p]));
 		p+=s-1;
 	}
-	int l;
-	for(int i=0;i<2;++i){
-		l = *((short*)&(data[++p]));
-		_teams[i]->decode(&(data[p]),&_tileMap);
-		p+=l-1;
-	}
 
+	int l;
 	l = l = *((short*)&(data[++p]));
 	_tileMap.decode(&(data[p]),this);
 	p+=l-1;
+
+	for(int i=0;i<2;++i){
+		l = *((short*)&(data[++p]));
+		_teams[i]->decode(&(data[p]),&_tileMap);
+
+		p+=l-1;
+	}
 }
 

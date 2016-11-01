@@ -68,6 +68,8 @@ void Team::beginTurn(){
 
 //verifica se ta no time, e retorna quem
 int Team::checkSelected(Character* c){
+	if(c == NULL)
+		return -1;
 	for(int i=0;i<5;++i){
 		if(c == &_characters[i]){
 			return i;
@@ -152,6 +154,7 @@ void Team::decode(char* data, TileMap* tm){
 	for(int i=0;i<5;++i){
 		int l = data[++p];
 		_characters[i].decode(&(data[p]));
+		tm->_map.at(_characters[i].getX(),_characters[i].getY()).actor = &(_characters[i]);
 		p+=l-1;
 	}
 

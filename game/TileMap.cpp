@@ -66,6 +66,8 @@ void TileMap::decode(char* data, Stage* stg){
 			_map.at(i).actor = stg->_blocks[index];
 		}else  if(type == ACTOR_POWUP){
 			_map.at(i).actor = stg->_powerUps[index];
+		}else{
+			_map.at(i).actor = NULL;
 		}
 	}
 }
