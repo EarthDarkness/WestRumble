@@ -13,13 +13,19 @@ enum NETID{
 	NET_MAXUSERSIZE
 };
 
-const int LEN = 2048;
+const uint16_t UDP_BROADCAST_PORT = 5123;
+
+const int LEN = 4096;
 const int WSIZE = 64;
 class network {
 private:
 	//SDLNet_SocketSet _sockets;//hidden pointer like (_SDLNet_SocketSet*)
-	TCPsocket _socket[NET_MAXUSERSIZE];//hidden pointer like (_TCPsocket*)
+	TCPsocket _socket[NET_MAXUSERSIZE];//hidden pointer like (_TCPsocket*)//port 5651
 	SDL_Thread* _thread[NET_MAXUSERSIZE];
+
+	UDPsocket _ask;//port 5123
+	UDPsocket _feed;//port 5512
+	UDPpacket* _msg;
 
 	char _window[WSIZE][LEN];
 	int _in;
@@ -50,7 +56,9 @@ public:
 	int init();
 	int quit();
 
+
 	int initServer(uint16_t port);
+	int initClient();
 	int initClient(const char* addr, uint16_t port);
 
 	int send(void* data, int len);

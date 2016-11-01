@@ -152,7 +152,7 @@ void Game::update(){
 				if(menu._net == 1){
 					engine._com.initServer(2332);
 				}else if(menu._net == 2){
-					engine._com.initClient("127.0.0.1",2332);
+					engine._com.initClient();//"191.4.236.165",2332);
 				}
 			}
 		}
@@ -212,7 +212,6 @@ void Game::updateStage(){
 		}
 	}
 		
-
 	while(!_ui._actionMsg.empty()){
 		if(menu._net == 0 || menu._net == 1){
 			_actionMsg.push(_ui._actionMsg.front());
@@ -223,17 +222,17 @@ void Game::updateStage(){
 		}
 	}
 
-	char buf[2048];
+	char buf[LEN];
 
 	if(menu._net == 0){
 		proccessMessages();
 	}else if(menu._net == 1){
-		while(engine._com.recv(buf,2048)>0){
-			_actionMsg.push(string(buf,2048));
+		while(engine._com.recv(buf,LEN)>0){
+			_actionMsg.push(string(buf,LEN));
 		}
 		proccessMessages();
 	}else if(menu._net == 2){
-		if(engine._com.recv(buf,2048)){
+		if(engine._com.recv(buf,LEN)){
 			stage.decode(buf);
 			centerTeam(stage._turn%2);
 		}

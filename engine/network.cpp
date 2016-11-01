@@ -168,13 +168,17 @@ int network::initServer(uint16_t port){
 	if(!_working)
 		return -1;
 
-	/*{
+	char buf[20] = "\0";
+	{
 	IPaddress lo;
-	SDLNet_ResolveHost(&lo,NULL,69);
-	printf("%d.%d.%d.%d\r\n",(lo.host>>24)&0xFF,(lo.host>>16)&0xFF,(lo.host>>8)&0xFF,(lo.host>>0)&0xFF);
-	const char* tp = SDLNet_ResolveIP(&lo);
-	if(tp) std::cout << tp << std::endl;
-	}*/
+	IPaddress le;
+	SDLNet_ResolveHost(&lo,NULL,2069);
+	SDLNet_ResolveHost(&le,SDLNet_ResolveIP(&lo),2068);
+	const char* to = SDLNet_ResolveIP(&le);
+
+	sprintf_s(buf,"%d.%d.%d.%d\r\n",(le.host>>0)&0xFF,(le.host>>8)&0xFF,(le.host>>16)&0xFF,(le.host>>24)&0xFF);
+	std::cout << buf << std::endl;
+	}
 
 	IPaddress address;
 	SDLNet_ResolveHost(&address,INADDR_ANY,port);
@@ -190,6 +194,66 @@ int network::initServer(uint16_t port){
 	//for(int i=NET_CLIENT1;i<NET_MAXUSERSIZE;++i)
 		//launchReceiveThread(i);
 
+	//UDP
+	_feed = SDLNet_UDP_Open(UDP_BROADCAST_PORT);
+	if(_feed == NULL){
+		std::cout << "Error." << std::endl;		
+	}
+	UDPpacket* rdata = SDLNet_AllocPacket(4096);
+	if(rdata == NULL){
+		std::cout << "Error." << std::endl;		
+	}
+	int r = 0;
+	while(r <= 0){
+		r = SDLNet_UDP_Recv(_feed,rdata);
+		SDL_Delay(100);
+	}
+
+	std::cout << rdata->data << std::endl;
+	memcpy(rdata->data,buf,strlen(buf));
+	rdata->len = strlen(buf);
+
+	int ret = SDLNet_UDP_Send(_feed,-1,rdata);
+	if(ret <= 0){
+		std::cout << "Error." << std::endl;		
+	}
+
+	SDLNet_FreePacket(rdata);
+	SDLNet_UDP_Close(_feed);
+	//END UDP
+	return 0;
+}
+int network::initClient(){
+	//UDP
+	_msg = SDLNet_AllocPacket(4096);
+	memcpy((char*)_msg->data,"Hallo o/ \0",11);
+	_msg->len = 11;
+	SDLNet_ResolveHost(&_msg->address,"255.255.255.255",UDP_BROADCAST_PORT);//to
+
+	_ask = SDLNet_UDP_Open(0);//open any port
+	if(_ask == NULL){
+		std::cout << "Error." << std::endl;		
+	}
+	int ret = SDLNet_UDP_Send(_ask,-1,_msg);
+	if(ret <= 0){
+		std::cout << "Error." << std::endl;		
+	}
+	int r = 0;
+	while(r <= 0){
+		r = SDLNet_UDP_Recv(_ask,_msg);
+		SDL_Delay(100);
+	}
+	char buf[20] = "\0";
+	std::cout << _msg->data << std::endl;
+	strcpy_s(buf,(char*)_msg->data);
+
+	SDLNet_UDP_Close(_ask);
+	_ask = NULL;
+
+	SDLNet_FreePacket(_msg);
+
+	initClient(buf,2332);
+	//END UDP
 	return 0;
 }
 int network::initClient(const char* addr, uint16_t port){
