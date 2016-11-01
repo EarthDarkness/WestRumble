@@ -36,7 +36,7 @@ extern animation PWP_star;
 
 extern animation* PWP_TABLE[];
 
-enum PWP_ID{
+/*enum PWP_ID{//PowerUp enum in PowerUp.h
 	PWP_ID_NONE=0,
 	PWP_ID_BARREL,
 	PWP_ID_BOOT,
@@ -47,7 +47,7 @@ enum PWP_ID{
 	PWP_ID_GUNPOWDER,
 	PWP_ID_ROPE,
 	PWP_ID_STAR
-};
+};*/
 
 extern animation BMB_SINGLE;
 extern animation BMB_TRIPLE;

@@ -375,7 +375,9 @@ void Stage::spawn(int x, int y){
 
 	int index = insert(_powerUps);
 	PowerUp* p = _powerUps[index];
-	p->init(powup[rand()%powup.size()]);
+	int res = powup[rand()%powup.size()];
+	p->setAnimation(PWP_TABLE,res);
+	p->init(res);
 
 	instantiateActor(p,x,y);
 }
@@ -689,6 +691,7 @@ void Stage::decode(char* data){
 	_suddenDeath = data[++p];
 
 	n = data[++p];
+	removeAll(_bombs);
 	for(int i=0;i<n;++i){
 		int index = insert(_bombs);
 		bomb* b = _bombs[index];
@@ -696,7 +699,9 @@ void Stage::decode(char* data){
 		b->decode(&(data[p]));
 		p+=s-1;
 	}
+
 	n = data[++p];
+	removeAll(_blocks);
 	for(int i=0;i<n;++i){
 		int index = insert(_blocks);
 		block* b = _blocks[index];
@@ -704,7 +709,9 @@ void Stage::decode(char* data){
 		b->decode(&(data[p]));
 		p+=s-1;
 	}
+
 	n = data[++p];
+	removeAll(_powerUps);
 	for(int i=0;i<n;++i){
 		int index = insert(_powerUps);
 		PowerUp* b = _powerUps[index];

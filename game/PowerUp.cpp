@@ -15,7 +15,7 @@ int PowerUp::getType(){
 }
 
 void PowerUp::init(int type){
-	if (type == POWUP_SPEED){
+	/*if (type == POWUP_SPEED){
 		_sprite.init(PWP_boot);
 	}else if (type == POWUP_BOMB){
 		_sprite.init(PWP_dynamite);
@@ -33,7 +33,7 @@ void PowerUp::init(int type){
 		_sprite.init(PWP_rope);
 	}else if (type == POWUP_DETONATOR){
 		_sprite.init(PWP_detonator);
-	}
+	}*/
 
 	if (type > POWUP_NONE && type < POWUP_END && type != POWUP_ACTIVE)
 		_type = type;

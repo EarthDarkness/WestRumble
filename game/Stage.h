@@ -39,6 +39,12 @@ void remove(vector<T*>& src, int pos){
 	src[pos]->deactivate();
 }
 
+template<class T>
+void removeAll(vector<T*>& src){
+	for(int i=0;i<src.size();++i){
+		src[i]->deactivate();
+	}
+}
 //int rand();
 /*class StageData
 {

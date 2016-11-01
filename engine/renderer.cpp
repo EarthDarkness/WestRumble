@@ -92,8 +92,8 @@ void renderer::renderSprite(int index, int x, int y, int w, int h){
 }
 void renderer::renderText(const char* text, font& f, int x, int y){
 	int len = strlen(text);
-	int w = f.width();
-	int h = f.height();
+	int w = f.width()*2;
+	int h = f.height()*2;
 	int line = 0;
 	for(int i=0;i<len;++i){
 		renderSprite(f.getChar(text[i]),x+i*w,y+line*h,w,h);
@@ -101,8 +101,8 @@ void renderer::renderText(const char* text, font& f, int x, int y){
 }
 void renderer::renderTextInMapCenter(const char* text, camera& cam, font& f, int x, int y, int offX, int offY){
 	int len = strlen(text);
-	int w = f.width();
-	int h = f.height();
+	int w = f.width()*2;
+	int h = f.height()*2;
 	int line = 0;
 	int xx;
 	int yy;

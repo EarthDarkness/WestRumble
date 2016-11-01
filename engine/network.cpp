@@ -1,5 +1,6 @@
 #include "network.h"
 #include <memory.h>
+#include <iostream>
 
 int NET_ThreadListen(void* userdata){
 	return reinterpret_cast<network*>(userdata)->listenRoutine();
@@ -166,6 +167,14 @@ int network::quit(){
 int network::initServer(uint16_t port){
 	if(!_working)
 		return -1;
+
+	/*{
+	IPaddress lo;
+	SDLNet_ResolveHost(&lo,NULL,69);
+	printf("%d.%d.%d.%d\r\n",(lo.host>>24)&0xFF,(lo.host>>16)&0xFF,(lo.host>>8)&0xFF,(lo.host>>0)&0xFF);
+	const char* tp = SDLNet_ResolveIP(&lo);
+	if(tp) std::cout << tp << std::endl;
+	}*/
 
 	IPaddress address;
 	SDLNet_ResolveHost(&address,INADDR_ANY,port);

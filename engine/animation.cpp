@@ -35,6 +35,8 @@ bool animation::isDone(){
 }
 
 void animation::setState(int stt){
+	if(_state == stt)
+		return;
 	_frame[_state].stop();
 	_state = stt;
 	_frame[_state].play();

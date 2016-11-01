@@ -17,7 +17,7 @@ struct goodsData
 	goodsData();
 	~goodsData();
 
-	void set(int x, int y, int w, int h, int price, int powup, int stock);
+	void set(int price, int powup, int stock);
 };
 
 class store

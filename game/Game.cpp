@@ -382,6 +382,9 @@ void Game::renderEnd(){
 
 
 void Game::proccessMessages(){
+	bool sync = false;
+	if(!_actionMsg.empty())
+		sync = true;
 	while(!_actionMsg.empty()){
 		const char* msg = _actionMsg.front().c_str();
 		Team* curteam = &stage.getTeam(_player);
@@ -546,6 +549,14 @@ void Game::proccessMessages(){
 		}
 		_actionMsg.pop();
 	}
+
+	if(menu._net == 1 && sync){
+		char buf[4096] = "\0";
+		int len;
+		stage.encode(buf,len);
+		engine._com.send(buf,len);
+	}
+
 }
 
 

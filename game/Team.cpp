@@ -154,7 +154,8 @@ void Team::decode(char* data, TileMap* tm){
 	for(int i=0;i<5;++i){
 		int l = data[++p];
 		_characters[i].decode(&(data[p]));
-		tm->_map.at(_characters[i].getX(),_characters[i].getY()).actor = &(_characters[i]);
+		if(_characters[i].getAlive())
+			tm->_map.at(_characters[i].getX(),_characters[i].getY()).actor = &(_characters[i]);
 		p+=l-1;
 	}
 

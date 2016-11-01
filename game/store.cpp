@@ -4,19 +4,6 @@
 
 #include <iostream>
 
-/*extern animation CHR_char_P1;
-extern animation CHR_char_P2;
-
-extern animation PWP_barrel;
-extern animation PWP_boot;
-extern animation PWP_detonator;
-extern animation PWP_dynamite;
-extern animation PWP_fuse;
-extern animation PWP_glove;
-extern animation PWP_gunpowder;
-extern animation PWP_rope;
-extern animation PWP_star;*/
-
 using namespace std;
 
 goodsData::goodsData(){
@@ -25,11 +12,13 @@ goodsData::goodsData(){
 }
 goodsData::~goodsData(){
 }
-void goodsData::set(int x, int y, int w, int h, int price, int powup, int stock = -1){
+void goodsData::set(int price, int powup, int stock = -1){
 	_price = price;
 	_stock = stock;
-	_gui.setPos(x,y,w,h);
+	_data.setAnimation(PWP_TABLE,powup);
 	_data.init(powup);
+	//invisible buttons
+	_gui.image_id = 1;
 }
 
 store::store(){
@@ -96,49 +85,15 @@ void store::setGUI(int width, int height){
 
 }
 void store::load(resources& res){
-	//invisible buttons
-	_goods[0]._gui.image_id = 1;
-	_goods[1]._gui.image_id = 1;
-	_goods[2]._gui.image_id = 1;
-	_goods[3]._gui.image_id = 1;
-	_goods[4]._gui.image_id = 1;
-	_goods[5]._gui.image_id = 1;
-	_goods[6]._gui.image_id = 1;
-	_goods[7]._gui.image_id = 1;
-	_goods[8]._gui.image_id = 1;
-	/*for(int i=0;i<3;++i){
-		_goods[i]._gui.setPos(400,200+i*96,48,48);
-		//get<0>(_goods[i]).setPos(400,200+i*96,48,48);
-	}*/
-	_goods[0]._price = 100;
-	_goods[1]._price = 50;
-	_goods[2]._price = 150;
-	_goods[0]._data.init(POWUP_BOMB);
-	_goods[1]._data.init(POWUP_SPEED);
-	_goods[2]._data.init(POWUP_FIRE);
-	_goods[3]._price = 200;
-	_goods[4]._price = 150;
-	_goods[5]._price = 150;
-	_goods[3]._data.init(POWUP_SHIELD);
-	_goods[4]._data.init(POWUP_BOMB_RELAUNCH);
-	_goods[5]._data.init(POWUP_BOMB_TIMER);
-	_goods[6]._price = 250;
-	_goods[7]._price = 200;
-	_goods[8]._price = 250;
-	_goods[6]._data.init(POWUP_DETONATOR);
-	_goods[7]._data.init(POWUP_BARRIER);
-	_goods[8]._data.init(POWUP_STUN);
-
-	_goods[0]._stock = 6;
-	_goods[1]._stock = 6;
-	_goods[2]._stock = 6;
-	_goods[3]._stock = 2;
-	_goods[4]._stock = 4;
-	_goods[5]._stock = 3;
-	_goods[6]._stock = 2;
-	_goods[7]._stock = 3;
-	_goods[8]._stock = 3;
-
+	_goods[0].set(100,POWUP_BOMB,6);
+	_goods[1].set(50,POWUP_SPEED,6);
+	_goods[2].set(150,POWUP_FIRE,6);
+	_goods[3].set(200,POWUP_SHIELD,2);
+	_goods[4].set(150,POWUP_BOMB_RELAUNCH,4);
+	_goods[5].set(150,POWUP_BOMB_TIMER,3);
+	_goods[6].set(250,POWUP_DETONATOR,2);
+	_goods[7].set(200,POWUP_BARRIER,3);
+	_goods[8].set(250,POWUP_STUN,3);
 
 }
 

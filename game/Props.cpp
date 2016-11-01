@@ -35,15 +35,16 @@ animation PWP_star;
 
 animation* PWP_TABLE[] = {
 	NULL,
-	&PWP_barrel,
-	&PWP_boot,
-	&PWP_detonator,
 	&PWP_dynamite,
+	&PWP_gunpowder,
+	&PWP_boot,
+	&PWP_star,
+	NULL,
 	&PWP_fuse,
 	&PWP_glove,
-	&PWP_gunpowder,
+	&PWP_barrel,
 	&PWP_rope,
-	&PWP_star
+	&PWP_detonator
 };
 
 
