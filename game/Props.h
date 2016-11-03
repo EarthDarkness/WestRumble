@@ -91,6 +91,7 @@ struct IMG_UI{
 	static int tutorial;
 	static int credits;
 	static int exit;
+	static int num[10];
 
 	IMG_UI(){
 		memset(this,0,sizeof(IMG_UI));

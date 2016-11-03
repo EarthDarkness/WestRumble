@@ -58,7 +58,9 @@ int core::createWindow(const char* name, int w, int h){
 		SDL_DestroyWindow(_window);
 		error = 1;
 	}
-	_window = SDL_CreateWindow(name,100,100,w,h,SDL_WINDOW_SHOWN|SDL_WINDOW_MAXIMIZED|SDL_WINDOW_RESIZABLE);//|SDL_WINDOW_FULLSCREEN);//
+	//UNDO
+	//_window = SDL_CreateWindow(name,100,100,w,h,SDL_WINDOW_SHOWN|SDL_WINDOW_MAXIMIZED|SDL_WINDOW_RESIZABLE);//|SDL_WINDOW_FULLSCREEN);//
+	_window = SDL_CreateWindow(name,100,100,800,600,SDL_WINDOW_SHOWN|SDL_WINDOW_RESIZABLE);//|SDL_WINDOW_FULLSCREEN);//
 	if(engRenderer != NULL){
 		SDL_DestroyRenderer(engRenderer);
 		error += 2;
@@ -74,6 +76,7 @@ void core::clear(){
 	SDL_DestroyRenderer(engRenderer);
 	SDL_DestroyWindow(_window);
 	Mix_CloseAudio();
+	_com.quit();
 	Mix_Quit();//Mix_CloseAudio();
 	IMG_Quit();
 	SDL_Quit();
@@ -86,7 +89,7 @@ SDL_Window* core::getWindow(){
 void core::sortEvents(){
 	while(SDL_PollEvent(&_event)){
 		if(_event.type == SDL_QUIT || _event.type == SDL_APP_TERMINATING)
-			_running = false;	
+			quit();	
 		if(_event.type == SDL_KEYDOWN)
 			if(_event.key.keysym.sym == SDLK_AC_BACK)
 				_back = true;//_running = false;
@@ -124,6 +127,6 @@ bool core::isRunning(){
 }
 void core::quit(){
 	_running = false;
-	_com.quit();
+	_com.close();
 }
 

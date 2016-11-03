@@ -4,12 +4,15 @@
 extern animation CHR_char_P1;
 extern animation CHR_char_P2;
 
+static int CHR_BASE_SPEED = 4;
+static int CHR_BASE_POWER = 3;
+
 Character::Character(){
 	_class = ACTOR_CHAR;
 
-	_speed = 2;
+	_speed = CHR_BASE_SPEED;
 	_capacity = 1;
-	_power = 2;
+	_power = CHR_BASE_POWER;
 	_shield = 0;
 	_alive = true;
 
@@ -26,9 +29,9 @@ Character::~Character(){
 void Character::reset(){
 	_class = ACTOR_CHAR;
 
-	_speed = 2;
+	_speed = CHR_BASE_SPEED;
 	_capacity = 1;
-	_power = 2;
+	_power = CHR_BASE_POWER;
 	_shield = 0;
 	_alive = true;
 
@@ -52,7 +55,7 @@ void Character::AddPowerUp(PowerUp* entry){
 	int type = entry->getType();
 	if(type < POWUP_ACTIVE){
 		if(type == POWUP_SPEED)
-			_speed += 1;
+			_speed += 2;
 		else if(type == POWUP_BOMB)
 			_capacity += 1;
 		else if(type == POWUP_FIRE)

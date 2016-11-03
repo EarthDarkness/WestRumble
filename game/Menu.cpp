@@ -33,6 +33,8 @@ Menu::~Menu(){
 void Menu::init(){
 	_state = MAIN_MENU;
 
+	_numpad.init();
+
 	_itemTable[MAIN_MENU].push_back(&_logo);
 	_itemTable[MAIN_MENU].push_back(&_play);
 	_itemTable[MAIN_MENU].push_back(&_server);
@@ -43,6 +45,9 @@ void Menu::init(){
 	_itemTable[TUTORIAL_MENU].push_back(&_next);
 	_itemTable[TUTORIAL_MENU].push_back(&_prev);
 	_itemTable[TUTORIAL_MENU].push_back(&_back);
+
+	for(int i=0;i<10;++i)
+		_itemTable[MULTIPLAYER_MENU].push_back(&(_numpad._nums[i]));
 
 	_logo.image_id = IMG_GFX::logo;
 
@@ -104,8 +109,13 @@ void Menu::setGUI(int width, int height){
 			_info[i].setPos(width/2-height/2,0,height,height);
 		}
 	}
-
-
+	//multiplayer
+	//numpad
+	int mh = (float)height*0.3f;
+	int mw = (float)mh*0.75f;
+	int mx = (width-mw)/2;
+	int my = height/2;
+	_numpad.setCoords(mx,my,mw,mh);
 }
 
 void Menu::udpdate(int mx, int my){
@@ -117,13 +127,15 @@ void Menu::udpdate(int mx, int my){
 			_state = TUTORIAL_MENU;
 			_page = 0;
 		}else if(_server.checkCollision(mx,my)){
-			if(_net == 0){
+			_state = MULTIPLAYER_MENU;
+			/*if(_net == 0){
 				_net = 1;
-			}
+			}*/
 		}else if(_client.checkCollision(mx,my)){
-			if(_net == 0){
+			_state = MULTIPLAYER_MENU;
+			/*if(_net == 0){
 				_net = 2;
-			}
+			}*/
 		}
 	}else if(_state == STAGE_MENU){
 		//_done = true;

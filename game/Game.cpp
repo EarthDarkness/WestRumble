@@ -175,8 +175,14 @@ void Game::update(){
 			state = STATEGAME;
 			//engine._render.playMusic("BGM",true,false);
 			_ui.init(&stage);
-			if(menu._net == 1)
+			if(menu._net == 1){
 				engine._com._hear = 1;
+				//sync map
+				char buf[LEN] = "\0";
+				int len;
+				stage.encode(buf,len);
+				engine._com.send(buf,len);
+			}
 		}
 		break;
 					 }
@@ -509,6 +515,7 @@ void Game::proccessMessages(){
 
 			int index = insert(stage._blocks);
 			block* b = stage._blocks[index];
+			b->setAnimation(BLK_TABLE,BLK_ID_BARREL);
 			stage.instantiateActor(b, xx, yy);
 
 			curteam->actions[pid] = CHAR_END;

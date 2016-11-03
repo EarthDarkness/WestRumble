@@ -69,6 +69,7 @@ animation* BLK_TABLE[]={
 	&BLK_barrel
 };
 
+animation UI_numpad;
 animation UI_action;
 animation UI_ovelay;
 
@@ -83,6 +84,7 @@ int IMG_UI::client = 0;
 int IMG_UI::tutorial = 0;
 int IMG_UI::credits = 0;
 int IMG_UI::exit = 0;
+int IMG_UI::num[10] = {0,0,0,0,0,0,0,0,0,0};
 
 
 int IMG_TUT::objectives = 0;
@@ -202,6 +204,16 @@ void intLoadImages(resources& res){
 	IMG_UI::client = res.loadImage("resources/image/UI_client.png");
 	IMG_UI::tutorial = res.loadImage("resources/image/UI_tutorial.png");
 	IMG_UI::credits = res.loadImage("resources/image/UI_credits.png");
+	IMG_UI::num[0] = res.loadImage("resources/image/UI_num_0.png");
+	IMG_UI::num[1] = res.loadImage("resources/image/UI_num_1.png");
+	IMG_UI::num[2] = res.loadImage("resources/image/UI_num_2.png");
+	IMG_UI::num[3] = res.loadImage("resources/image/UI_num_3.png");
+	IMG_UI::num[4] = res.loadImage("resources/image/UI_num_4.png");
+	IMG_UI::num[5] = res.loadImage("resources/image/UI_num_5.png");
+	IMG_UI::num[6] = res.loadImage("resources/image/UI_num_6.png");
+	IMG_UI::num[7] = res.loadImage("resources/image/UI_num_7.png");
+	IMG_UI::num[8] = res.loadImage("resources/image/UI_num_8.png");
+	IMG_UI::num[9] = res.loadImage("resources/image/UI_num_9.png");
 
 
 	IMG_TUT::actions = res.loadImage("resources/image/TUT_actions.png");
@@ -330,6 +342,9 @@ void intLoadAnimations(resources& res){
 
 	loadAnimation(IMG_BLK::box,BLK_box,ANIM_IDLE,res);
 	loadAnimation(IMG_BLK::barrel,BLK_barrel,ANIM_IDLE,res);
+
+	for(int i=0;i<10;++i)
+		loadAnimation(IMG_UI::num[i],UI_numpad,i,res);
 
 	loadAnimation(IMG_TRANSPARENT,UI_action,ANIM_NONE,res);
 	loadAnimation(IMG_ACT::move,UI_action,ANIM_MOVE,res);

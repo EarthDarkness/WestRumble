@@ -38,6 +38,7 @@ void network::waitForThreads(){
 		if(_thread[i] == NULL)
 			continue;
 		SDL_WaitThread(_thread[i],&out);
+		_thread[i] = NULL;
 	}
 	_signal = 0;
 }
@@ -108,8 +109,18 @@ int network::receiveRoutine(int id){
 	return 0;
 }
 
+void network::resolveLocalIp(){
+	IPaddress lo;
+	SDLNet_ResolveHost(&lo,NULL,2069);
+	SDLNet_ResolveHost(&lo,SDLNet_ResolveIP(&lo),2068);
+
+	sprintf_s(_ip,"%d.%d.%d.%d\0",(lo.host>>0)&0xFF,(lo.host>>8)&0xFF,(lo.host>>16)&0xFF,(lo.host>>24)&0xFF);
+	std::cout << _ip << std::endl;
+}
 
 network::network(){
+	strcpy_s(_ip,"0.0.0.0");
+
 	_who = -1;
 	_signal = 0;
 	_hear = 0;
@@ -139,6 +150,7 @@ network::~network(){
 int network::init(){
 	if(SDLNet_Init() != -1){
 		_working = true;
+		resolveLocalIp();
 		return 0;
 	}
 	return -1;
@@ -164,21 +176,13 @@ int network::quit(){
 	return 0;
 }
 
+const char* network::getLocalIp(){
+	return _ip;
+}
+
 int network::initServer(uint16_t port){
 	if(!_working)
 		return -1;
-
-	char buf[20] = "\0";
-	{
-	IPaddress lo;
-	IPaddress le;
-	SDLNet_ResolveHost(&lo,NULL,2069);
-	SDLNet_ResolveHost(&le,SDLNet_ResolveIP(&lo),2068);
-	const char* to = SDLNet_ResolveIP(&le);
-
-	sprintf_s(buf,"%d.%d.%d.%d\r\n",(le.host>>0)&0xFF,(le.host>>8)&0xFF,(le.host>>16)&0xFF,(le.host>>24)&0xFF);
-	std::cout << buf << std::endl;
-	}
 
 	IPaddress address;
 	SDLNet_ResolveHost(&address,INADDR_ANY,port);
@@ -195,7 +199,7 @@ int network::initServer(uint16_t port){
 		//launchReceiveThread(i);
 
 	//UDP
-	_feed = SDLNet_UDP_Open(UDP_BROADCAST_PORT);
+	/*_feed = SDLNet_UDP_Open(UDP_BROADCAST_PORT);
 	if(_feed == NULL){
 		std::cout << "Error." << std::endl;		
 	}
@@ -219,13 +223,13 @@ int network::initServer(uint16_t port){
 	}
 
 	SDLNet_FreePacket(rdata);
-	SDLNet_UDP_Close(_feed);
+	SDLNet_UDP_Close(_feed);*/
 	//END UDP
 	return 0;
 }
 int network::initClient(){
 	//UDP
-	_msg = SDLNet_AllocPacket(4096);
+	/*_msg = SDLNet_AllocPacket(4096);
 	memcpy((char*)_msg->data,"Hallo o/ \0",11);
 	_msg->len = 11;
 	SDLNet_ResolveHost(&_msg->address,"255.255.255.255",UDP_BROADCAST_PORT);//to
@@ -252,8 +256,10 @@ int network::initClient(){
 
 	SDLNet_FreePacket(_msg);
 
-	initClient(buf,2332);
+	initClient(buf,2332);*/
 	//END UDP
+
+	initClient("127.0.0.1",2332);
 	return 0;
 }
 int network::initClient(const char* addr, uint16_t port){
@@ -322,7 +328,6 @@ int network::recv(void* data, int len){
 }
 
 void network::close(){
-	waitForThreads();
 
 	if(_netId == NET_SERVER){
 		for(int i=NET_CLIENT1;i<NET_MAXUSERSIZE;++i){
@@ -336,6 +341,8 @@ void network::close(){
 
 	SDLNet_TCP_Close(_socket[NET_SELF]);
 	_socket[NET_SELF] = NULL;
+
+	waitForThreads();
 
 	_netId = -1;
 	_in = 0;

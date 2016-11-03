@@ -37,9 +37,9 @@ matMN<Tile>& userInterface::getTileMap(){
 	return _tileMap->_map;
 }
 bool userInterface::areEnemies(Character* c1, Character* c2){
-	if(_teams[0]->isMember(c1) && _teams[0]->isMember(c2))
+	if(_teams[0]->isMember(c1)>-1 && _teams[0]->isMember(c2)>-1)
 		return false;
-	if(_teams[1]->isMember(c1) && _teams[1]->isMember(c2))
+	if(_teams[1]->isMember(c1)>-1 && _teams[1]->isMember(c2)>-1)
 		return false;
 	return true;
 }

@@ -27,6 +27,8 @@ private:
 	UDPsocket _feed;//port 5512
 	UDPpacket* _msg;
 
+	char _ip[16];
+
 	char _window[WSIZE][LEN];
 	int _in;
 	int _out;
@@ -40,6 +42,7 @@ private:
 
 	void waitForThreads();
 
+	void resolveLocalIp();
 
 public:
 	volatile int _who;
@@ -56,6 +59,7 @@ public:
 	int init();
 	int quit();
 
+	const char* getLocalIp();
 
 	int initServer(uint16_t port);
 	int initClient();
