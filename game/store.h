@@ -11,7 +11,7 @@ struct goodsData
 {
 	int _price;
 	int _stock;
-	Button _gui;
+	button _gui;
 	PowerUp _data;
 
 	goodsData();
@@ -29,8 +29,8 @@ private:
 	int _y;
 
 	goodsData _goods[9];
-	Button _exit;
-	Button _player[5];
+	button _exit;
+	button _player[5];
 
 	int _selected;
 	int _done;

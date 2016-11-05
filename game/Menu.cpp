@@ -30,10 +30,34 @@ Menu::Menu(){
 Menu::~Menu(){
 }
 
+void Menu::setupDisplay(){
+	guiEntry* ptrArr[8*8];
+
+	//mainmenu
+	int p=-1;
+	//server client
+	ptrArr[++p] = &_server;
+	ptrArr[++p] = &_client;
+	//menu 
+	ptrArr[++p] = &_play;
+	ptrArr[++p] = new panel(2, 1, 0.1f, 0.0f, ptrArr);
+	ptrArr[++p] = &_tutorial;
+	ptrArr[++p] = &_credits;
+	//spaing
+	ptrArr[++p] = NULL;
+	ptrArr[++p] = new panel(1, 4, 0.0f, 0.1f, ptrArr+2);
+	ptrArr[++p] = NULL;
+
+	_display[MAIN_MENU].init(3, 1, 0.0f, 0.0f, ptrArr+6);
+
+}
+
 void Menu::init(){
 	_state = MAIN_MENU;
 
-	_numpad.init();
+	setupDisplay();
+
+	//_numpad.init();
 
 	_itemTable[MAIN_MENU].push_back(&_logo);
 	_itemTable[MAIN_MENU].push_back(&_play);
@@ -46,8 +70,8 @@ void Menu::init(){
 	_itemTable[TUTORIAL_MENU].push_back(&_prev);
 	_itemTable[TUTORIAL_MENU].push_back(&_back);
 
-	for(int i=0;i<10;++i)
-		_itemTable[MULTIPLAYER_MENU].push_back(&(_numpad._nums[i]));
+	//for(int i=0;i<10;++i)
+	//	_itemTable[MULTIPLAYER_MENU].push_back(&(_numpad._nums[i]));
 
 	_logo.image_id = IMG_GFX::logo;
 
@@ -72,50 +96,52 @@ void Menu::init(){
 }
 
 void Menu::setGUI(int width, int height){
-	int lw = 840;
-	int lh = 420;
-	scaleHeight(height/2,lw,lh);
-	if(lw>width)
-		scaleWidth(width,lw,lh);
-	_logo.setPos(width/2-lw/2,0,lw,lh);
+	_display[MAIN_MENU].setGUI(0,0,width,height);
 
-	int ss;//space size
-	int is;//item size
-	fitInSpace(height/2,4,0.9f,ss,is);
+	//int lw = 840;
+	//int lh = 420;
+	//scaleHeight(height/2,lw,lh);
+	//if(lw>width)
+	//	scaleWidth(width,lw,lh);
+	//_logo.setPos(width/2-lw/2,0,lw,lh);
 
-	lw = 450;
-	lh = 180;
-	scaleHeight(is,lw,lh);
-	if(lw>width)
-		scaleWidth(width,lw,lh);
+	//int ss;//space size
+	//int is;//item size
+	//fitInSpace(height/2,4,0.9f,ss,is);
 
-	int xx = width/2-lw/2;
+	//lw = 450;
+	//lh = 180;
+	//scaleHeight(is,lw,lh);
+	//if(lw>width)
+	//	scaleWidth(width,lw,lh);
 
-	_play.setPos(xx,height/2+ss/2+0*(lh+ss),lw,lh);
-	_server.setPos(xx-lw/2,height/2+ss/2+1*(lh+ss),lw,lh);
-	_client.setPos(xx+lw/2,height/2+ss/2+1*(lh+ss),lw,lh);
-	_tutorial.setPos(xx,height/2+ss/2+2*(lh+ss),lw,lh);
-	_credits.setPos(xx,height/2+ss/2+3*(lh+ss),lw,lh);
-	
-	bool portrait = (width<height);
-	
-	_next.setPos(width-100,0,100,100);
-	_prev.setPos(0,0,100,100);
-	_back.setPos(width-96,height-96,96,96);
-	for(int i=0;i<4;++i){
-		if(portrait){
-			_info[i].setPos(0,height/2-width/2,width,width);
-		}else{
-			_info[i].setPos(width/2-height/2,0,height,height);
-		}
-	}
-	//multiplayer
-	//numpad
-	int mh = (float)height*0.3f;
-	int mw = (float)mh*0.75f;
-	int mx = (width-mw)/2;
-	int my = height/2;
-	_numpad.setCoords(mx,my,mw,mh);
+	//int xx = width/2-lw/2;
+
+	//_play.setPos(xx,height/2+ss/2+0*(lh+ss),lw,lh);
+	//_server.setPos(xx-lw/2,height/2+ss/2+1*(lh+ss),lw,lh);
+	//_client.setPos(xx+lw/2,height/2+ss/2+1*(lh+ss),lw,lh);
+	//_tutorial.setPos(xx,height/2+ss/2+2*(lh+ss),lw,lh);
+	//_credits.setPos(xx,height/2+ss/2+3*(lh+ss),lw,lh);
+	//
+	//bool portrait = (width<height);
+	//
+	//_next.setPos(width-100,0,100,100);
+	//_prev.setPos(0,0,100,100);
+	//_back.setPos(width-96,height-96,96,96);
+	//for(int i=0;i<4;++i){
+	//	if(portrait){
+	//		_info[i].setPos(0,height/2-width/2,width,width);
+	//	}else{
+	//		_info[i].setPos(width/2-height/2,0,height,height);
+	//	}
+	//}
+	////multiplayer
+	////numpad
+	//int mh = (float)height*0.3f;
+	//int mw = (float)mh*0.75f;
+	//int mx = (width-mw)/2;
+	//int my = height/2;
+	//_numpad.setCoords(mx,my,mw,mh);
 }
 
 void Menu::udpdate(int mx, int my){
@@ -152,7 +178,7 @@ void Menu::udpdate(int mx, int my){
 }
 void Menu::render(renderer& ren){
 	for(int i=0;i<_itemTable[_state].size();++i){
-		Button* ptr = _itemTable[_state][i];
+		button* ptr = _itemTable[_state][i];
 		ren.renderSprite(ptr->image_id,ptr->rect.x,ptr->rect.y,ptr->rect.w,ptr->rect.h);
 	}
 }

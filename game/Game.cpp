@@ -38,9 +38,9 @@ void Game::init(){
 	loadResources();
 
 	menu.init();
-	_server.setPos(50,300,64,64);
+	_server.setGUI(50,300,64,64);
 	_server.image_id = 0;
-	_client.setPos(200,300,64,64);
+	_client.setGUI(200,300,64,64);
 	_client.image_id = 0;
 
 	setGUI();
@@ -62,17 +62,17 @@ void Game::setGUI(){
 	
 
 	button_end_turn.image_id = IMG_UI::endturn;
-	button_end_turn.setPos(width_screen-dist-ss/2,height_screen-dist-ss/2,dist,dist);
+	button_end_turn.setGUI(width_screen-dist-ss/2,height_screen-dist-ss/2,dist,dist);
 
 	button_move_left.image_id = IMG_UI::move;
 	button_move_right.image_id = IMG_UI::move;
 	button_move_up.image_id = IMG_UI::move;
 	button_move_down.image_id = IMG_UI::move;
 
-	button_move_left.setPos(space,space+ss+dist,ss,sh);
-	button_move_right.setPos(width_screen-space-ss,space+ss+dist,ss,sh);
-	button_move_up.setPos(space+ss+dist,space,sw,ss);
-	button_move_down.setPos(space+ss+dist,height_screen-space-ss,sw,ss);
+	button_move_left.setGUI(space,space+ss+dist,ss,sh);
+	button_move_right.setGUI(width_screen-space-ss,space+ss+dist,ss,sh);
+	button_move_up.setGUI(space+ss+dist,space,sw,ss);
+	button_move_down.setGUI(space+ss+dist,height_screen-space-ss,sw,ss);
 
 	//menu.start.setPos(width_screen/2-100/2,((height_screen/2-50/2)/2)*3,100,50);
 	menu.setGUI(width_screen,height_screen);

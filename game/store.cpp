@@ -63,18 +63,18 @@ void store::setGUI(int width, int height){
 	int yv = width<height?spa*2+hh:0;
 
 	_exit.image_id = IMG_UI::exit;
-	_exit.setPos(width-aa-spa,height-aa-spa,aa,aa);
+	_exit.setGUI(width-aa-spa,height-aa-spa,aa,aa);
 
 	for(int i=0;i<5;++i){
 		//_player[i].image_id = "NULL";
 		if(width<height)
-			_player[i].setPos(spa+i*(spa+ww),spa,ww,hh);
+			_player[i].setGUI(spa+i*(spa+ww),spa,ww,hh);
 		else
-			_player[i].setPos(spa,spa+i*(spa+hh),ww,hh);
+			_player[i].setGUI(spa,spa+i*(spa+hh),ww,hh);
 	}
 	for(int j=0;j<3;++j){
 		for(int i=0;i<3;++i){
-			_goods[j*3+i]._gui.setPos(xv+spv+i*(spv+vv),yv+spv+j*(spv+vv)+vv/4,vv,vv/2);
+			_goods[j*3+i]._gui.setGUI(xv+spv+i*(spv+vv),yv+spv+j*(spv+vv)+vv/4,vv,vv/2);
 		}
 	}
 

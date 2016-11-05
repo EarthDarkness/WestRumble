@@ -24,7 +24,7 @@ private:
 	vector<Actors> _overlay;
 	Actors _ohi;//Over Head Icon
 
-	Button* _endturn;
+	button* _endturn;
 
 	void pushOvelay(int x, int y, int ol);
 	

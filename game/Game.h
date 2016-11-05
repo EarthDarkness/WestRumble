@@ -54,8 +54,8 @@ private:
 	userInterface _ui;
 
 	//network _net;
-	Button _server;
-	Button _client;
+	button _server;
+	button _client;
 
 	int _player;
 	bool _field;
@@ -84,12 +84,12 @@ private:
 	Team A;
 	Team B;
 
-	Button button_move_right;
-	Button button_move_left;
-	Button button_move_up;
-	Button button_move_down;
+	button button_move_right;
+	button button_move_left;
+	button button_move_up;
+	button button_move_down;
 
-	Button button_end_turn;
+	button button_end_turn;
 
 	//status
 	int _speed;

@@ -11,51 +11,51 @@
 #include "Actors.h"
 #include "Props.h"
 
-class numpad
-{
-public:
-	Button _nums[10];
-	numpad(){
-	}
-	~numpad(){
-	}
-
-	void init(){
-		for(int i=0;i<10;++i)
-			_nums[i].image_id = IMG_UI::num[i];
-	}
-
-	void setCoords(int x, int y, int w, int h){
-		int wsp = ((float)w*0.4f);
-		int hsp = ((float)w*0.4f);
-
-		int wn = w-wsp;
-		int hn = h-hsp;
-
-		int wc = wn/3;
-		int hc = hn/4;
-
-		for(int j=0;j<3;++j){
-			for(int i=0;i<3;++i){
-				int xx = x+i*(wsp/2+wc);
-				int yy = y+j*(hsp/3+hc);
-
-				_nums[1+j*3+i].setPos(xx,yy,wc,hc);
-			}
-		}
-		_nums[0].setPos(x+1*(wsp/2+wc),y+3*(hsp/3+hc),wc,hc);
-
-	}
-	int getNum(int mx, int my){
-		for(int i=0;i<10;++i){
-			if(_nums[i].checkCollision(mx,my)){
-				return i;
-			}
-		}
-		return -1;
-	}
-
-};
+//class numpad
+//{
+//public:
+//	button _nums[10];
+//	numpad(){
+//	}
+//	~numpad(){
+//	}
+//
+//	void init(){
+//		for(int i=0;i<10;++i)
+//			_nums[i].image_id = IMG_UI::num[i];
+//	}
+//
+//	void setCoords(int x, int y, int w, int h){
+//		int wsp = ((float)w*0.4f);
+//		int hsp = ((float)w*0.4f);
+//
+//		int wn = w-wsp;
+//		int hn = h-hsp;
+//
+//		int wc = wn/3;
+//		int hc = hn/4;
+//
+//		for(int j=0;j<3;++j){
+//			for(int i=0;i<3;++i){
+//				int xx = x+i*(wsp/2+wc);
+//				int yy = y+j*(hsp/3+hc);
+//
+//				_nums[1+j*3+i].setPos(xx,yy,wc,hc);
+//			}
+//		}
+//		_nums[0].setPos(x+1*(wsp/2+wc),y+3*(hsp/3+hc),wc,hc);
+//
+//	}
+//	int getNum(int mx, int my){
+//		for(int i=0;i<10;++i){
+//			if(_nums[i].checkCollision(mx,my)){
+//				return i;
+//			}
+//		}
+//		return -1;
+//	}
+//
+//};
 
 enum MENU_STATES{
 	MAIN_MENU = 0,
@@ -71,10 +71,13 @@ class Menu
 private:
 	input* _input;
 
+	panel _display[MAX_MENU];
+
 public:
 	Menu();
 	~Menu();
 
+	void setupDisplay();
 	void init();
 
 	void setGUI(int width, int height);
@@ -90,33 +93,33 @@ public:
 	//mainmenu
 	string _bgn;
 	
-	Button _logo;
+	button _logo;
 
-	Button _play;
-	Button _server;
-	Button _client;
-	Button _tutorial;
-	Button _credits;
-	Button _exit;
+	button _play;
+	button _server;
+	button _client;
+	button _tutorial;
+	button _credits;
+	button _exit;
 
 	//tutorial
 	int _page;
-	Button _next;
-	Button _prev;
-	Button _back;
+	button _next;
+	button _prev;
+	button _back;
 
-	Button _info[4];
+	button _info[4];
 
 	//multiplayer
 	//0123456789
 	//
-	numpad _numpad;
+	//numpad _numpad;
 
 
 	int _state;
 	//Button stages[4];
 
-	vector<Button*> _itemTable[MAX_MENU];
+	vector<button*> _itemTable[MAX_MENU];
 
 
 };

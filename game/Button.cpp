@@ -1,25 +1,25 @@
 #include "Button.h"
-Button::Button(){
+button::button(){
 	image_id = 0;
 	image_press_id = 0;
 	sound_press_id = 0;
 }
-Button::~Button(){
+button::~button(){
 
 }
 
-void Button::setPos(int x, int y, int w, int h){
+void button::setGUI(int x, int y, int w, int h){
 	rect.x = x;
 	rect.y = y;
 	rect.w = w;
 	rect.h = h;
 }
 
-bool Button::checkCollision( int x, int y)
+bool button::checkCollision( int x, int y)
 {
-	return static_cast<const Button*>(this)->checkCollision(x,y);
+	return static_cast<const button*>(this)->checkCollision(x,y);
 }
-bool Button::checkCollision( int x, int y)const
+bool button::checkCollision( int x, int y)const
 {
 	if (x > (rect.x) && x < (rect.x + rect.w)){
 		if (y >(rect.y) && y < (rect.y + rect.h)){

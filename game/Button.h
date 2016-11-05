@@ -1,11 +1,12 @@
 #ifndef BOTTON_H
 #define BOTTON_H
+#include "panel.h"
 
 #include <SDL.h>
 #include <string>
 using namespace std;
 
-class Button
+class button : public guiEntry
 {
 public:
 	int image_id;
@@ -13,10 +14,10 @@ public:
 	int sound_press_id;
 	SDL_Rect rect;
 
-	Button(); 
-	~Button();
+	button(); 
+	~button();
 
-	void setPos(int x, int y, int w, int h);
+	void setGUI(int x, int y, int w, int h);
 
 	bool checkCollision(int x, int y);
 	bool checkCollision(int x, int y)const;

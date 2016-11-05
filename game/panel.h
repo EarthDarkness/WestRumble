@@ -1,24 +1,34 @@
 #ifndef PANEL_H
 #define PANEL_H
 
-#include "Button.h"
-
+#include "..\engine\matrixMN.h"
 #include <vector>
 
-
-enum PANEL_STYLE{
-	PANEL_VERTICAL=0,
-	PANEL_HORIZONTAL,
-	PANEL_MATRIX
-};
-
-class panel
+class guiEntry
 {
 public:
-	int _type;//PANEL_STYLE
-	vector<bool> _isPanel;
-	vector<Button*> _buttons;
-	vector<panel*> _panels;
+	virtual void setGUI(int x, int y, int w, int h) = 0;
+	virtual bool doDestroy(){
+		return false;
+	}
+};
+
+
+class panel : public guiEntry
+{
+	float _wSpacing;//percent of empty space between elements
+	float _hSpacing;
+	matMN<guiEntry*> _elements;
+
+public:
+	panel();
+	panel(int width, int height, float wSpacing, float hSpacing, guiEntry** members);
+	~panel();
+
+	void init(int width, int height, float wSpacing, float hSpacing, guiEntry** members);
+
+	void setGUI(int x, int y, int w, int h);
+	bool doDestroy();
 };
 
 
