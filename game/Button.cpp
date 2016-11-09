@@ -3,10 +3,12 @@ button::button(){
 	image_id = 0;
 	image_press_id = 0;
 	sound_press_id = 0;
+
 }
 button::~button(){
 
 }
+
 
 void button::setGUI(int x, int y, int w, int h){
 	rect.x = x;

@@ -50,3 +50,38 @@ void panel::setGUI(int x, int y, int w, int h){
 bool panel::doDestroy(){
 	return true;
 }
+
+board::board(){
+}
+board::board(int size, guiEntry** members){
+	init(size,members);
+}
+board::~board(){
+	for(int i=0;i<_elements.size();++i)
+		if(_elements[i] != NULL)
+			if(_elements[i]->doDestroy())
+				delete _elements[i];
+}
+
+void board::init(int size, guiEntry** members){
+	_elements.init(size);
+	for(int i=0;i<size;++i)
+		_elements[i] = members[i];
+}
+
+void board::setGUI(int x, int y, int w, int h){
+	for(int i=0;i<_elements.size();++i){
+		guiEntry* ptr = _elements[i];
+		if(ptr == NULL)
+			continue;
+		ptr->setGUI(
+			ptr->_xrel*w-x,
+			ptr->_yrel*h-y,
+			ptr->_wrel*w,
+			ptr->_hrel*h
+			);
+	}
+}
+bool board::doDestroy(){
+	return true;
+}

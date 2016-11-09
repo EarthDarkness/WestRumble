@@ -85,7 +85,7 @@ int IMG_UI::tutorial = 0;
 int IMG_UI::credits = 0;
 int IMG_UI::exit = 0;
 int IMG_UI::num[10] = {0,0,0,0,0,0,0,0,0,0};
-
+int IMG_UI::stgthumb0 = 0;
 
 int IMG_TUT::objectives = 0;
 int IMG_TUT::controls = 0;
@@ -214,6 +214,7 @@ void intLoadImages(resources& res){
 	IMG_UI::num[7] = res.loadImage("resources/image/UI_num_7.png");
 	IMG_UI::num[8] = res.loadImage("resources/image/UI_num_8.png");
 	IMG_UI::num[9] = res.loadImage("resources/image/UI_num_9.png");
+	IMG_UI::stgthumb0 = res.loadImage("resources/image/UI_STG_thumb_0.png");
 
 
 	IMG_TUT::actions = res.loadImage("resources/image/TUT_actions.png");

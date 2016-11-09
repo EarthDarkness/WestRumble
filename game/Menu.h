@@ -71,7 +71,8 @@ class Menu
 private:
 	input* _input;
 
-	panel _display[MAX_MENU];
+	//panel _display[MAX_MENU];
+	board _display[MAX_MENU];
 
 public:
 	Menu();
@@ -102,6 +103,11 @@ public:
 	button _credits;
 	button _exit;
 
+	//stage select
+	button _stgThumb[4];
+	button _stgNext;
+	button _stgPrev;
+
 	//tutorial
 	int _page;
 	button _next;
@@ -111,9 +117,15 @@ public:
 	button _info[4];
 
 	//multiplayer
-	//0123456789
-	//
-	//numpad _numpad;
+	button _mpServer;
+	button _mpClient;
+	button _mpIp;
+	button _mpLeft;
+	button _mpRight;
+	button _mpPool;
+	button _mpNumpad[10];
+	button _mpNext;
+	button _mpPrev;
 
 
 	int _state;

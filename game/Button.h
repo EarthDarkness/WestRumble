@@ -14,6 +14,7 @@ public:
 	int sound_press_id;
 	SDL_Rect rect;
 
+
 	button(); 
 	~button();
 
