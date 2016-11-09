@@ -154,9 +154,23 @@ void Menu::init(){
 }
 
 void Menu::setGUI(int width, int height){
-	_display[MAIN_MENU].setGUI(0,0,width,height);
-	_display[STAGE_MENU].setGUI(0,0,width,height);
-	_display[MULTIPLAYER_MENU].setGUI(0,0,width,height);
+	int x,y,w,h;
+	if(width > height){
+		x = (width-height)/2;
+		y = 0;
+		w = height;
+		h = height;
+	}else{
+		x = 0;
+		y = (height-width)/2;
+		w = width;
+		h = width;
+	}
+
+
+	_display[MAIN_MENU].setGUI(x,y,w,h);
+	_display[STAGE_MENU].setGUI(x,y,w,h);
+	_display[MULTIPLAYER_MENU].setGUI(x,y,w,h);
 
 	//int lw = 840;
 	//int lh = 420;

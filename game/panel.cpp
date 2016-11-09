@@ -75,8 +75,8 @@ void board::setGUI(int x, int y, int w, int h){
 		if(ptr == NULL)
 			continue;
 		ptr->setGUI(
-			ptr->_xrel*w-x,
-			ptr->_yrel*h-y,
+			ptr->_xrel*w+x,
+			ptr->_yrel*h+y,
 			ptr->_wrel*w,
 			ptr->_hrel*h
 			);
