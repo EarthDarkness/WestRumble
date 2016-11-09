@@ -59,6 +59,9 @@ void Actors::activate(int index){
 void Actors::deactivate(){
 	_index = -1;
 }
+void Actors::setIndex(int id){
+	_index = id;
+}
 int Actors::getIndex(){
 	return _index;
 }

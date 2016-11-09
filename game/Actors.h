@@ -28,8 +28,8 @@ protected:
 	int _index;
 
 	int _anim;	
-	animation _sprite;
 public:
+	animation _sprite;//TEMP
 	Actors();
 	~Actors();
 
@@ -47,6 +47,7 @@ public:
 
 	void activate(int index);
 	void deactivate();
+	void setIndex(int id);
 	int getIndex();
 	bool isActive();
 

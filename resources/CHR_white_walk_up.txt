@@ -1,0 +1,19 @@
+16
+white/walk_up0001.png
+white/walk_up0003.png
+white/walk_up0005.png
+white/walk_up0007.png
+white/walk_up0009.png
+white/walk_up0011.png
+white/walk_up0013.png
+white/walk_up0015.png
+white/walk_up0017.png
+white/walk_up0019.png
+white/walk_up0021.png
+white/walk_up0023.png
+white/walk_up0025.png
+white/walk_up0027.png
+white/walk_up0029.png
+white/walk_up0031.png
+walk_up 16 0.2 L
+0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15

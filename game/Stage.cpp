@@ -213,16 +213,25 @@ void Stage::renderActors(renderer& renderer){
 
 	for(int j=0;j<h;++j){
 		for(int i=0;i<w;++i){
+			Actors* ov = _tileMap._map.at(i,j).over;
 			Actors* ptr = _tileMap._map.at(i,j).actor;
+			if(ov != NULL){
+				renderer.renderSprite(ov->getSprite(),ov->getX(),ov->getY());
+				if(ptr != NULL)
+					ptr->getSprite();
+				continue;
+			}
 			if(ptr == NULL)
 				continue;
-			if(ptr->getClass() == ACTOR_BLOCK || ptr->getClass() == ACTOR_POWUP)
+			
+			if(ptr->getClass() == ACTOR_BLOCK || ptr->getClass() == ACTOR_POWUP){
 				renderer.renderActorInMapCenter(*ptr,_camera,0,-15);
-			else if(ptr->getClass() == ACTOR_CHAR)
-				renderer.renderActorInMapCenter(*ptr,_camera,0,-30);
-			else
+			}else if(ptr->getClass() == ACTOR_CHAR){
+				if(ptr->getIndex() != -2)
+					renderer.renderActorInMapCenter(*ptr,_camera,0,-30);
+			}else{
 				renderer.renderActorInMapCenter(*ptr,_camera);
-
+			}
 			if(ptr->getClass() == ACTOR_BOMB){
 				if(ptr->getBomb()->getTurn() >= 0)
 					renderer.renderTextInMapCenter(i_to_str(ptr->getBomb()->getTurn()).c_str(),_camera,*_font,ptr->getX(),ptr->getY());
@@ -249,9 +258,9 @@ void Stage::renderActors(renderer& renderer){
 			renderer.renderActorInMapCenter(_vfx[i],_camera,15,-15);
 		}else if(_vfx[i].getAnimation().getState() == ANIM_IDLE_D){
 			renderer.renderActorInMapCenter(_vfx[i],_camera,-15,-15);
-		}if(_vfx[i].getAnimation().getState() == ANIM_IDLE_L){
+		}else if(_vfx[i].getAnimation().getState() == ANIM_IDLE_L){
 			renderer.renderActorInMapCenter(_vfx[i],_camera,-15,-15);
-		}if(_vfx[i].getAnimation().getState() == ANIM_IDLE_U){
+		}else if(_vfx[i].getAnimation().getState() == ANIM_IDLE_U){
 			renderer.renderActorInMapCenter(_vfx[i],_camera,15,-15);
 		}else{
 			renderer.renderActorInMapCenter(_vfx[i],_camera);

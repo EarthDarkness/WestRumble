@@ -18,6 +18,7 @@ struct Tile{
 		up = 0;
 		collision = 0;
 		actor = NULL;
+		over = NULL;
 	}
 	~Tile()
 	{
@@ -31,7 +32,8 @@ struct Tile{
 	int bot;
 	int up;
 	int collision;
-	Actors* actor;//to index
+	Actors* actor;
+	Actors* over;
 
 };
 class Stage;

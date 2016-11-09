@@ -35,6 +35,8 @@ void Game::init(){
 	_cam.setCam(&stage.getCamera());
 	_cam.setSpeed(1.0f/10.0f);
 
+	_movie.init(&stage.getCamera());
+
 	loadResources();
 
 	menu.init();
@@ -208,6 +210,11 @@ void Game::updateStage(){
 	if(!_cam.isDone())
 		_cam.update();
 
+	if(!_movie.isDone()){
+		_movie.update();
+	//	return;
+	}
+
 	if(!_field){
 		if(menu._net == 0){
 			turnPlayer(_player);
@@ -308,8 +315,8 @@ void Game::render()
 	engine.flush();
 	//SDL_Delay(16);
 }
-void Game::renderStage()
-{
+void Game::renderStage(){
+
 	stage.renderMap(engine._render);
 	_ui.renderOverlay(engine._render,stage.getCamera());
 	stage.renderActors(engine._render);
@@ -332,6 +339,8 @@ void Game::renderStage()
 	//render button end turn
 	engine._render.renderSprite(button_end_turn.image_id, button_end_turn.rect.x, button_end_turn.rect.y, button_end_turn.rect.w, button_end_turn.rect.h);
 
+	//if(!_movie.isDone())
+		//engine._render.renderSprite(_dummie.getSprite(),_dummie.getX(),_dummie.getY());
 
 	//render status
 	if(visualized != NULL){
@@ -363,13 +372,8 @@ void Game::renderStage()
 	//render player
 	if (_player == 0){
 		engine._render.renderSprite(IMG_GFX::win1, 0 + 20 + 200, 0);
-	}
-	else if (_player == 1){
+	}else if (_player == 1){
 		engine._render.renderSprite(IMG_GFX::win2, 0 + 20 + 200, 0);
-	}
-	else if (_player == 2)
-	{
-
 	}
 
 
@@ -411,11 +415,14 @@ void Game::proccessMessages(){
 				if(tgt->getClass() == ACTOR_POWUP) act->AddPowerUp(tgt->getPowerUp());
 				else cout << "something on the way: " << tgt->getClass() << endl;
 			}
+			_dummie.init(_player);
+			_movie.waitForMotion(stage._tileMap._map, act->getX(), act->getY(), xx, yy, &_dummie,act);
 
 			stage.moveActor(act->getX(), act->getY(), xx, yy);//TODO validate movment
 
 			curteam->actions[pid] = CHAR_MOVED;
 			curteam->_state[pid].addCooldown(ACTIONMOVE,1);
+
 
 		}else if(msg[1] == WRP_DYNAMITE){
 			int pid = 0;

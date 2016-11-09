@@ -5,6 +5,7 @@
 #include "Stage.h"
 #include "../engine/core.h"
 #include "../engine/translator.h"
+#include "../engine/motion.h"
 #include "../engine/network.h"
 #include "Button.h"
 #include "Character.h"
@@ -47,7 +48,8 @@ private:
 	//movieClipF<
 	//bool _animDone;
 
-	
+	motion _movie;
+	Character _dummie;
 
 	queue<int> _selectedActions;
 	queue<string> _actionMsg;

@@ -327,6 +327,10 @@ void intLoadAnimations(resources& res){
 	loadAnimation("resources/CHR_black_shot_right.txt",CHR_char_P1,ANIM_SHOT_R,res);
 	loadAnimation("resources/CHR_black_shot_up.txt",CHR_char_P1,ANIM_SHOT_U,res);
 	loadAnimation("resources/CHR_black_shot_down.txt",CHR_char_P1,ANIM_SHOT_D,res);
+	loadAnimation("resources/CHR_black_walk_left.txt",CHR_char_P1,ANIM_WALK_L,res);
+	loadAnimation("resources/CHR_black_walk_right.txt",CHR_char_P1,ANIM_WALK_R,res);
+	loadAnimation("resources/CHR_black_walk_up.txt",CHR_char_P1,ANIM_WALK_U,res);
+	loadAnimation("resources/CHR_black_walk_down.txt",CHR_char_P1,ANIM_WALK_D,res);
 
 	loadAnimation("resources/CHR_white_idle_left.txt",CHR_char_P2,ANIM_IDLE_L,res);
 	loadAnimation("resources/CHR_white_idle_right.txt",CHR_char_P2,ANIM_IDLE_R,res);
@@ -340,6 +344,10 @@ void intLoadAnimations(resources& res){
 	loadAnimation("resources/CHR_white_shot_right.txt",CHR_char_P2,ANIM_SHOT_R,res);
 	loadAnimation("resources/CHR_white_shot_up.txt",CHR_char_P2,ANIM_SHOT_U,res);
 	loadAnimation("resources/CHR_white_shot_down.txt",CHR_char_P2,ANIM_SHOT_D,res);
+	loadAnimation("resources/CHR_white_walk_left.txt",CHR_char_P2,ANIM_WALK_L,res);
+	loadAnimation("resources/CHR_white_walk_right.txt",CHR_char_P2,ANIM_WALK_R,res);
+	loadAnimation("resources/CHR_white_walk_up.txt",CHR_char_P2,ANIM_WALK_U,res);
+	loadAnimation("resources/CHR_white_walk_down.txt",CHR_char_P2,ANIM_WALK_D,res);
 
 	loadAnimation(IMG_BLK::box,BLK_box,ANIM_IDLE,res);
 	loadAnimation(IMG_BLK::barrel,BLK_barrel,ANIM_IDLE,res);

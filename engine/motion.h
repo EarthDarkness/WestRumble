@@ -2,6 +2,7 @@
 #define MOTION_H
 
 #include "../game/TileMap.h"
+#include "../game/TileMap.h"
 #include "camera.h"
 #include <vector>
 
@@ -45,7 +46,9 @@ class motion
 {
 private:
 	static camera* _cam;
-	//TODO actor pointer to draw fake player walking while true is not visible
+	Actors* _entity;
+	Actors* _real;
+	matMN<Tile>* _map;
 
 	vector<int> _path;
 	int _xm;//matrix initial x
@@ -64,7 +67,7 @@ public:
 
 	static void init(camera* cam);
 
-	void waitForMotion(matMN<Tile>& map, int x0, int y0, int x, int y, animation* anim);
+	void waitForMotion(matMN<Tile>& map, int x0, int y0, int x, int y, Actors* act, Actors* real);
 	void vaitForAnimation(animation* anim);
 
 	void update();

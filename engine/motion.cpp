@@ -1,5 +1,6 @@
 #include "motion.h"
 #include "translator.h"
+#include "..\game\Props.h"
 
 void dirToCoord(int dir,int* vec){
 	switch(dir){
@@ -108,11 +109,11 @@ void getPatch(matMN<Tile>& map, int x0, int y0, int x, int y, vector<int>& out){
 				if(xx < 0 || xx >= map.width() || yy < 0 || yy >= map.height())
 					continue;
 				//if block if not walkable
-				if(map.at(xx,yy).collision == 1)
+				if(map.at(xx,yy).collision == 0)
 					continue;
-				if(map.at(xx,yy).collision == 2 && map.at(closed.back()->_x,closed.back()->_y).collision != 4)
-					continue;
-				if(map.at(xx,yy).collision != NULL)
+				//if(map.at(xx,yy).collision == 2 && map.at(closed.back()->_x,closed.back()->_y).collision != 4)
+				//	continue;
+				if(map.at(xx,yy).actor != NULL)
 					continue;
 
 				//calc walk cost G
@@ -174,7 +175,7 @@ void getPatch(matMN<Tile>& map, int x0, int y0, int x, int y, vector<int>& out){
 		}
 		buf = buf->_parent;
 	}
-	reverse(out.begin(),out.end());
+	//reverse(out.begin(),out.end());
 
 	killVec(open);
 	killVec(closed);
@@ -208,7 +209,7 @@ void motion::init(camera* cam){
 	_cam = cam;
 }
 
-void motion::waitForMotion(matMN<Tile>& map, int x0, int y0, int x, int y, animation* anim){
+void motion::waitForMotion(matMN<Tile>& map, int x0, int y0, int x, int y, Actors* act, Actors* real){
 	if(_cam == NULL)
 		return;
 	_moveDone = false;
@@ -223,7 +224,10 @@ void motion::waitForMotion(matMN<Tile>& map, int x0, int y0, int x, int y, anima
 
 	_count = WALKSPEED;
 
-	_anim = anim;
+	_entity = act;
+	_real = real;
+	_real->setIndex(-2);
+	_map = &map;
 
 }
 void motion::vaitForAnimation(animation* anim){
@@ -239,39 +243,62 @@ void motion::update(){
 	if(!_moveDone){
 		if(_count >= WALKSPEED){
 			if(!_path.empty()){
-				_count = 0;
-
-				int dir = _path.front();
+				int dir = _path.back();
+				_path.pop_back();
 
 				int xw;
 				int yw;
+				_map->at(_xm,_ym).over = NULL;
 
-				if(dir = DIR_N)
+				if(dir == DIR_N){
 					_ym-=1;
-				else if(dir = DIR_S)
+					_entity->setState(ANIM_WALK_U);
+				}else if(dir == DIR_S){
 					_ym+=1;
-				else if(dir = DIR_E)
+					_entity->setState(ANIM_WALK_D);
+				}else if(dir == DIR_E){
 					_xm+=1;
-				else if(dir = DIR_W)
+					_entity->setState(ANIM_WALK_R);
+				}else if(dir == DIR_W){
 					_xm-=1;
-				
+					_entity->setState(ANIM_WALK_L);
+				}
+				_map->at(_xm,_ym).over = _entity;
 				matToWin(_xm,_ym,_cam->getX(),_cam->getY(),_cam->getScale(),xw,yw);
 				int xb = _x0 + _xv;
 				int yb = _y0 + _yv;
-				_xv = xw-_x0;
-				_xv = xw-_y0;
+				_xv = xw-xb;
+				_yv = yw-yb;
 				_x0 = xb;
 				_y0 = yb;
 				_count = 0;
 			}else{
 				_moveDone = true;
+				_entity->setState(0);
+				_entity->setState(1);
+				_map->at(_xm,_ym).over = NULL;
+				_entity = NULL;
+				_real->setIndex(-1);
+				_real = NULL;
+				return;
 			}
-		}else{
-			_count ++;
 		}
+		_count++;
+		float dt =(float)(_count)/(float)(WALKSPEED);
+		int xx = _x0+_xv*dt+3;
+		int yy = _y0+_yv*dt-60;
+
+		if(_entity->getAnimation().getState() == ANIM_IDLE_R || _entity->getAnimation().getState() == ANIM_IDLE_U){
+			xx-=6;
+		}
+
+		_entity->setPos(xx,yy);
+
+		//_animDone = true;
+		//_moveDone = true;
 	}
 	if(!_animDone){
-		_animDone = _anim->isDone();
+		_animDone = _moveDone;//true;//_anim->isDone();
 	}
 }
 bool motion::isDone(){
