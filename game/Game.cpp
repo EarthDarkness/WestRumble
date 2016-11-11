@@ -41,12 +41,11 @@ void Game::init(){
 
 	menu.init();
 	menu._com = &engine._com;
-	_server.setGUI(50,300,64,64);
-	_server.image_id = 0;
-	_client.setGUI(200,300,64,64);
-	_client.image_id = 0;
+
+	_ui.setFont(&engine._font);
 
 	setGUI();
+
 
 	stage.init(&engine._font);
 	shop.setGUI(width_screen,height_screen);
@@ -216,7 +215,7 @@ void Game::updateStage(){
 
 	if(!_movie.isDone()){
 		_movie.update();
-	//	return;
+		return;
 	}
 
 	if(!_field){

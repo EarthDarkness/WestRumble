@@ -3,6 +3,7 @@
 
 #include "Stage.h"
 #include "../engine/renderer.h"
+#include "../engine/font.h"
 #include <vector>
 #include <queue>
 
@@ -19,6 +20,8 @@ private:
 	Actors* _target;
 	queue<int> _commands;
 
+	Actors* _tracked;
+	font* _font;
 
 
 	vector<Actors> _overlay;
@@ -35,7 +38,7 @@ public:
 	userInterface();
 	~userInterface();
 
-
+	void setFont(font* f);
 	void init(Stage* stg);
 
 

@@ -1,5 +1,6 @@
 #include "userInterface.h"
 #include "NetProtocol.h"
+#include "../engine/translator.h"
 #include "Props.h"
 
 
@@ -9,8 +10,10 @@ userInterface::userInterface(){
 	_teams[0] = NULL;
 	_teams[1] = NULL;
 
-	Actors* _selected = NULL;
-	Actors* _target = NULL;
+	_selected = NULL;
+	_target = NULL;
+	_tracked = NULL;
+	_font = NULL;
 }
 userInterface::~userInterface(){
 }
@@ -22,6 +25,10 @@ void userInterface::pushOvelay(int x, int y, int ol){
 	_overlay.back().getAnimation().init(UI_ovelay);
 	_overlay.back().setPos(x,y);
 	_overlay.back().setState(ol);
+}
+
+void userInterface::setFont(font * f){
+	_font = f;
 }
 
 void userInterface::init(Stage* stg){
@@ -60,6 +67,7 @@ Actors* userInterface::getOverlayAt(int x, int y){
 
 void userInterface::update(int xm, int ym, int player, int val){
 	Actors* clicked = getActorAt(xm,ym);
+	_tracked = clicked;
 
 	if((_stg->_turn%2)==player){
 		if(val == 1){
@@ -551,6 +559,25 @@ void userInterface::renderOverlay(renderer& ren, camera& cam){
 }
 void userInterface::renderIcons(renderer& ren, camera& cam){
 	ren.renderActorInMapCenter(_ohi,cam,-15,-75);
+	if(_tracked){
+		int x = -10;
+		int y = -10;
+		if(_tracked->getClass() == ACTOR_CHAR){
+			ren.renderSprite(IMG_GFX::bomb,x,y);
+			ren.renderText(i_to_str(_tracked->getCharacter()->getBombs()).c_str(),*_font,x+70,y+22);
+			ren.renderSprite(IMG_GFX::boot,x,y+40);
+			ren.renderText(i_to_str(_tracked->getCharacter()->getSpeed()).c_str(),*_font,x+70,y+62);
+			ren.renderSprite(IMG_GFX::gunpowder,x,y+80);	
+			ren.renderText(i_to_str(_tracked->getCharacter()->getFire()).c_str(),*_font,x+70,y+102);
+		}else if(_tracked->getClass() == ACTOR_BOMB){
+			ren.renderSprite(IMG_GFX::gunpowder,x,y);
+			if(_tracked->getBomb()->getTurn()>0){
+				ren.renderSprite(IMG_GFX::timer,x,y+40);
+				ren.renderText(i_to_str(_tracked->getBomb()->getTurn()).c_str(),*_font,x+70,y+62);
+			}
+		}
+	}
+
 }
 void userInterface::clear(){
 	_overlay.clear();

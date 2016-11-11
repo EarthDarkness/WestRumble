@@ -83,7 +83,7 @@ int Character::getSpeed(){
 	return _speed;
 }
 int Character::getBombs(){
-	return _power;
+	return _capacity;
 }
 int Character::getFire(){
 	return _power;
