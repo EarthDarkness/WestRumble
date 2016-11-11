@@ -63,13 +63,13 @@ void Game::setGUI(){
 	int sh = height_screen-2*(space+ss+dist);
 	
 
-	button_end_turn.image_id = IMG_UI::endturn;
+	button_end_turn._sprite.loadAnim(IMG_UI::endturn);
 	button_end_turn.setGUI(width_screen-dist-ss/2,height_screen-dist-ss/2,dist,dist);
 
-	button_move_left.image_id = IMG_UI::move;
-	button_move_right.image_id = IMG_UI::move;
-	button_move_up.image_id = IMG_UI::move;
-	button_move_down.image_id = IMG_UI::move;
+	button_move_left._sprite.loadAnim(IMG_UI::move);
+	button_move_right._sprite.loadAnim(IMG_UI::move);
+	button_move_up._sprite.loadAnim(IMG_UI::move);
+	button_move_down._sprite.loadAnim(IMG_UI::move);
 
 	button_move_left.setGUI(space,space+ss+dist,ss,sh);
 	button_move_right.setGUI(width_screen-space-ss,space+ss+dist,ss,sh);
@@ -328,19 +328,19 @@ void Game::renderStage(){
 
 
 	//render button right move
-	engine._render.renderSprite(button_move_right.image_id, button_move_right.rect.x, button_move_right.rect.y, button_move_right.rect.w, button_move_right.rect.h);
+	engine._render.renderSprite(button_move_right.getSprite(), button_move_right._rect);
 
 	//render button left move
-	engine._render.renderSprite(button_move_left.image_id, button_move_left.rect.x, button_move_left.rect.y, button_move_left.rect.w, button_move_left.rect.h);
+	engine._render.renderSprite(button_move_left.getSprite(), button_move_left._rect);
 
 	//render button up move
-	engine._render.renderSprite(button_move_up.image_id, button_move_up.rect.x, button_move_up.rect.y, button_move_up.rect.w, button_move_up.rect.h);
+	engine._render.renderSprite(button_move_up.getSprite(), button_move_up._rect);
 
 	//render button down move
-	engine._render.renderSprite(button_move_down.image_id, button_move_down.rect.x, button_move_down.rect.y, button_move_down.rect.w, button_move_down.rect.h);
+	engine._render.renderSprite(button_move_down.getSprite(), button_move_down._rect);
 
 	//render button end turn
-	engine._render.renderSprite(button_end_turn.image_id, button_end_turn.rect.x, button_end_turn.rect.y, button_end_turn.rect.w, button_end_turn.rect.h);
+	engine._render.renderSprite(button_end_turn.getSprite(), button_end_turn._rect);
 
 	//if(!_movie.isDone())
 		//engine._render.renderSprite(_dummie.getSprite(),_dummie.getX(),_dummie.getY());

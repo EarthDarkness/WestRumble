@@ -142,6 +142,10 @@ int pushAnimation(int* frames, int size){
 		G_Anim.push_back(frames[i]);
 	return G_Anim.size()-size;
 }
+int pushAnimation(int frame){
+	G_Anim.push_back(frame);
+	return G_Anim.size()-1;
+}
 void loadAnimation(const char* file, animation& anim, int stt, resources& res){
 	stringstream in;
 	vector<string> data;
@@ -189,80 +193,76 @@ void loadAnimation(int sprite, animation& anim, int stt, resources& res){
 }
 
 void intLoadImages(resources& res){
-	res.loadImage("resources/image/invalid.png");
-	res.loadImage("resources/image/transparent.png");
-	{
-		int zero=0;
-		pushAnimation(&zero,1);
-	}
+	pushAnimation(res.loadImage("resources/image/invalid.png"));
+	pushAnimation(res.loadImage("resources/image/transparent.png"));
 
-	IMG_GFX::logo = res.loadImage("resources/image/GFX_logo.png");
-	IMG_GFX::wood = res.loadImage("resources/image/BGN_title.png");
+	IMG_GFX::logo = pushAnimation(res.loadImage("resources/image/GFX_logo.png"));
+	IMG_GFX::wood = pushAnimation(res.loadImage("resources/image/BGN_title.png"));
 
-	IMG_UI::play = res.loadImage("resources/image/UI_play.png");
-	IMG_UI::server = res.loadImage("resources/image/UI_server.png");
-	IMG_UI::client = res.loadImage("resources/image/UI_client.png");
-	IMG_UI::tutorial = res.loadImage("resources/image/UI_tutorial.png");
-	IMG_UI::credits = res.loadImage("resources/image/UI_credits.png");
-	IMG_UI::num[0] = res.loadImage("resources/image/UI_num_0.png");
-	IMG_UI::num[1] = res.loadImage("resources/image/UI_num_1.png");
-	IMG_UI::num[2] = res.loadImage("resources/image/UI_num_2.png");
-	IMG_UI::num[3] = res.loadImage("resources/image/UI_num_3.png");
-	IMG_UI::num[4] = res.loadImage("resources/image/UI_num_4.png");
-	IMG_UI::num[5] = res.loadImage("resources/image/UI_num_5.png");
-	IMG_UI::num[6] = res.loadImage("resources/image/UI_num_6.png");
-	IMG_UI::num[7] = res.loadImage("resources/image/UI_num_7.png");
-	IMG_UI::num[8] = res.loadImage("resources/image/UI_num_8.png");
-	IMG_UI::num[9] = res.loadImage("resources/image/UI_num_9.png");
-	IMG_UI::stgthumb0 = res.loadImage("resources/image/UI_STG_thumb_0.png");
+	IMG_UI::play = pushAnimation(res.loadImage("resources/image/UI_play.png"));
+	IMG_UI::server = pushAnimation(res.loadImage("resources/image/UI_server.png"));
+	IMG_UI::client = pushAnimation(res.loadImage("resources/image/UI_client.png"));
+	IMG_UI::tutorial = pushAnimation(res.loadImage("resources/image/UI_tutorial.png"));
+	IMG_UI::credits = pushAnimation(res.loadImage("resources/image/UI_credits.png"));
+	IMG_UI::num[0] = pushAnimation(res.loadImage("resources/image/UI_num_0.png"));
+	IMG_UI::num[1] = pushAnimation(res.loadImage("resources/image/UI_num_1.png"));
+	IMG_UI::num[2] = pushAnimation(res.loadImage("resources/image/UI_num_2.png"));
+	IMG_UI::num[3] = pushAnimation(res.loadImage("resources/image/UI_num_3.png"));
+	IMG_UI::num[4] = pushAnimation(res.loadImage("resources/image/UI_num_4.png"));
+	IMG_UI::num[5] = pushAnimation(res.loadImage("resources/image/UI_num_5.png"));
+	IMG_UI::num[6] = pushAnimation(res.loadImage("resources/image/UI_num_6.png"));
+	IMG_UI::num[7] = pushAnimation(res.loadImage("resources/image/UI_num_7.png"));
+	IMG_UI::num[8] = pushAnimation(res.loadImage("resources/image/UI_num_8.png"));
+	IMG_UI::num[9] = pushAnimation(res.loadImage("resources/image/UI_num_9.png"));
+	IMG_UI::stgthumb0 = pushAnimation(res.loadImage("resources/image/UI_STG_thumb_0.png"));
 
 
-	IMG_TUT::actions = res.loadImage("resources/image/TUT_actions.png");
-	IMG_TUT::controls = res.loadImage("resources/image/TUT_controls.png");
-	IMG_TUT::objectives = res.loadImage("resources/image/TUT_objectives.png");
-	IMG_TUT::rules = res.loadImage("resources/image/TUT_rules.png");
+	IMG_TUT::actions = pushAnimation(res.loadImage("resources/image/TUT_actions.png"));
+	IMG_TUT::controls = pushAnimation(res.loadImage("resources/image/TUT_controls.png"));
+	IMG_TUT::objectives = pushAnimation(res.loadImage("resources/image/TUT_objectives.png"));
+	IMG_TUT::rules = pushAnimation(res.loadImage("resources/image/TUT_rules.png"));
 
-	IMG_UI::move = res.loadImage("resources/image/UI_move.png");
-	IMG_UI::endturn = res.loadImage("resources/image/UI_endturn.png");
+	IMG_UI::move = pushAnimation(res.loadImage("resources/image/UI_move.png"));
+	IMG_UI::endturn = pushAnimation(res.loadImage("resources/image/UI_endturn.png"));
 
-	IMG_OL::bomb = res.loadImage("resources/image/OL_bomb.png");
-	IMG_OL::barrel = res.loadImage("resources/image/OL_barrel.png");
-	IMG_OL::downtimer = res.loadImage("resources/image/OL_downtimer.png");
-	IMG_OL::uptimer = res.loadImage("resources/image/OL_uptimer.png");
-	IMG_OL::gunfire = res.loadImage("resources/image/OL_gunfire.png");
-	IMG_OL::rope = res.loadImage("resources/image/OL_rope.png");
-	IMG_OL::launch = res.loadImage("resources/image/OL_throw.png");
-	IMG_OL::walk = res.loadImage("resources/image/OL_walk.png");
-	IMG_OL::marker = res.loadImage("resources/image/OL_marker.png");
+	IMG_OL::bomb = pushAnimation(res.loadImage("resources/image/OL_bomb.png"));
+	IMG_OL::barrel = pushAnimation(res.loadImage("resources/image/OL_barrel.png"));
+	IMG_OL::downtimer = pushAnimation(res.loadImage("resources/image/OL_downtimer.png"));
+	IMG_OL::uptimer = pushAnimation(res.loadImage("resources/image/OL_uptimer.png"));
+	IMG_OL::gunfire = pushAnimation(res.loadImage("resources/image/OL_gunfire.png"));
+	IMG_OL::rope = pushAnimation(res.loadImage("resources/image/OL_rope.png"));
+	IMG_OL::launch = pushAnimation(res.loadImage("resources/image/OL_throw.png"));
+	IMG_OL::walk = pushAnimation(res.loadImage("resources/image/OL_walk.png"));
+	IMG_OL::marker = pushAnimation(res.loadImage("resources/image/OL_marker.png"));
 
-	IMG_ACT::barrel = res.loadImage("resources/image/GFX_ACT_barrel.png");
-	IMG_ACT::bomb = res.loadImage("resources/image/GFX_ACT_bomb.png");
-	IMG_ACT::detonate = res.loadImage("resources/image/GFX_ACT_detonate.png");
-	IMG_ACT::grab = res.loadImage("resources/image/GFX_ACT_grab.png");
-	IMG_ACT::move = res.loadImage("resources/image/GFX_ACT_move.png");
-	IMG_ACT::shot = res.loadImage("resources/image/GFX_ACT_shot.png");
-	IMG_ACT::stun = res.loadImage("resources/image/GFX_ACT_stun.png");
-	IMG_ACT::launch = res.loadImage("resources/image/GFX_ACT_throw.png");
-	IMG_ACT::timedown = res.loadImage("resources/image/GFX_ACT_timerdown.png");
-	IMG_ACT::timeup = res.loadImage("resources/image/GFX_ACT_timerup.png");
+	IMG_ACT::barrel = pushAnimation(res.loadImage("resources/image/GFX_ACT_barrel.png"));
+	IMG_ACT::bomb = pushAnimation(res.loadImage("resources/image/GFX_ACT_bomb.png"));
+	IMG_ACT::detonate = pushAnimation(res.loadImage("resources/image/GFX_ACT_detonate.png"));
+	IMG_ACT::grab = pushAnimation(res.loadImage("resources/image/GFX_ACT_grab.png"));
+	IMG_ACT::move = pushAnimation(res.loadImage("resources/image/GFX_ACT_move.png"));
+	IMG_ACT::shot = pushAnimation(res.loadImage("resources/image/GFX_ACT_shot.png"));
+	IMG_ACT::stun = pushAnimation(res.loadImage("resources/image/GFX_ACT_stun.png"));
+	IMG_ACT::launch = pushAnimation(res.loadImage("resources/image/GFX_ACT_throw.png"));
+	IMG_ACT::timedown = pushAnimation(res.loadImage("resources/image/GFX_ACT_timerdown.png"));
+	IMG_ACT::timeup = pushAnimation(res.loadImage("resources/image/GFX_ACT_timerup.png"));
 
-	IMG_BLK::box = res.loadImage("resources/image/BLK_box.png");
-	IMG_BLK::barrel = res.loadImage("resources/image/BLK_barrel.png");
+	IMG_BLK::box = pushAnimation(res.loadImage("resources/image/BLK_box.png"));
+	IMG_BLK::barrel = pushAnimation(res.loadImage("resources/image/BLK_barrel.png"));
 
-	IMG_GFX::win1 = res.loadImage("resources/image/jogador1.png");
-	IMG_GFX::win2 = res.loadImage("resources/image/jogador2.png");
-	IMG_GFX::tie = res.loadImage("resources/image/draw.png");
+	IMG_GFX::win1 = pushAnimation(res.loadImage("resources/image/jogador1.png"));
+	IMG_GFX::win2 = pushAnimation(res.loadImage("resources/image/jogador2.png"));
+	IMG_GFX::tie = pushAnimation(res.loadImage("resources/image/draw.png"));
 
-	IMG_GFX::bomb = res.loadImage("resources/image/GFX_UI_bomb.png");
-	IMG_GFX::gunpowder = res.loadImage("resources/image/GFX_UI_gunpowder.png");
-	IMG_GFX::boot = res.loadImage("resources/image/GFX_UI_boot.png");
-	IMG_GFX::timer = res.loadImage("resources/image/GFX_UI_timer.png");
+	IMG_GFX::bomb = pushAnimation(res.loadImage("resources/image/GFX_UI_bomb.png"));
+	IMG_GFX::gunpowder = pushAnimation(res.loadImage("resources/image/GFX_UI_gunpowder.png"));
+	IMG_GFX::boot = pushAnimation(res.loadImage("resources/image/GFX_UI_boot.png"));
+	IMG_GFX::timer = pushAnimation(res.loadImage("resources/image/GFX_UI_timer.png"));
 
-	IMG_GFX::char_black = res.loadImage("resources/image/UI_char_black.png");
-	IMG_GFX::char_white = res.loadImage("resources/image/UI_char_white.png");
-	IMG_GFX::select = res.loadImage("resources/image/select.png");
+	IMG_GFX::char_black = pushAnimation(res.loadImage("resources/image/UI_char_black.png"));
+	IMG_GFX::char_white = pushAnimation(res.loadImage("resources/image/UI_char_white.png"));
+	IMG_GFX::select = pushAnimation(res.loadImage("resources/image/select.png"));
 
-	IMG_UI::exit = res.loadImage("resources/image/exit.png");
+	IMG_UI::exit = pushAnimation(res.loadImage("resources/image/exit.png"));
 
 }
 void intLoadAnimations(resources& res){

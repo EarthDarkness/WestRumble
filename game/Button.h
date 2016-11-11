@@ -4,24 +4,56 @@
 
 #include <SDL.h>
 #include <string>
+#include <vector>
+#include "../engine/animation.h"
+
 using namespace std;
+
+
+class button;
+class clickHandler
+{
+private:
+	int alloc();
+public:
+	int _time;
+	vector<button*> _peers;
+
+	clickHandler();
+	~clickHandler();
+
+	int getTime();
+
+	void clickAt(int mx, int my, int time);
+
+	void add(button* entity);
+	void rem(button* entity);
+
+};
+
+static clickHandler BUTTONCLICKER;
 
 class button : public guiEntry
 {
 public:
-	int image_id;
-	int image_press_id;
-	int sound_press_id;
-	SDL_Rect rect;
+	animation _sprite;
+	string _sound;
+	SDL_Rect _rect;
+
+	int _press;//time stamp
 
 
 	button(); 
 	~button();
 
+	int getSprite();
+
 	void setGUI(int x, int y, int w, int h);
 
-	bool checkCollision(int x, int y);
-	bool checkCollision(int x, int y)const;
+	bool isPress();
+	bool checkCollision(int mx, int my);
+
+	bool isDone();
 
 };
 

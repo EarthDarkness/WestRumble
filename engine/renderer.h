@@ -25,6 +25,7 @@ public:
 	void renderActorInMap(Actors& entry, camera& cam, int w = -1, int h = -1);//unised
 	void renderActorInMapCenter(Actors& entry, camera& cam, int offX = 0, int offY = 0);
 	void renderSprite(int index, int x, int y, int w = -1, int h = -1);
+	void renderSprite(int index, SDL_Rect rect);
 	void renderText(const char* text, font& f, int x, int y);
 	void renderTextInMapCenter(const char* text, camera& cam, font& f, int x, int y, int offX = 0, int offY = 0);
 

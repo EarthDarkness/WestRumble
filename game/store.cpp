@@ -18,13 +18,13 @@ void goodsData::set(int price, int powup, int stock = -1){
 	_data.setAnimation(PWP_TABLE,powup);
 	_data.init(powup);
 	//invisible buttons
-	_gui.image_id = 1;
+	_gui._sprite.loadAnim(1);
 }
 
 store::store(){
 	_client = NULL;
 	for(int i=0;i<5;++i)
-		_player[i].image_id = 1;
+		_player[i]._sprite.loadAnim(1);
 	
 	_selected = 0;
 	_done = false;
@@ -62,7 +62,7 @@ void store::setGUI(int width, int height){
 	int xv = width<height?0:spa*2+ww;
 	int yv = width<height?spa*2+hh:0;
 
-	_exit.image_id = IMG_UI::exit;
+	_exit._sprite.loadAnim(IMG_UI::exit);
 	_exit.setGUI(width-aa-spa,height-aa-spa,aa,aa);
 
 	for(int i=0;i<5;++i){
@@ -105,9 +105,9 @@ void store::init(Team* client, int color){
 	
 	for(int i=0;i<5;++i){
 		if(color == 0){
-			_player[i].image_id = IMG_GFX::char_black;
+			_player[i]._sprite.loadAnim(IMG_GFX::char_black);
 		}else{
-			_player[i].image_id = IMG_GFX::char_white;
+			_player[i]._sprite.loadAnim(IMG_GFX::char_white);
 		}
 	}
 
@@ -181,18 +181,18 @@ void store::update(core& engine){
 	}
 }
 void store::render(core& engine){
-	engine._render.renderSprite(_exit.image_id,_exit.rect.x,_exit.rect.y,_exit.rect.w,_exit.rect.h);
+	engine._render.renderSprite(_exit.getSprite(),_exit._rect);
 	for(int i=0;i<5;++i)
-		engine._render.renderSprite(_player[i].image_id,_player[i].rect.x,_player[i].rect.y,_player[i].rect.w,_player[i].rect.h);
+		engine._render.renderSprite(_player[i].getSprite(),_player[i]._rect);
 	if(_selected >=0 && _selected <= 5)
-		engine._render.renderSprite(IMG_GFX::select,_player[_selected].rect.x,_player[_selected].rect.y,_player[_selected].rect.w,_player[_selected].rect.h);
+		engine._render.renderSprite(IMG_GFX::select,_player[_selected]._rect);
 	for(int i=0;i<9;++i){
 		if(_goods[i]._stock == 0)
 			continue;
-		engine._render.renderSprite(_goods[i]._data.getSprite(),_goods[i]._gui.rect.x,_goods[i]._gui.rect.y,_goods[i]._gui.rect.w,_goods[i]._gui.rect.h);
-		engine._render.renderText(i_to_str(_goods[i]._price).c_str(),engine._font,_goods[i]._gui.rect.x+_goods[i]._gui.rect.w/2,_goods[i]._gui.rect.y+_goods[i]._gui.rect.h/2);
+		engine._render.renderSprite(_goods[i]._data.getSprite(),_goods[i]._gui._rect);
+		engine._render.renderText(i_to_str(_goods[i]._price).c_str(),engine._font,_goods[i]._gui._rect.x+_goods[i]._gui._rect.w/2,_goods[i]._gui._rect.y+_goods[i]._gui._rect.h/2);
 		if(_goods[i]._stock > -1)
-			engine._render.renderText(i_to_str(_goods[i]._stock).c_str(),engine._font,_goods[i]._gui.rect.x+_goods[i]._gui.rect.w/3,_goods[i]._gui.rect.y);
+			engine._render.renderText(i_to_str(_goods[i]._stock).c_str(),engine._font,_goods[i]._gui._rect.x+_goods[i]._gui._rect.w/3,_goods[i]._gui._rect.y);
 	}
 		//engine._render.renderSprite(_goods[i]._gui.image_id.c_str(),_goods[i]._gui.rect.x,_goods[i]._gui.rect.y,_goods[i]._gui.rect.w,_goods[i]._gui.rect.h);
 	engine._render.renderText(i_to_str(_client->getCoin()).c_str(),engine._font,_x,_y);

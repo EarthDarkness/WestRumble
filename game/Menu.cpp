@@ -131,41 +131,41 @@ void Menu::init(){
 	//for(int i=0;i<10;++i)
 	//	_itemTable[MULTIPLAYER_MENU].push_back(&(_numpad._nums[i]));
 
-	_logo.image_id = IMG_GFX::logo;
+	_logo._sprite.loadAnim(IMG_GFX::logo);
 
-	_play.image_id = IMG_UI::play;
-	_multiplayer.image_id = IMG_UI::server;
-	//_server.image_id = IMG_UI::server;
-	//_client.image_id = IMG_UI::client;
-	_tutorial.image_id = IMG_UI::tutorial;
-	_credits.image_id = IMG_UI::credits;
+	_play._sprite.loadAnim(IMG_UI::play);
+	_multiplayer._sprite.loadAnim(IMG_UI::server);
+	//_server._sprite.loadAnim(IMG_UI::server;
+	//_client._sprite.loadAnim(IMG_UI::client;
+	_tutorial._sprite.loadAnim(IMG_UI::tutorial);
+	_credits._sprite.loadAnim(IMG_UI::credits);
 
-	_stgThumb[0].image_id = IMG_UI::stgthumb0;
-	_stgThumb[1].image_id = IMG_UI::stgthumb0;
-	_stgThumb[2].image_id = IMG_UI::stgthumb0;
-	_stgThumb[3].image_id = IMG_UI::stgthumb0;
-	_stgNext.image_id = IMG_UI::play;
-	_stgPrev.image_id = IMG_UI::exit;
+	_stgThumb[0]._sprite.loadAnim(IMG_UI::stgthumb0);
+	_stgThumb[1]._sprite.loadAnim(IMG_UI::stgthumb0);
+	_stgThumb[2]._sprite.loadAnim(IMG_UI::stgthumb0);
+	_stgThumb[3]._sprite.loadAnim(IMG_UI::stgthumb0);
+	_stgNext._sprite.loadAnim(IMG_UI::play);
+	_stgPrev._sprite.loadAnim(IMG_UI::exit);
 
-	_mpServer.image_id = IMG_UI::server;
-	_mpClient.image_id = IMG_UI::client;
-	_mpPool.image_id = IMG_UI::move;
-	_mpIp.image_id = IMG_UI::move;
-	_mpLeft.image_id = IMG_UI::move;
-	_mpRight.image_id = IMG_UI::move;
+	_mpServer._sprite.loadAnim(IMG_UI::server);
+	_mpClient._sprite.loadAnim(IMG_UI::client);
+	_mpPool._sprite.loadAnim(IMG_UI::move);
+	_mpIp._sprite.loadAnim(IMG_UI::move);
+	_mpLeft._sprite.loadAnim(IMG_UI::move);
+	_mpRight._sprite.loadAnim(IMG_UI::move);
 	for(int i=0;i<10;++i)
-		_mpNumpad[i].image_id = IMG_UI::num[i];
-	_mpNext.image_id = IMG_UI::play;
-	_mpPrev.image_id = IMG_UI::exit;
+		_mpNumpad[i]._sprite.loadAnim(IMG_UI::num[i]);
+	_mpNext._sprite.loadAnim(IMG_UI::play);
+	_mpPrev._sprite.loadAnim(IMG_UI::exit);
 
-	_next.image_id = IMG_UI::move;
-	_prev.image_id = IMG_UI::move;
-	_back.image_id = IMG_UI::exit;
+	_next._sprite.loadAnim(IMG_UI::move);
+	_prev._sprite.loadAnim(IMG_UI::move);
+	_back._sprite.loadAnim(IMG_UI::exit);
 
-	_info[0].image_id = IMG_TUT::objectives;
-	_info[1].image_id = IMG_TUT::controls;
-	_info[2].image_id = IMG_TUT::rules;
-	_info[3].image_id = IMG_TUT::actions;
+	_info[0]._sprite.loadAnim(IMG_TUT::objectives);
+	_info[1]._sprite.loadAnim(IMG_TUT::controls);
+	_info[2]._sprite.loadAnim(IMG_TUT::rules);
+	_info[3]._sprite.loadAnim(IMG_TUT::actions);
 
 
 
@@ -302,14 +302,14 @@ void Menu::udpdate(int mx, int my){
 void Menu::render(renderer& ren, font& fon){
 	for(int i=0;i<_itemTable[_state].size();++i){
 		button* ptr = _itemTable[_state][i];
-		ren.renderSprite(ptr->image_id,ptr->rect.x,ptr->rect.y,ptr->rect.w,ptr->rect.h);
+		ren.renderSprite(ptr->getSprite(),ptr->_rect);
 	}
 	if(_state == MULTIPLAYER_MENU){
 		char buf[20];
 		sprintf_s(buf,"%3d.%3d.%3d.%3d",(_mpIpAddr>>0)&0xFF,(_mpIpAddr>>8)&0xFF,(_mpIpAddr>>16)&0xFF,(_mpIpAddr>>24)&0xFF);
-		ren.renderText(buf,fon,_mpIp.rect.x,_mpIp.rect.y);
-		int xx = _mpIp.rect.x+(int)((float)_mpLeft.rect.w*(4.0f/3.0f))*_mpIpPos;
-		ren.renderSprite(_mpLeft.image_id,xx,_mpIp.rect.y,_mpLeft.rect.w,_mpLeft.rect.h);
+		ren.renderText(buf,fon,_mpIp._rect.x,_mpIp._rect.y);
+		int xx = _mpIp._rect.x+(int)((float)_mpLeft._rect.w*(4.0f/3.0f))*_mpIpPos;
+		ren.renderSprite(_mpLeft.getSprite(),xx,_mpIp._rect.y,_mpLeft._rect.w,_mpLeft._rect.h);
 	}
 }
 

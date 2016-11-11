@@ -53,7 +53,12 @@ void animation::loadAnim(int stt, int index, int size, float speed, bool loop){
 	_frame[stt].setSpeed(speed);
 	_frame[stt]._loop = loop;
 }
-
+void animation::loadAnim(int index, int stt){
+	_index[stt] = index;
+	_frame[stt].init(1);
+	_frame[stt].setSpeed(1.0f);
+	_frame[stt]._loop = false;
+}
 
 
 

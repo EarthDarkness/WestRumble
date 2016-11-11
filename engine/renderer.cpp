@@ -90,6 +90,9 @@ void renderer::renderSprite(int index, int x, int y, int w, int h){
 		SDL_QueryTexture(buf,NULL,NULL,&pos.w,&pos.h);
 	SDL_RenderCopy(engRenderer,buf,NULL,&pos);
 }
+void renderer::renderSprite(int index, SDL_Rect rect){
+	renderSprite(index,rect.x,rect.y,rect.w,rect.h);
+}
 void renderer::renderText(const char* text, font& f, int x, int y){
 	int len = strlen(text);
 	int w = f.width()*2;

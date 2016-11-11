@@ -218,6 +218,7 @@ enum ANIM_STATE_BMB{
 
 
 int pushAnimation(int* frames, int size);
+int pushAnimation(int frame);
 void loadAnimation(const char* file, animation& anim, int stt, resources& res);
 void loadProps(resources& res);
 

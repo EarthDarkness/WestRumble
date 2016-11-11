@@ -31,5 +31,6 @@ public:
 	int getState();
 
 	void loadAnim(int stt, int index, int size, float speed, bool loop);
+	void loadAnim(int index, int stt=0);
 };
 #endif
