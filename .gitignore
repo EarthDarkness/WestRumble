@@ -28,6 +28,11 @@
 *.out
 *.app
 
+# zipfiles
+*.rar
+*.zip
+*.7z
+
 # Visual Studio Project
 *.opensdf
 *.sdf
@@ -45,3 +50,4 @@ lib/
 .vs/
 Debug/
 Release/
+Bin/
