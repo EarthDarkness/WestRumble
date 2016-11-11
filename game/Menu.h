@@ -6,6 +6,8 @@
 #include <string>
 #include "../engine/resources.h"
 #include "../engine/renderer.h"
+#include "../engine/network.h"
+#include "../engine/font.h"
 
 #include "Button.h"
 #include "Actors.h"
@@ -71,10 +73,13 @@ class Menu
 private:
 	input* _input;
 
-	//panel _display[MAX_MENU];
 	board _display[MAX_MENU];
 
+	void ipPushNum(int num);
+
 public:
+	network* _com;//TEMP
+
 	Menu();
 	~Menu();
 
@@ -84,7 +89,7 @@ public:
 	void setGUI(int width, int height);
 
 	void udpdate(int mx, int my);
-	void render(renderer& ren);
+	void render(renderer& ren, font& fon);
 
 	bool isDone();
 
@@ -97,8 +102,7 @@ public:
 	button _logo;
 
 	button _play;
-	button _server;
-	button _client;
+	button _multiplayer;
 	button _tutorial;
 	button _credits;
 	button _exit;
@@ -126,6 +130,9 @@ public:
 	button _mpNumpad[10];
 	button _mpNext;
 	button _mpPrev;
+
+	int _mpIpPos;
+	int _mpIpAddr;
 
 
 	int _state;

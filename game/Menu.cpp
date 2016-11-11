@@ -2,6 +2,20 @@
 #include "enum.h"
 #include "Props.h"
 
+void Menu::ipPushNum(int num){
+	uint8_t* va = (uint8_t*)(&_mpIpAddr);
+	int p = _mpIpPos;
+
+	if((va[p] >= 100) || (va[p] >= 25 && va[p] < 100))
+		va[p] = 0;
+
+	va[p]*=10;
+	va[p]+=num;
+
+	if((va[p] >= 100) || (va[p] >= 25 && va[p] < 100))
+		_mpIpPos = (_mpIpPos+1)%4;
+}
+
 Menu::Menu(){
 	_state = MAIN_MENU;
 
@@ -10,6 +24,8 @@ Menu::Menu(){
 	_page = 0;
 
 	_net = 0;//0 no, 1 server, 2 client
+	_mpIpPos = 0;
+	_mpIpAddr = 0;
 
 }
 Menu::~Menu(){
@@ -26,8 +42,9 @@ void Menu::setupDisplay(){
 	ptrArr[++p] = &_logo;		_logo.init(0.5f,0.25f,0.75f,0.4f,true);
 	ptrArr[++p] = &_play;		_play.init(0.5f,0.5f,0.3f,0.1f,true);
 
-	ptrArr[++p] = &_server;		_server.init(0.35f,0.6f,0.3f,0.1f,true);
-	ptrArr[++p] = &_client;		_client.init(0.65f,0.6f,0.3f,0.1f,true);
+	ptrArr[++p] = &_multiplayer;	_multiplayer.init(0.5f,0.6f,0.3f,0.1f,true);
+	//ptrArr[++p] = &_server;		_server.init(0.35f,0.6f,0.3f,0.1f,true);
+	//ptrArr[++p] = &_client;		_client.init(0.65f,0.6f,0.3f,0.1f,true);
 
 	ptrArr[++p] = &_tutorial;	_tutorial.init(0.5f,0.7f,0.3f,0.1f,true);
 	ptrArr[++p] = &_credits;	_credits.init(0.5f,0.8f,0.3f,0.1f,true);
@@ -60,9 +77,9 @@ void Menu::setupDisplay(){
 	ptrArr[++p] = &_mpServer;						_mpServer.init(0.35f,0.1f,0.3f,0.1f,true);
 	ptrArr[++p] = &_mpClient;						_mpClient.init(0.65f,0.1f,0.3f,0.1f,true);
 
-	ptrArr[++p] = &_mpLeft;							_mpLeft.init(0.2f,0.25f,0.1f,0.1f,true);
-	ptrArr[++p] = &_mpIp;							_mpIp.init(0.5f,0.25f,0.4f,0.1f,true);
-	ptrArr[++p] = &_mpRight;						_mpRight.init(0.8f,0.25f,0.1f,0.1f,true);
+	ptrArr[++p] = &_mpLeft;							_mpLeft.init(0.15f,0.25f,0.1f,0.1f,true);
+	ptrArr[++p] = &_mpIp;							_mpIp.init(0.5f,0.25f,0.5f,0.1f,true);
+	ptrArr[++p] = &_mpRight;						_mpRight.init(0.85f,0.25f,0.1f,0.1f,true);
 
 	ptrArr[++p] = &_mpPool;							_mpPool.init(0.7f,0.6f,0.4f,0.45f,true);
 
@@ -83,8 +100,9 @@ void Menu::init(){
 
 	_itemTable[MAIN_MENU].push_back(&_logo);
 	_itemTable[MAIN_MENU].push_back(&_play);
-	_itemTable[MAIN_MENU].push_back(&_server);
-	_itemTable[MAIN_MENU].push_back(&_client);
+	//_itemTable[MAIN_MENU].push_back(&_server);
+	//_itemTable[MAIN_MENU].push_back(&_client);
+	_itemTable[MAIN_MENU].push_back(&_multiplayer);
 	_itemTable[MAIN_MENU].push_back(&_tutorial);
 	_itemTable[MAIN_MENU].push_back(&_credits);
 
@@ -116,8 +134,9 @@ void Menu::init(){
 	_logo.image_id = IMG_GFX::logo;
 
 	_play.image_id = IMG_UI::play;
-	_server.image_id = IMG_UI::server;
-	_client.image_id = IMG_UI::client;
+	_multiplayer.image_id = IMG_UI::server;
+	//_server.image_id = IMG_UI::server;
+	//_client.image_id = IMG_UI::client;
 	_tutorial.image_id = IMG_UI::tutorial;
 	_credits.image_id = IMG_UI::credits;
 
@@ -226,27 +245,44 @@ void Menu::udpdate(int mx, int my){
 		}else if(_tutorial.checkCollision(mx,my)){
 			_state = TUTORIAL_MENU;
 			_page = 0;
-		}else if(_server.checkCollision(mx,my)){
+		}else if(_multiplayer.checkCollision(mx,my)){
 			_state = MULTIPLAYER_MENU;
 			/*if(_net == 0){
 				_net = 1;
 			}*/
-		}else if(_client.checkCollision(mx,my)){
+		//}else if(_client.checkCollision(mx,my)){
 			_state = MULTIPLAYER_MENU;
 			/*if(_net == 0){
 				_net = 2;
 			}*/
 		}
 	}else if(_state == MULTIPLAYER_MENU){
+		for(int i=0;i<10;++i){
+			if(_mpNumpad[i].checkCollision(mx,my)){
+				ipPushNum(i);
+			}
+		}
+
 		if(_mpServer.checkCollision(mx,my)){
-			if(_net == 0) _net = 1;
+			if(_net == 0){
+				_net = 1;
+				uint8_t* v = (uint8_t*)(&_mpIpAddr);
+				sscanf_s(_com->getLocalIp(),"%hhu.%hhu.%hhu.%hhu",v,v+1,v+2,v+3);
+				int a =0;
+			}
 		}else if(_mpClient.checkCollision(mx,my)){
-			if(_net == 0) _net = 2;
+			if(_net == 0){
+				_net = 2;
+			}
 		}else if(_mpNext.checkCollision(mx,my)){
 			_state = STAGE_MENU;
 		}else if(_mpPrev.checkCollision(mx,my)){
 			_state = MAIN_MENU;
 			_net = 0;
+		}else if(_mpLeft.checkCollision(mx,my)){
+			_mpIpPos = (_mpIpPos-1)%4;
+		}else if(_mpRight.checkCollision(mx,my)){
+			_mpIpPos = (_mpIpPos+1)%4;
 		}
 	}else if(_state == STAGE_MENU){
 		if(_stgNext.checkCollision(mx,my)){
@@ -263,10 +299,17 @@ void Menu::udpdate(int mx, int my){
 		_page = (_page+4)%4;
 	}
 }
-void Menu::render(renderer& ren){
+void Menu::render(renderer& ren, font& fon){
 	for(int i=0;i<_itemTable[_state].size();++i){
 		button* ptr = _itemTable[_state][i];
 		ren.renderSprite(ptr->image_id,ptr->rect.x,ptr->rect.y,ptr->rect.w,ptr->rect.h);
+	}
+	if(_state == MULTIPLAYER_MENU){
+		char buf[20];
+		sprintf_s(buf,"%3d.%3d.%3d.%3d",(_mpIpAddr>>0)&0xFF,(_mpIpAddr>>8)&0xFF,(_mpIpAddr>>16)&0xFF,(_mpIpAddr>>24)&0xFF);
+		ren.renderText(buf,fon,_mpIp.rect.x,_mpIp.rect.y);
+		int xx = _mpIp.rect.x+(int)((float)_mpLeft.rect.w*(4.0f/3.0f))*_mpIpPos;
+		ren.renderSprite(_mpLeft.image_id,xx,_mpIp.rect.y,_mpLeft.rect.w,_mpLeft.rect.h);
 	}
 }
 

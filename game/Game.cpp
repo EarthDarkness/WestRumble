@@ -40,6 +40,7 @@ void Game::init(){
 	loadResources();
 
 	menu.init();
+	menu._com = &engine._com;
 	_server.setGUI(50,300,64,64);
 	_server.image_id = 0;
 	_client.setGUI(200,300,64,64);
@@ -154,7 +155,10 @@ void Game::update(){
 				if(menu._net == 1){
 					engine._com.initServer(2332);
 				}else if(menu._net == 2){
-					engine._com.initClient();//"191.4.236.165",2332);
+					char buf[20];
+					sprintf_s(buf,"%d.%d.%d.%d",(menu._mpIpAddr>>0)&0xFF,(menu._mpIpAddr>>8)&0xFF,(menu._mpIpAddr>>16)&0xFF,(menu._mpIpAddr>>24)&0xFF);
+					engine._com.initClient(buf,2332);//"191.4.236.165",2332);
+					//engine._com.initClient("127.0.0.1",2332);
 				}
 			}
 		}
@@ -287,7 +291,7 @@ void Game::render()
 	{
 	case STATEMENU:{
 		engine._render.renderSprite(IMG_GFX::wood,0,0,width_screen,height_screen);
-		menu.render(engine._render);
+		menu.render(engine._render,engine._font);
 		break;
 				   }
 	case STATESHOP_A:{
