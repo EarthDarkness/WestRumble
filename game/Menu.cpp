@@ -239,18 +239,18 @@ void Menu::setGUI(int width, int height){
 
 void Menu::udpdate(int mx, int my){
 	if(_state == MAIN_MENU){
-		if(_play.checkCollision(mx,my)){
+		if(_play.isPress()){
 			//_done = true;
 			_state = STAGE_MENU;
-		}else if(_tutorial.checkCollision(mx,my)){
+		}else if(_tutorial.isPress()){
 			_state = TUTORIAL_MENU;
 			_page = 0;
-		}else if(_multiplayer.checkCollision(mx,my)){
+		}else if(_multiplayer.isPress()){
 			_state = MULTIPLAYER_MENU;
 			/*if(_net == 0){
 				_net = 1;
 			}*/
-		//}else if(_client.checkCollision(mx,my)){
+		//}else if(_client.isPress()){
 			_state = MULTIPLAYER_MENU;
 			/*if(_net == 0){
 				_net = 2;
@@ -258,42 +258,42 @@ void Menu::udpdate(int mx, int my){
 		}
 	}else if(_state == MULTIPLAYER_MENU){
 		for(int i=0;i<10;++i){
-			if(_mpNumpad[i].checkCollision(mx,my)){
+			if(_mpNumpad[i].isPress()){
 				ipPushNum(i);
 			}
 		}
 
-		if(_mpServer.checkCollision(mx,my)){
+		if(_mpServer.isPress()){
 			if(_net == 0){
 				_net = 1;
 				uint8_t* v = (uint8_t*)(&_mpIpAddr);
 				sscanf_s(_com->getLocalIp(),"%hhu.%hhu.%hhu.%hhu",v,v+1,v+2,v+3);
 				int a =0;
 			}
-		}else if(_mpClient.checkCollision(mx,my)){
+		}else if(_mpClient.isPress()){
 			if(_net == 0){
 				_net = 2;
 			}
-		}else if(_mpNext.checkCollision(mx,my)){
+		}else if(_mpNext.isPress()){
 			_state = STAGE_MENU;
-		}else if(_mpPrev.checkCollision(mx,my)){
+		}else if(_mpPrev.isPress()){
 			_state = MAIN_MENU;
 			_net = 0;
-		}else if(_mpLeft.checkCollision(mx,my)){
+		}else if(_mpLeft.isPress()){
 			_mpIpPos = (_mpIpPos-1)%4;
-		}else if(_mpRight.checkCollision(mx,my)){
+		}else if(_mpRight.isPress()){
 			_mpIpPos = (_mpIpPos+1)%4;
 		}
 	}else if(_state == STAGE_MENU){
-		if(_stgNext.checkCollision(mx,my)){
+		if(_stgNext.isPress()){
 			_done = true;
 		}
 	}else if(_state == TUTORIAL_MENU){
-		if(_next.checkCollision(mx,my)){
+		if(_next.isPress()){
 			++_page;
-		}else if(_prev.checkCollision(mx,my)){
+		}else if(_prev.isPress()){
 			--_page;
-		}else if(_back.checkCollision(mx,my)){
+		}else if(_back.isPress()){
 			_state = MAIN_MENU;
 		}
 		_page = (_page+4)%4;

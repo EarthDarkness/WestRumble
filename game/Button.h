@@ -24,18 +24,22 @@ public:
 
 	int getTime();
 
-	void clickAt(int mx, int my, int time);
+	void clickAt(int mx, int my);
+	void clickAt();
 
 	void add(button* entity);
 	void rem(button* entity);
 
 };
 
-static clickHandler BUTTONCLICKER;
+extern clickHandler BUTTONCLICKER;
 
 class button : public guiEntry
 {
+	friend class clickHandler;
+private:
 public:
+	bool checkCollision(int mx, int my);
 	animation _sprite;
 	string _sound;
 	SDL_Rect _rect;
@@ -51,7 +55,6 @@ public:
 	void setGUI(int x, int y, int w, int h);
 
 	bool isPress();
-	bool checkCollision(int mx, int my);
 
 	bool isDone();
 

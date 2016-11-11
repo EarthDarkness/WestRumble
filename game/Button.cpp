@@ -19,14 +19,17 @@ int clickHandler::getTime(){
 	return _time;
 }
 
-void clickHandler::clickAt(int mx, int my, int time){
-	_time = time;
+void clickHandler::clickAt(int mx, int my){
+	++_time;
 	for(int i=0;i<_peers.size();++i){
 		if(_peers[i] != NULL)
 		if(_peers[i]->checkCollision(mx,my)){
-			_peers[i]->_press = time;
+			_peers[i]->_press = _time;
 		}
 	}
+}
+void clickHandler::clickAt(){
+	++_time;
 }
 
 void clickHandler::add(button* entity){
@@ -39,16 +42,18 @@ void clickHandler::rem(button* entity){
 			_peers[i] = NULL;
 }
 
+clickHandler BUTTONCLICKER;
+
 
 
 button::button(){
 	_sound = "";
 	_press = -1;
 
-	
+	BUTTONCLICKER.add(this);	
 }
 button::~button(){
-
+	BUTTONCLICKER.rem(this);	
 }
 
 int button::getSprite(){

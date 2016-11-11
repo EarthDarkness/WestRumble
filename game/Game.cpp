@@ -135,35 +135,42 @@ void Game::update(){
 	switch (state)
 	{
 	case STATEMENU:{
-		if(engine._input.isPress()){
-			menu.udpdate(engine._input.getX(),engine._input.getY());
-			if(menu.isDone()){
-				if (stage.loadStage("resources/stage/stage1.txt", engine._res)){
-					cout << "stage1.txt loaded" << endl;
-				}
-				if(menu._net == 0 || menu._net == 1){
-					stage.polulate();
-				}
+		if(engine._input.isPress())
+			BUTTONCLICKER.clickAt(engine._input.getX(),engine._input.getY());
+		else
+			BUTTONCLICKER.clickAt();
 
-				stage.start(&A, &B);
-				centerTeam(0);
-				state = STATESHOP_A;
+		menu.udpdate(engine._input.getX(),engine._input.getY());
+		if(menu.isDone()){
+			if (stage.loadStage("resources/stage/stage1.txt", engine._res)){
+				cout << "stage1.txt loaded" << endl;
+			}
+			if(menu._net == 0 || menu._net == 1){
+				stage.polulate();
+			}
 
-				shop.init(&A,0);
+			stage.start(&A, &B);
+			centerTeam(0);
+			state = STATESHOP_A;
 
-				if(menu._net == 1){
-					engine._com.initServer(2332);
-				}else if(menu._net == 2){
-					char buf[20];
-					sprintf_s(buf,"%d.%d.%d.%d",(menu._mpIpAddr>>0)&0xFF,(menu._mpIpAddr>>8)&0xFF,(menu._mpIpAddr>>16)&0xFF,(menu._mpIpAddr>>24)&0xFF);
-					engine._com.initClient(buf,2332);//"191.4.236.165",2332);
-					//engine._com.initClient("127.0.0.1",2332);
-				}
+			shop.init(&A,0);
+
+			if(menu._net == 1){
+				engine._com.initServer(2332);
+			}else if(menu._net == 2){
+				char buf[20];
+				sprintf_s(buf,"%d.%d.%d.%d",(menu._mpIpAddr>>0)&0xFF,(menu._mpIpAddr>>8)&0xFF,(menu._mpIpAddr>>16)&0xFF,(menu._mpIpAddr>>24)&0xFF);
+				engine._com.initClient(buf,2332);//"191.4.236.165",2332);
+				//engine._com.initClient("127.0.0.1",2332);
 			}
 		}
 		break;
 				   }
 	case STATESHOP_A:{
+		if(engine._input.isPress())
+			BUTTONCLICKER.clickAt(engine._input.getX(),engine._input.getY());
+		else
+			BUTTONCLICKER.clickAt();
 		shop.update(engine);
 
 		if (shop.isDone()){
@@ -174,6 +181,11 @@ void Game::update(){
 		break;
 					 }
 	case STATESHOP_B:{
+		if(engine._input.isPress())
+			BUTTONCLICKER.clickAt(engine._input.getX(),engine._input.getY());
+		else
+			BUTTONCLICKER.clickAt();
+
 		shop.update(engine);
 
 		if (shop.isDone()){
@@ -607,7 +619,7 @@ void Game::centerTeam(int t){
 void Game::turnPlayer(int player){
 	if(engine._input.isPress()){
 		int val = 0;
-		if(button_end_turn.checkCollision(engine._input.getX(),engine._input.getY())){
+		if(button_end_turn.checkCollision(engine._input.getX(), engine._input.getY())){
 			val = 1;
 		}
 		int xm,ym;

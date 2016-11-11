@@ -129,16 +129,13 @@ void store::update(core& engine){
 		return;
 	}
 
-	if(!engine._input.isPress())
-		return;
-
-	if(_exit.checkCollision(engine._input.getX(),engine._input.getY())){
+	if(_exit.isPress()){
 		_done = true;
 		//engine._render.renderSprite("L1",350,350);//debug???
 		return;
 	}
 	for(int i=0;i<5;++i){
-		if(_player[i].checkCollision(engine._input.getX(),engine._input.getY())){
+		if(_player[i].isPress()){
 			_selected = i;
 			return;
 		}
@@ -167,7 +164,7 @@ void store::update(core& engine){
 	}*/
 
 	for(int i=0;i<9;++i){
-		if(_goods[i]._gui.checkCollision(engine._input.getX(),engine._input.getY())){
+		if(_goods[i]._gui.isPress()){
 			if(_goods[i]._stock <= 0 && _goods[i]._stock != -1)
 				return;
 			if(_client->getCoin() < _goods[i]._price)
