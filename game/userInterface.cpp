@@ -203,6 +203,8 @@ void userInterface::initCommand(){
 
 	Character* chr = static_cast<Character*>(_selected);
 
+	markEntry(chr);
+
 	if(act == ACTIONMOVE){
 		markWalk(chr);
 		setOHI(ANIM_MOVE,chr->getX(),chr->getY());
@@ -314,14 +316,14 @@ void userInterface::clearOverlays(){
 }
 
 void userInterface::markEntry(Actors* entry){
+	clearOverlays();
+
 	if(!_tileMap->inBound(entry->getX(),entry->getY()))
 		return;
 
 	pushOvelay(entry->getX(),entry->getY(),ANIM_NONE);
 }
 void userInterface::markWalk(Character* entry){
-	_overlay.clear();
-
 	if(!_tileMap->inBound(entry->getX(),entry->getY()))
 		return;
 
@@ -349,8 +351,6 @@ void userInterface::markWalk(Character* entry){
 	}
 }
 void userInterface::markBomb(Character* entry){
-	_overlay.clear();
-
 	if(!_tileMap->inBound(entry->getX(),entry->getY()))
 		return;
 
@@ -377,8 +377,6 @@ void userInterface::markBomb(Character* entry){
 	}
 }
 void userInterface::markGunFire(Character* entry){
-	_overlay.clear();
-
 	if(!_tileMap->inBound(entry->getX(),entry->getY()))
 		return;
 
@@ -401,8 +399,6 @@ void userInterface::markGunFire(Character* entry){
 	}
 }
 void userInterface::markTimerUp(Character* entry){
-	_overlay.clear();
-
 	if(!_tileMap->inBound(entry->getX(),entry->getY()))
 		return;
 	int range = 4;
@@ -426,8 +422,6 @@ void userInterface::markTimerUp(Character* entry){
 	}
 }
 void userInterface::markTimerDown(Character* entry){
-	_overlay.clear();
-
 	if(!_tileMap->inBound(entry->getX(),entry->getY()))
 		return;
 	int range = 4;
@@ -452,8 +446,6 @@ void userInterface::markTimerDown(Character* entry){
 	}
 }
 void userInterface::markThrow(Character* entry){//TODO sprite
-	_overlay.clear();
-
 	if(!_tileMap->inBound(entry->getX(),entry->getY()))
 		return;
 
@@ -477,8 +469,6 @@ void userInterface::markThrow(Character* entry){//TODO sprite
 	}
 }
 void userInterface::markDetonator(Character* entry){
-	_overlay.clear();
-
 	if(!_tileMap->inBound(entry->getX(),entry->getY()))
 		return;
 
@@ -501,8 +491,6 @@ void userInterface::markDetonator(Character* entry){
 	}
 }
 void userInterface::markBarrel(Character* entry){//TODO sprite
-	_overlay.clear();
-
 	if(!_tileMap->inBound(entry->getX(),entry->getY()))
 		return;
 
@@ -525,8 +513,6 @@ void userInterface::markBarrel(Character* entry){//TODO sprite
 	}
 }
 void userInterface::markRope(Character* entry){//TODO sprite
-	_overlay.clear();
-
 	if(!_tileMap->inBound(entry->getX(),entry->getY()))
 		return;
 
