@@ -86,6 +86,7 @@ int IMG_UI::credits = 0;
 int IMG_UI::exit = 0;
 int IMG_UI::num[10] = {0,0,0,0,0,0,0,0,0,0};
 int IMG_UI::stgthumb0 = 0;
+int IMG_UI::heat[16] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
 int IMG_TUT::objectives = 0;
 int IMG_TUT::controls = 0;
@@ -215,7 +216,22 @@ void intLoadImages(resources& res){
 	IMG_UI::num[8] = pushAnimation(res.loadImage("resources/image/UI_num_8.png"));
 	IMG_UI::num[9] = pushAnimation(res.loadImage("resources/image/UI_num_9.png"));
 	IMG_UI::stgthumb0 = pushAnimation(res.loadImage("resources/image/UI_STG_thumb_0.png"));
-
+	IMG_UI::heat[0] = pushAnimation(res.loadImage("resources/image/UI_heat_0.png"));
+	IMG_UI::heat[1] = pushAnimation(res.loadImage("resources/image/UI_heat_1.png"));
+	IMG_UI::heat[2] = pushAnimation(res.loadImage("resources/image/UI_heat_2.png"));
+	IMG_UI::heat[3] = pushAnimation(res.loadImage("resources/image/UI_heat_3.png"));
+	IMG_UI::heat[4] = pushAnimation(res.loadImage("resources/image/UI_heat_4.png"));
+	IMG_UI::heat[5] = pushAnimation(res.loadImage("resources/image/UI_heat_5.png"));
+	IMG_UI::heat[6] = pushAnimation(res.loadImage("resources/image/UI_heat_6.png"));
+	IMG_UI::heat[7] = pushAnimation(res.loadImage("resources/image/UI_heat_7.png"));
+	/*IMG_UI::heat[8] = pushAnimation(res.loadImage("resources/image/UI_heat_8.png"));
+	IMG_UI::heat[9] = pushAnimation(res.loadImage("resources/image/UI_heat_9.png"));
+	IMG_UI::heat[10] = pushAnimation(res.loadImage("resources/image/UI_heat_10.png"));
+	IMG_UI::heat[11] = pushAnimation(res.loadImage("resources/image/UI_heat_11.png"));
+	IMG_UI::heat[12] = pushAnimation(res.loadImage("resources/image/UI_heat_12.png"));
+	IMG_UI::heat[13] = pushAnimation(res.loadImage("resources/image/UI_heat_13.png"));
+	IMG_UI::heat[14] = pushAnimation(res.loadImage("resources/image/UI_heat_14.png"));
+	IMG_UI::heat[15] = pushAnimation(res.loadImage("resources/image/UI_heat_15.png"));*/
 
 	IMG_TUT::actions = pushAnimation(res.loadImage("resources/image/TUT_actions.png"));
 	IMG_TUT::controls = pushAnimation(res.loadImage("resources/image/TUT_controls.png"));

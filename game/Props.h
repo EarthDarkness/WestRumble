@@ -93,6 +93,7 @@ struct IMG_UI{
 	static int exit;
 	static int num[10];
 	static int stgthumb0;
+	static int heat[16];
 
 	IMG_UI(){
 		memset(this,0,sizeof(IMG_UI));

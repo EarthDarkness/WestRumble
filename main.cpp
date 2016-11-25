@@ -11,5 +11,8 @@ int main(int argc, char** argv) {
 		gm.update();
 		gm.render();
 	}
+
+	_log.save(_logFile.c_str());
+
 	return 0;
 }

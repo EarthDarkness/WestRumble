@@ -3,7 +3,13 @@
 #include "NetProtocol.h"
 #include "Props.h"
 
+
+field _log;
+string _logFile;
+
 Game::Game(){
+	_logFile = "log.txt";
+
 	selected = NULL;
 
 	//stateActionCharacter = ACTIONNULL;
@@ -103,6 +109,8 @@ void Game::reset(){
 
 	_player = 0;
 
+	_log.save(_logFile.c_str());
+
 	menu._state = MAIN_MENU;
 	state = STATEMENU;
 	cout << "END GAME!!!" << endl;
@@ -145,6 +153,8 @@ void Game::update(){
 			if (stage.loadStage("resources/stage/stage1.txt", engine._res)){
 				cout << "stage1.txt loaded" << endl;
 			}
+			_log.init(stage._tileMap);
+			_log.load(_logFile.c_str());
 			if(menu._net == 0 || menu._net == 1){
 				stage.polulate();
 			}
@@ -333,6 +343,14 @@ void Game::render()
 void Game::renderStage(){
 
 	stage.renderMap(engine._render);
+
+	for(int j=0;j<_log._map.height();++j){
+		for(int i=0;i<_log._map.width();++i){
+			_log._sprite.setState(_log._map.at(i,j));
+			engine._render.renderSpriteInMap(_log._sprite.get(),stage.getCamera(),i,j);
+		}
+	}
+
 	_ui.renderOverlay(engine._render,stage.getCamera());
 	stage.renderActors(engine._render);
 	_ui.renderIcons(engine._render,stage.getCamera());

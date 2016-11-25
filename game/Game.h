@@ -14,6 +14,8 @@
 #include "enum.h"
 #include "userInterface.h"
 
+#include "logger.h"
+
 
 #include <stack>
 #include <queue>
@@ -22,14 +24,11 @@
 
 using namespace std;
 
-
-
 class Game
 {
 private:
 	//char en[4096];
-	//int ll;
-
+	//int ll;	
 
 	const char* title;
 	int width_screen;

@@ -84,9 +84,12 @@ void userInterface::update(int xm, int ym, int player, int val){
 
 			return;
 		}
+		bool ovlhit = false;
+		if(getOverlayAt(xm,ym) != NULL)
+			if(getOverlayAt(xm,ym)->_sprite.getState() != ANIM_NONE)
+				ovlhit = true;
 
-
-		if(getOverlayAt(xm,ym) != NULL){
+		if(ovlhit){
 			updateCommand(xm,ym,player);
 			setOHI(ANIM_NONE,0,0);
 		}else if(clicked == NULL){

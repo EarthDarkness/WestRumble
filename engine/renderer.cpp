@@ -93,6 +93,17 @@ void renderer::renderSprite(int index, int x, int y, int w, int h){
 void renderer::renderSprite(int index, SDL_Rect rect){
 	renderSprite(index,rect.x,rect.y,rect.w,rect.h);
 }
+void renderer::renderSpriteInMap(int index, camera& cam, int x, int y){
+	SDL_Rect pos;
+	SDL_Texture* buf = NULL;
+
+	matToWin(x,y,cam.getX(),cam.getY(),cam.getScale(),pos.x,pos.y);
+	
+	buf = _res->getImage(index);
+
+	SDL_QueryTexture(buf,NULL,NULL,&pos.w,&pos.h);
+	SDL_RenderCopy(engRenderer,buf,NULL,&pos);
+}
 void renderer::renderText(const char* text, font& f, int x, int y){
 	int len = strlen(text);
 	int w = f.width()*2;

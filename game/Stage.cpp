@@ -4,7 +4,10 @@
 #include "enum.h"
 #include "Props.h"
 
+#include "logger.h"
+
 #define SUDDENDEATH 20
+
 
 Stage::Stage(){
 	_turn = 0;
@@ -604,6 +607,8 @@ bool Stage::areEnemies(Character* c1, Character* c2){
 void Stage::hitChar(Character* c){
 	if(c == NULL)
 		return;
+
+	_log.add(c->getX(),c->getY(),1);
 
 	if(c->getShield() > 0){
 		c->AddShield(-1);
