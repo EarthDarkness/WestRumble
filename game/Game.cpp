@@ -163,39 +163,48 @@ void Game::update(){
 			centerTeam(0);
 			state = STATESHOP_A;
 
+			shop.init(&A,0);  
 
-			shop.init(&A,0);
+			if(menu._net == 1){  
+				engine._com.initServer(2332);  
+			}else if(menu._net == 2){  
+				char buf[20];  
+				sprintf_s(buf,"%d.%d.%d.%d",(menu._mpIpAddr>>0)&0xFF,(menu._mpIpAddr>>8)&0xFF,(menu._mpIpAddr>>16)&0xFF,(menu._mpIpAddr>>24)&0xFF);  
+				engine._com.initClient(buf,2332);//"191.4.236.165",2332);  
+				//engine._com.initClient("127.0.0.1",2332);  
 
-			if(menu._net != 0){
-				_ui.init(&stage);
+			//shop.init(&A,0);
 
-				//state = STATEGAME;
+			//if(menu._net != 0){
+			//	_ui.init(&stage);
 
-				/*if(menu._net == 1){
+			//	//state = STATEGAME;
 
-					//engine._com.initServer(2332);
+			//	/*if(menu._net == 1){
 
-					engine._com._hear = 1;
-					//sync map
-					char buf[LEN] = "\0";
-					int len;
-					stage.encode(buf,len);
-					engine._com.send(buf,len);
+			//		//engine._com.initServer(2332);
 
-				}else */if(menu._net == 2){
-					char buf[20];
-					sprintf_s(buf,"%d.%d.%d.%d",(menu._mpIpAddr>>0)&0xFF,(menu._mpIpAddr>>8)&0xFF,(menu._mpIpAddr>>16)&0xFF,(menu._mpIpAddr>>24)&0xFF);
-					engine._com.initClient(buf,2332);//"191.4.236.165",2332);
-					//engine._com.initClient("127.0.0.1",2332);
-				}
+			//		engine._com._hear = 1;
+			//		//sync map
+			//		char buf[LEN] = "\0";
+			//		int len;
+			//		stage.encode(buf,len);
+			//		engine._com.send(buf,len);
 
-				//engine._render.playMusic("BGM",true,false);
+			//	}else */if(menu._net == 2){
+			//		char buf[20];
+			//		sprintf_s(buf,"%d.%d.%d.%d",(menu._mpIpAddr>>0)&0xFF,(menu._mpIpAddr>>8)&0xFF,(menu._mpIpAddr>>16)&0xFF,(menu._mpIpAddr>>24)&0xFF);
+			//		engine._com.initClient(buf,2332);//"191.4.236.165",2332);
+			//		//engine._com.initClient("127.0.0.1",2332);
+			//	}
 
-				//_ui.init(&stage);
-			}else{
+			//	//engine._render.playMusic("BGM",true,false);
+
+			//	//_ui.init(&stage);
+			//}else{
 
 
-				shop.init(&A,0);
+			//	shop.init(&A,0);
 			}
 		}
 		break;
@@ -316,9 +325,9 @@ void Game::updateStage(){
 		proccessMessages();
 	}else if(menu._net == 2){
 		if(engine._com.recv(buf,LEN)){
-			if(buf[0] == WRP_MOVE){
+			if(buf[1] == WRP_MOVE){
 				_actionMsg.push(string(buf,LEN));
-			}else if(buf[0] == WRP_SCENE){
+			}else if(buf[1] == WRP_SCENE){
 				stage.decode(buf);
 				centerTeam(stage._turn%2);
 			}

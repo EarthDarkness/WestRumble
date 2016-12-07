@@ -647,9 +647,10 @@ void Stage::hitBlock(block* b){
 void Stage::encode(char* data, int& len){
 	int p = -1;
 	char* n;
-	data[++p] = 0;//2byte total size
-	data[++p] = 0;//2byte total size
+	data[++p] = 0;
 	data[++p] = WRP_SCENE;
+	data[++p] = 0;//2byte total size
+	data[++p] = 0;//2byte total size
 
 	data[++p] = _turn & 0xff;
 	data[++p] = _suddenDeath & 0xff;
@@ -697,12 +698,12 @@ void Stage::encode(char* data, int& len){
 
 	data[++p] = '\0';
 
-	short* ss=(short*)data;
+	short* ss=(short*)(data+2);
 	(*ss) = ++p;
 	len = p;
 }
 void Stage::decode(char* data){
-	int p = 2;//previously 1 to skip 0 and 1 now skiping 2 also
+	int p = 3;//previously 1 to skip 0 and 1 now skiping 2 and 3 also
 	int n;
 
 	_turn = data[++p];
