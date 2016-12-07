@@ -28,6 +28,7 @@ private:
 	Actors _ohi;//Over Head Icon
 
 	button* _endturn;
+	int _player;
 
 	void pushOvelay(int x, int y, int ol);
 	

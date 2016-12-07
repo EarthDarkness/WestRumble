@@ -114,7 +114,8 @@ void getPatch(matMN<Tile>& map, int x0, int y0, int x, int y, vector<int>& out){
 				//if(map.at(xx,yy).collision == 2 && map.at(closed.back()->_x,closed.back()->_y).collision != 4)
 				//	continue;
 				if(map.at(xx,yy).actor != NULL)
-					continue;
+					if(map.at(xx,yy).actor->getClass() != ACTOR_POWUP)
+						continue;
 
 				//calc walk cost G
 				if(i == 0 || j == 0)

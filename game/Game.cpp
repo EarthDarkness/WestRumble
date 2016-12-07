@@ -162,16 +162,23 @@ void Game::update(){
 			stage.start(&A, &B);
 			centerTeam(0);
 			state = STATESHOP_A;
+			if(menu._net != 0){
+				state = STATEGAME;
 
-			shop.init(&A,0);
+				//engine._render.playMusic("BGM",true,false);
 
-			if(menu._net == 1){
-				engine._com.initServer(2332);
-			}else if(menu._net == 2){
-				char buf[20];
-				sprintf_s(buf,"%d.%d.%d.%d",(menu._mpIpAddr>>0)&0xFF,(menu._mpIpAddr>>8)&0xFF,(menu._mpIpAddr>>16)&0xFF,(menu._mpIpAddr>>24)&0xFF);
-				engine._com.initClient(buf,2332);//"191.4.236.165",2332);
-				//engine._com.initClient("127.0.0.1",2332);
+				_ui.init(&stage);
+			}else{
+				shop.init(&A,0);
+
+				if(menu._net == 1){
+					engine._com.initServer(2332);
+				}else if(menu._net == 2){
+					char buf[20];
+					sprintf_s(buf,"%d.%d.%d.%d",(menu._mpIpAddr>>0)&0xFF,(menu._mpIpAddr>>8)&0xFF,(menu._mpIpAddr>>16)&0xFF,(menu._mpIpAddr>>24)&0xFF);
+					engine._com.initClient(buf,2332);//"191.4.236.165",2332);
+					//engine._com.initClient("127.0.0.1",2332);
+				}
 			}
 		}
 		break;
@@ -344,12 +351,14 @@ void Game::renderStage(){
 
 	stage.renderMap(engine._render);
 
+#ifdef DISPLAY_LOG
 	for(int j=0;j<_log._map.height();++j){
 		for(int i=0;i<_log._map.width();++i){
 			_log._sprite.setState(_log._map.at(i,j));
 			engine._render.renderSpriteInMap(_log._sprite.get(),stage.getCamera(),i,j);
 		}
 	}
+#endif
 
 	_ui.renderOverlay(engine._render,stage.getCamera());
 	stage.renderActors(engine._render);
@@ -589,7 +598,8 @@ void Game::proccessMessages(){
 			act->detonate(exp);
 
 			for(int i=0;i<MAX_BOMBS;++i)
-				stage._bombs[exp[i]]->setTurn(1);
+				if(exp[i] != -1)
+					stage._bombs[exp[i]]->setTurn(1);
 			
 			curteam->actions[pid] = CHAR_END;
 		}

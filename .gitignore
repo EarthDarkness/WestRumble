@@ -43,6 +43,8 @@
 *.filters
 *.vcxproj
 
+#arquivo de log
+log.txt
 
 # Library folders
 include/

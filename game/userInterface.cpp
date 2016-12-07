@@ -14,6 +14,8 @@ userInterface::userInterface(){
 	_target = NULL;
 	_tracked = NULL;
 	_font = NULL;
+
+	_player = 0;
 }
 userInterface::~userInterface(){
 }
@@ -131,6 +133,7 @@ void userInterface::updateCommand(int xm, int ym, int player){
 		_commands.pop();
 		return;
 	}*/
+	_player = player;
 
 	Actors* mark = getOverlayAt(xm,ym);
 	if(mark == NULL)
@@ -485,8 +488,9 @@ void userInterface::markDetonator(Character* entry){
 				continue;
 			if(buf->getClass() != ACTOR_BOMB)
 				continue;
-			//if(static_cast<bomb*>(buf)->getOwner() != static_cast<Character*>(entry))
-			//	continue;
+
+			if(buf->getBomb()->getOwner() != _teams[_player]->isMember(_selected->getCharacter()))
+				continue;
 
 
 			pushOvelay(xx,yy,ANIM_DETOANTE);

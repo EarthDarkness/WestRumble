@@ -108,7 +108,7 @@ inline void WrpEncodeRope(char* msg, int pid, int x, int y){
 inline void WrpEncodeDetonate(char* msg, int pid){
 	int p=-1;
 	msg[++p] = 4;
-	msg[++p] = (char)(WRP_BARREL);
+	msg[++p] = (char)(WRP_DETONATE);
 	msg[++p] = (char)(pid & 0xFF);
 	msg[++p] = '\0';
 }
