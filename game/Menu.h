@@ -13,52 +13,6 @@
 #include "Actors.h"
 #include "Props.h"
 
-//class numpad
-//{
-//public:
-//	button _nums[10];
-//	numpad(){
-//	}
-//	~numpad(){
-//	}
-//
-//	void init(){
-//		for(int i=0;i<10;++i)
-//			_nums[i].image_id = IMG_UI::num[i];
-//	}
-//
-//	void setCoords(int x, int y, int w, int h){
-//		int wsp = ((float)w*0.4f);
-//		int hsp = ((float)w*0.4f);
-//
-//		int wn = w-wsp;
-//		int hn = h-hsp;
-//
-//		int wc = wn/3;
-//		int hc = hn/4;
-//
-//		for(int j=0;j<3;++j){
-//			for(int i=0;i<3;++i){
-//				int xx = x+i*(wsp/2+wc);
-//				int yy = y+j*(hsp/3+hc);
-//
-//				_nums[1+j*3+i].setPos(xx,yy,wc,hc);
-//			}
-//		}
-//		_nums[0].setPos(x+1*(wsp/2+wc),y+3*(hsp/3+hc),wc,hc);
-//
-//	}
-//	int getNum(int mx, int my){
-//		for(int i=0;i<10;++i){
-//			if(_nums[i].checkCollision(mx,my)){
-//				return i;
-//			}
-//		}
-//		return -1;
-//	}
-//
-//};
-
 enum MENU_STATES{
 	MAIN_MENU = 0,
 	STAGE_MENU,

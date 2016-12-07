@@ -15,6 +15,7 @@ enum NetProtocol{
 	WRP_BARREL,
 	WRP_ROPE,
 	WRP_DETONATE,
+	WRP_SCENE,
 	WRP_MAX_SIZE
 };
 enum NetDir{

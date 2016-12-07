@@ -162,23 +162,40 @@ void Game::update(){
 			stage.start(&A, &B);
 			centerTeam(0);
 			state = STATESHOP_A;
+
+
+			shop.init(&A,0);
+
 			if(menu._net != 0){
-				state = STATEGAME;
-
-				//engine._render.playMusic("BGM",true,false);
-
 				_ui.init(&stage);
-			}else{
-				shop.init(&A,0);
 
-				if(menu._net == 1){
-					engine._com.initServer(2332);
-				}else if(menu._net == 2){
+				//state = STATEGAME;
+
+				/*if(menu._net == 1){
+
+					//engine._com.initServer(2332);
+
+					engine._com._hear = 1;
+					//sync map
+					char buf[LEN] = "\0";
+					int len;
+					stage.encode(buf,len);
+					engine._com.send(buf,len);
+
+				}else */if(menu._net == 2){
 					char buf[20];
 					sprintf_s(buf,"%d.%d.%d.%d",(menu._mpIpAddr>>0)&0xFF,(menu._mpIpAddr>>8)&0xFF,(menu._mpIpAddr>>16)&0xFF,(menu._mpIpAddr>>24)&0xFF);
 					engine._com.initClient(buf,2332);//"191.4.236.165",2332);
 					//engine._com.initClient("127.0.0.1",2332);
 				}
+
+				//engine._render.playMusic("BGM",true,false);
+
+				//_ui.init(&stage);
+			}else{
+
+
+				shop.init(&A,0);
 			}
 		}
 		break;
@@ -239,6 +256,8 @@ void Game::updateStage(){
 	if(stage.waitForVFX())
 		return;
 
+	
+
 	if(!_cam.isDone())
 		_cam.update();
 
@@ -247,6 +266,25 @@ void Game::updateStage(){
 		return;
 	}
 
+	bool noClick = false;
+
+	//move buttons
+	if(engine._input.isDown()){
+		if(button_move_right.checkCollision(engine._input.getX(), engine._input.getY())){
+			stage.getCamera().addPos(-10, 0);
+			noClick = true;
+		}else if(button_move_left.checkCollision(engine._input.getX(), engine._input.getY())){
+			stage.getCamera().addPos(10, 0);
+			noClick = true;
+		}else if(button_move_up.checkCollision(engine._input.getX(), engine._input.getY())){
+			stage.getCamera().addPos(0, 10);
+			noClick = true;
+		}else if(button_move_down.checkCollision(engine._input.getX(), engine._input.getY())){
+			stage.getCamera().addPos(0, -10);
+			noClick = true;
+		}
+	}
+	if(!noClick)
 	if(!_field){
 		if(menu._net == 0){
 			turnPlayer(_player);
@@ -278,31 +316,19 @@ void Game::updateStage(){
 		proccessMessages();
 	}else if(menu._net == 2){
 		if(engine._com.recv(buf,LEN)){
-			stage.decode(buf);
-			centerTeam(stage._turn%2);
+			if(buf[0] == WRP_MOVE){
+				_actionMsg.push(string(buf,LEN));
+			}else if(buf[0] == WRP_SCENE){
+				stage.decode(buf);
+				centerTeam(stage._turn%2);
+			}
 		}
+		proccessMessages();
 	}
 
 	if(_field)//one per turn end
 		turnField();
 
-
-	//move buttons
-	if(engine._input.isDown()){
-		if(button_move_right.checkCollision(engine._input.getX(), engine._input.getY())){
-			stage.getCamera().addPos(-10, 0);
-			return;
-		}else if(button_move_left.checkCollision(engine._input.getX(), engine._input.getY())){
-			stage.getCamera().addPos(10, 0);
-			return;
-		}else if(button_move_up.checkCollision(engine._input.getX(), engine._input.getY())){
-			stage.getCamera().addPos(0, 10);
-			return;
-		}else if(button_move_down.checkCollision(engine._input.getX(), engine._input.getY())){
-			stage.getCamera().addPos(0, -10);
-			return;
-		}
-	}
 
 }
 void Game::updateEnd(){
@@ -465,6 +491,10 @@ void Game::proccessMessages(){
 			curteam->actions[pid] = CHAR_MOVED;
 			curteam->_state[pid].addCooldown(ACTIONMOVE,1);
 
+			//move message
+			if(menu._net == 1){
+				engine._com.send((void*)msg,msg[0]);
+			}
 
 		}else if(msg[1] == WRP_DYNAMITE){
 			int pid = 0;
@@ -565,6 +595,7 @@ void Game::proccessMessages(){
 			int index = insert(stage._blocks);
 			block* b = stage._blocks[index];
 			b->setAnimation(BLK_TABLE,BLK_ID_BARREL);
+			b->setData(BLK_ID_BARREL);
 			stage.instantiateActor(b, xx, yy);
 
 			curteam->actions[pid] = CHAR_END;

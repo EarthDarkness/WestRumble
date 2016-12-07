@@ -216,18 +216,18 @@ void Menu::setGUI(int width, int height){
 	//_tutorial.setPos(xx,height/2+ss/2+2*(lh+ss),lw,lh);
 	//_credits.setPos(xx,height/2+ss/2+3*(lh+ss),lw,lh);
 	//
-	//bool portrait = (width<height);
-	//
-	//_next.setPos(width-100,0,100,100);
-	//_prev.setPos(0,0,100,100);
-	//_back.setPos(width-96,height-96,96,96);
-	//for(int i=0;i<4;++i){
-	//	if(portrait){
-	//		_info[i].setPos(0,height/2-width/2,width,width);
-	//	}else{
-	//		_info[i].setPos(width/2-height/2,0,height,height);
-	//	}
-	//}
+
+	bool portrait = (width<height);
+	_next.setGUI(width-100,0,100,100);
+	_prev.setGUI(0,0,100,100);
+	_back.setGUI(width-96,height-96,96,96);
+	for(int i=0;i<4;++i){
+		if(portrait){
+			_info[i].setGUI(0,height/2-width/2,width,width);
+		}else{
+			_info[i].setGUI(width/2-height/2,0,height,height);
+		}
+	}
 	////multiplayer
 	////numpad
 	//int mh = (float)height*0.3f;
@@ -268,16 +268,27 @@ void Menu::udpdate(int mx, int my){
 				_net = 1;
 				uint8_t* v = (uint8_t*)(&_mpIpAddr);
 				sscanf_s(_com->getLocalIp(),"%hhu.%hhu.%hhu.%hhu",v,v+1,v+2,v+3);
-				int a =0;
+				//_com->initServer(2332);
 			}
 		}else if(_mpClient.isPress()){
 			if(_net == 0){
 				_net = 2;
+				
 			}
 		}else if(_mpNext.isPress()){
+			if(_net == 1){
+				//_com->initServer(2332);
+			}else if(_net == 2){
+				//char buf[20];
+				//sprintf_s(buf,"%d.%d.%d.%d",(_mpIpAddr>>0)&0xFF,(_mpIpAddr>>8)&0xFF,(_mpIpAddr>>16)&0xFF,(_mpIpAddr>>24)&0xFF);
+				//_com->initClient(buf,2332);//"191.4.236.165",2332);
+			}
 			_state = STAGE_MENU;
 		}else if(_mpPrev.isPress()){
 			_state = MAIN_MENU;
+			if(_net != 0){
+				_com->close();
+			}
 			_net = 0;
 		}else if(_mpLeft.isPress()){
 			_mpIpPos = (_mpIpPos-1)%4;
@@ -287,6 +298,12 @@ void Menu::udpdate(int mx, int my){
 	}else if(_state == STAGE_MENU){
 		if(_stgNext.isPress()){
 			_done = true;
+		}else if(_stgPrev.isPress()){
+			_state = MAIN_MENU;
+			if(_net != 0){
+				_com->close();
+			}
+			_net = 0;
 		}
 	}else if(_state == TUTORIAL_MENU){
 		if(_next.isPress()){
@@ -310,6 +327,13 @@ void Menu::render(renderer& ren, font& fon){
 		ren.renderText(buf,fon,_mpIp._rect.x,_mpIp._rect.y);
 		int xx = _mpIp._rect.x+(int)((float)_mpLeft._rect.w*(4.0f/3.0f))*_mpIpPos;
 		ren.renderSprite(_mpLeft.getSprite(),xx,_mpIp._rect.y,_mpLeft._rect.w,_mpLeft._rect.h);
+	}else if(_state == TUTORIAL_MENU){
+		ren.renderSprite(_prev.getSprite(),_prev._rect);
+		ren.renderSprite(_next.getSprite(),_next._rect);
+		ren.renderSprite(_back.getSprite(),_back._rect);
+
+		ren.renderSprite(_info[_page].getSprite(),_info[_page]._rect);
+
 	}
 }
 

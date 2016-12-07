@@ -5,8 +5,9 @@
 #include "Props.h"
 
 #include "logger.h"
+#include "NetProtocol.h"
 
-#define SUDDENDEATH 20
+#define SUDDENDEATH 30
 
 
 Stage::Stage(){
@@ -374,6 +375,7 @@ void Stage::polulate(){
 		block* b = _blocks[index];
 
 		b->setAnimation(BLK_TABLE,BLK_ID_BOX);
+		b->setData(BLK_ID_BOX);
 		instantiateActor(b,pos[r]%w,pos[r]/w);
 		cout << "block at: " << pos[r]%w << "," << pos[r]/w << endl;
 	}
@@ -636,7 +638,8 @@ void Stage::hitBlock(block* b){
 		return;
 
 	_tileMap._map.at(b->getX(),b->getY()).setActor(NULL);
-	spawn(b->getX(),b->getY());
+	if(b->getData() == BLK_ID_BOX)
+		spawn(b->getX(),b->getY());
 	remove(_blocks,b->getIndex());
 }
 
@@ -646,6 +649,7 @@ void Stage::encode(char* data, int& len){
 	char* n;
 	data[++p] = 0;//2byte total size
 	data[++p] = 0;//2byte total size
+	data[++p] = WRP_SCENE;
 
 	data[++p] = _turn & 0xff;
 	data[++p] = _suddenDeath & 0xff;
@@ -698,7 +702,7 @@ void Stage::encode(char* data, int& len){
 	len = p;
 }
 void Stage::decode(char* data){
-	int p = 1;
+	int p = 2;//previously 1 to skip 0 and 1 now skiping 2 also
 	int n;
 
 	_turn = data[++p];
