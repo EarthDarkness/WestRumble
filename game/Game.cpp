@@ -169,8 +169,6 @@ void Game::update(){
 				_ui.init(&stage);
 
 				if(menu._net == 1){
-					//engine._com.initServer(2332);
-
 					engine._com._hear = 1;
 					//sync map
 					char buf[LEN] = "\0";
@@ -178,12 +176,7 @@ void Game::update(){
 					stage.encode(buf,len);
 					engine._com.send(buf,len);
 
-				}/*else if(menu._net == 2){
-					char buf[20];
-					sprintf_s(buf,"%d.%d.%d.%d",(menu._mpIpAddr>>0)&0xFF,(menu._mpIpAddr>>8)&0xFF,(menu._mpIpAddr>>16)&0xFF,(menu._mpIpAddr>>24)&0xFF);
-					engine._com.initClient(buf,2332);//"191.4.236.165",2332);
-													 //engine._com.initClient("127.0.0.1",2332);
-				}*/
+				}
 			}else{
 				state = STATESHOP_A;
 
@@ -192,48 +185,6 @@ void Game::update(){
 			}
 
 
-
-			/*if(menu._net == 1){  
-				engine._com.initServer(2332);  
-			}else if(menu._net == 2){  
-				char buf[20];  
-				sprintf_s(buf,"%d.%d.%d.%d",(menu._mpIpAddr>>0)&0xFF,(menu._mpIpAddr>>8)&0xFF,(menu._mpIpAddr>>16)&0xFF,(menu._mpIpAddr>>24)&0xFF);  
-				engine._com.initClient(buf,2332);//"191.4.236.165",2332);  */
-				//engine._com.initClient("127.0.0.1",2332);  
-
-			//shop.init(&A,0);
-
-			//if(menu._net != 0){
-			//	_ui.init(&stage);
-
-			//	//state = STATEGAME;
-
-			//	/*if(menu._net == 1){
-
-			//		//engine._com.initServer(2332);
-
-			//		engine._com._hear = 1;
-			//		//sync map
-			//		char buf[LEN] = "\0";
-			//		int len;
-			//		stage.encode(buf,len);
-			//		engine._com.send(buf,len);
-
-			//	}else */if(menu._net == 2){
-			//		char buf[20];
-			//		sprintf_s(buf,"%d.%d.%d.%d",(menu._mpIpAddr>>0)&0xFF,(menu._mpIpAddr>>8)&0xFF,(menu._mpIpAddr>>16)&0xFF,(menu._mpIpAddr>>24)&0xFF);
-			//		engine._com.initClient(buf,2332);//"191.4.236.165",2332);
-			//		//engine._com.initClient("127.0.0.1",2332);
-			//	}
-
-			//	//engine._render.playMusic("BGM",true,false);
-
-			//	//_ui.init(&stage);
-			//}else{
-
-
-			//	shop.init(&A,0);
-			//}
 		}
 		break;
 				   }
@@ -275,8 +226,7 @@ void Game::update(){
 		break;
 					 }
 	case STATEGAME:{
-		if (endGame)
-			//reset();
+		if(endGame)
 			state = STATEEND;
 		else
 			updateStage();
@@ -302,6 +252,8 @@ void Game::updateStage(){
 		_movie.update();
 		return;
 	}
+
+	checkEnd();
 
 	bool noClick = false;
 
@@ -371,6 +323,10 @@ void Game::updateStage(){
 void Game::updateEnd(){
 	if (engine._input.isPress()){
 		reset();
+		if(menu._net != 0){
+			engine._com.close();
+		}
+		menu.reset();
 		state = STATEMENU;
 	}
 }
@@ -802,7 +758,7 @@ void Game::turnField(){
 		}
 	}
 
-	checkEnd();
+	//checkEnd();
 	if(stage.suddenDeath()){
 		stage.dropBomb(stage.suddenDeath());
 	}

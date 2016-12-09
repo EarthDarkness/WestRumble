@@ -42,6 +42,8 @@ public:
 
 	void setGUI(int width, int height);
 
+	void reset();
+
 	void udpdate(int mx, int my);
 	void render(renderer& ren, font& fon);
 

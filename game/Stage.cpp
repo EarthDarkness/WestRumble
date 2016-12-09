@@ -617,7 +617,7 @@ void Stage::hitChar(Character* c){
 
 	_tileMap._map.at(c->getX(),c->getY()).setActor(NULL);
 
-	if(_teams[0]->isMember(c))
+	if(_teams[0]->isMember(c) > -1)
 		_teams[0]->count -= 1;
 	else
 		_teams[1]->count -= 1;

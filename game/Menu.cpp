@@ -237,6 +237,18 @@ void Menu::setGUI(int width, int height){
 	//_numpad.setCoords(mx,my,mw,mh);
 }
 
+void Menu::reset(){
+	_state = MAIN_MENU;
+
+	_done = false;
+
+	_page = 0;
+
+	_net = 0;
+	_mpIpPos = 0;
+	_mpIpAddr = 0;
+}
+
 void Menu::udpdate(int mx, int my){
 	if(_state == MAIN_MENU){
 		if(_play.isPress()){
