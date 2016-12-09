@@ -268,7 +268,7 @@ void Menu::udpdate(int mx, int my){
 				_net = 1;
 				uint8_t* v = (uint8_t*)(&_mpIpAddr);
 				sscanf_s(_com->getLocalIp(),"%hhu.%hhu.%hhu.%hhu",v,v+1,v+2,v+3);
-				//_com->initServer(2332);
+				_com->initServer(2332);
 			}
 		}else if(_mpClient.isPress()){
 			if(_net == 0){
@@ -279,9 +279,9 @@ void Menu::udpdate(int mx, int my){
 			if(_net == 1){
 				//_com->initServer(2332);
 			}else if(_net == 2){
-				//char buf[20];
-				//sprintf_s(buf,"%d.%d.%d.%d",(_mpIpAddr>>0)&0xFF,(_mpIpAddr>>8)&0xFF,(_mpIpAddr>>16)&0xFF,(_mpIpAddr>>24)&0xFF);
-				//_com->initClient(buf,2332);//"191.4.236.165",2332);
+				char buf[20];
+				sprintf_s(buf,"%d.%d.%d.%d",(_mpIpAddr>>0)&0xFF,(_mpIpAddr>>8)&0xFF,(_mpIpAddr>>16)&0xFF,(_mpIpAddr>>24)&0xFF);
+				_com->initClient(buf,2332);//"191.4.236.165",2332);
 			}
 			_state = STAGE_MENU;
 		}else if(_mpPrev.isPress()){

@@ -161,16 +161,44 @@ void Game::update(){
 
 			stage.start(&A, &B);
 			centerTeam(0);
-			state = STATESHOP_A;
 
-			shop.init(&A,0);  
 
-			if(menu._net == 1){  
+			if(menu._net != 0){
+				state = STATEGAME;
+
+				_ui.init(&stage);
+
+				if(menu._net == 1){
+					//engine._com.initServer(2332);
+
+					engine._com._hear = 1;
+					//sync map
+					char buf[LEN] = "\0";
+					int len;
+					stage.encode(buf,len);
+					engine._com.send(buf,len);
+
+				}/*else if(menu._net == 2){
+					char buf[20];
+					sprintf_s(buf,"%d.%d.%d.%d",(menu._mpIpAddr>>0)&0xFF,(menu._mpIpAddr>>8)&0xFF,(menu._mpIpAddr>>16)&0xFF,(menu._mpIpAddr>>24)&0xFF);
+					engine._com.initClient(buf,2332);//"191.4.236.165",2332);
+													 //engine._com.initClient("127.0.0.1",2332);
+				}*/
+			}else{
+				state = STATESHOP_A;
+
+				shop.init(&A,0);  
+				
+			}
+
+
+
+			/*if(menu._net == 1){  
 				engine._com.initServer(2332);  
 			}else if(menu._net == 2){  
 				char buf[20];  
 				sprintf_s(buf,"%d.%d.%d.%d",(menu._mpIpAddr>>0)&0xFF,(menu._mpIpAddr>>8)&0xFF,(menu._mpIpAddr>>16)&0xFF,(menu._mpIpAddr>>24)&0xFF);  
-				engine._com.initClient(buf,2332);//"191.4.236.165",2332);  
+				engine._com.initClient(buf,2332);//"191.4.236.165",2332);  */
 				//engine._com.initClient("127.0.0.1",2332);  
 
 			//shop.init(&A,0);
@@ -205,7 +233,7 @@ void Game::update(){
 
 
 			//	shop.init(&A,0);
-			}
+			//}
 		}
 		break;
 				   }
