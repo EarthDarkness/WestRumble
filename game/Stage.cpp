@@ -28,9 +28,6 @@ Stage::~Stage(){
 void Stage::init(font* f){
 	_font = f;
 }
-/*void Stage::setGUI(int width, int height){
-
-}*/
 
 //TODO fix redundance
 int Stage::loadStage(const char* path, resources& res){

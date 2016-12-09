@@ -33,10 +33,11 @@ inline void WrpEncodeEndTurn(char* msg){
 	msg[++p] = (char)(WRP_END_TURN);
 	msg[++p] = '\0';
 }
-inline void WrpEncodeMove(char* msg, int pid, int x, int y){
+inline void WrpEncodeMove(char* msg, int tid, int pid, int x, int y){
 	int p=-1;
-	msg[++p] = 6;
+	msg[++p] = 7;
 	msg[++p] = (char)(WRP_MOVE);
+	msg[++p] = (char)(tid & 0xFF);
 	msg[++p] = (char)(pid & 0xFF);
 	msg[++p] = (char)(x & 0xFF);
 	msg[++p] = (char)(y & 0xFF);
@@ -127,7 +128,7 @@ inline bool WrpDecodeEndTurn(const char* msg){
 
 	return true;
 }
-inline bool WrpDecodeMove(const char* msg, int& pid, int& x, int& y){
+inline bool WrpDecodeMove(const char* msg, int& tid, int& pid, int& x, int& y){
 	if(msg == NULL)
 		return false;
 
@@ -136,6 +137,7 @@ inline bool WrpDecodeMove(const char* msg, int& pid, int& x, int& y){
 	if(msg[++p] != WRP_MOVE)
 		return false;
 
+	tid = msg[++p];
 	pid = msg[++p];
 	x = msg[++p];
 	y = msg[++p];

@@ -479,20 +479,21 @@ void Game::proccessMessages(){
 			_field = true;
 
 		}else if(msg[1] == WRP_MOVE){
+			int tid = 0;
 			int pid = 0;
 			int xx = 0;
 			int yy = 0;
 
-			WrpDecodeMove(msg,pid,xx,yy);
+			WrpDecodeMove(msg,tid,pid,xx,yy);
 
-			Character* act = &(curteam->getCharacter(pid));
+			Character* act = &(stage.getTeam(tid).getCharacter(pid));
 
 			Actors* tgt = stage.getActorAt(xx,yy);
 			if(tgt != NULL){
 				if(tgt->getClass() == ACTOR_POWUP) act->AddPowerUp(tgt->getPowerUp());
 				else cout << "something on the way: " << tgt->getClass() << endl;
 			}
-			_dummie.init(_player);
+			_dummie.init(tid);
 			_movie.waitForMotion(stage._tileMap._map, act->getX(), act->getY(), xx, yy, &_dummie,act);
 
 			stage.moveActor(act->getX(), act->getY(), xx, yy);//TODO validate movment
@@ -624,7 +625,7 @@ void Game::proccessMessages(){
 					opo->_state[opo->checkSelected(tgt)].addCooldown(ACTIONMOVE,2);
 				}
 			}
-			curteam->_state[pid].addCooldown(ACTIONSTUN,1);
+			curteam->_state[pid].addCooldown(ACTIONSTUN,2);
 			curteam->actions[pid] = CHAR_END;
 
 		}else if(msg[1] == WRP_DETONATE){

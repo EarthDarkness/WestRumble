@@ -68,6 +68,8 @@ Actors* userInterface::getOverlayAt(int x, int y){
 
 
 void userInterface::update(int xm, int ym, int player, int val){
+	_player = player;
+
 	Actors* clicked = getActorAt(xm,ym);
 	_tracked = clicked;
 
@@ -133,7 +135,7 @@ void userInterface::updateCommand(int xm, int ym, int player){
 		_commands.pop();
 		return;
 	}*/
-	_player = player;
+	//_player = player;
 
 	Actors* mark = getOverlayAt(xm,ym);
 	if(mark == NULL)
@@ -151,7 +153,7 @@ void userInterface::updateCommand(int xm, int ym, int player){
 	int pid = _teams[player]->isMember(chr);
 
 	if(act == ACTIONMOVE){
-		WrpEncodeMove(buf,pid,xm,ym);
+		WrpEncodeMove(buf,player,pid,xm,ym);
 	}else if(act == ACTIONBOMB){
 		WrpEncodeDynamite(buf,pid,xm,ym);
 	}else if (act == ACTIONGUNFIRE){
@@ -178,6 +180,7 @@ void userInterface::updateCommand(int xm, int ym, int player){
 		_target = _tileMap->_map.at(xm,ym).actor;
 		placeCommands(ACTIONRELAUNCH);
 		_commands.pop();
+		initCommand();
 		return;
 	}else if (act == ACTIONRELAUNCH){
 		WrpEncodeThrow(buf,pid,_target->getX(),_target->getY(),xm,ym);
@@ -336,7 +339,8 @@ void userInterface::markWalk(Character* entry){
 	for(int j = -entry->getSpeed();j<=entry->getSpeed();++j){
 		for(int i = -entry->getSpeed();i<=entry->getSpeed();++i){
 
-			if(abs(j)+abs(i) > entry->getSpeed())
+			//if(abs(j)+abs(i) > entry->getSpeed())
+			if(sqrtf(powf((float)i,2.0f)+powf((float)j,2.0f)) > (float)entry->getSpeed())
 				continue;
 
 			int xx = i+entry->getX();
@@ -487,6 +491,9 @@ void userInterface::markDetonator(Character* entry){
 			if(buf == NULL)
 				continue;
 			if(buf->getClass() != ACTOR_BOMB)
+				continue;
+
+			if(buf->getBomb()->getTeam() != _player)
 				continue;
 
 			if(buf->getBomb()->getOwner() != _teams[_player]->isMember(_selected->getCharacter()))

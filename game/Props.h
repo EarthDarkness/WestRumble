@@ -16,8 +16,8 @@ extern animation* VFX_TABLE[];
 
 enum VFX_ID{
 	VFX_ID_NONE=0,
-	VFX_ID_GUNFLARE,
 	VFX_ID_GUNFIRE,
+	VFX_ID_GUNFLARE,
 	VFX_ID_EXPLOSION
 };
 
