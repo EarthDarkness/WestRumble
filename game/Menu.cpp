@@ -86,7 +86,7 @@ void Menu::setupDisplay(){
 	ptrArr[++p] = &_mpNext;							_mpNext.init(0.35f,0.9f,0.13f,0.1f,true);
 	ptrArr[++p] = &_mpPrev;							_mpPrev.init(0.65f,0.9f,0.13f,0.1f,true);
 
-	_display[MULTIPLAYER_MENU].init(9,ptrArr+12);
+	_display[MULTIPLAYER_MENU].init(12,ptrArr+12);
 
 
 }
@@ -303,9 +303,9 @@ void Menu::udpdate(int mx, int my){
 			}
 			_net = 0;
 		}else if(_mpLeft.isPress()){
-			_mpIpPos = (_mpIpPos-1)%4;
+			_mpIpPos = (_mpIpPos-1+4)%4;
 		}else if(_mpRight.isPress()){
-			_mpIpPos = (_mpIpPos+1)%4;
+			_mpIpPos = (_mpIpPos+1+4)%4;
 		}
 	}else if(_state == STAGE_MENU){
 		if(_stgNext.isPress()){

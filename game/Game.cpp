@@ -88,6 +88,16 @@ void Game::setGUI(){
 
 void Game::loadResources(){
 	engine._res.loadMusic("resources/lilywest.wav","BGM");
+	engine._res.loadSound("resources/gunfire_mix.wav","gunfire");
+	engine._res.loadSound("resources/knock.wav","click");
+	engine._res.loadSound("resources/explosion.wav","explosion");
+
+	engine._res.loadSound("resources/dynamite.wav","bomb");
+	engine._res.loadSound("resources/shot.wav","shot");
+	engine._res.loadSound("resources/barrel.wav","barrel");
+	engine._res.loadSound("resources/rope.wav","rope");
+	engine._res.loadSound("resources/time_up.wav","time_up");
+	engine._res.loadSound("resources/time_down.wav","time_down");
 
 	loadProps(engine._res);
 
@@ -143,11 +153,12 @@ void Game::update(){
 	switch (state)
 	{
 	case STATEMENU:{
-		if(engine._input.isPress())
+		if(engine._input.isPress()){
 			BUTTONCLICKER.clickAt(engine._input.getX(),engine._input.getY());
-		else
+			engine._render.playSound("click");
+		}else{
 			BUTTONCLICKER.clickAt();
-
+		}
 		menu.udpdate(engine._input.getX(),engine._input.getY());
 		if(menu.isDone()){
 			if (stage.loadStage("resources/stage/stage1.txt", engine._res)){
@@ -215,7 +226,7 @@ void Game::update(){
 
 		if (shop.isDone()){
 			state = STATEGAME;
-			//engine._render.playMusic("BGM",true,false);
+			engine._render.playMusic("BGM",true,false);
 			_ui.init(&stage);
 			if(menu._net == 1){
 				engine._com._hear = 1;
@@ -517,6 +528,8 @@ void Game::proccessMessages(){
 
 			curteam->actions[pid] = CHAR_END;
 
+			engine._render.playSound("bomb");
+
 		}else if(msg[1] == WRP_SHOT){
 			int pid = 0;
 			int dir = 0;
@@ -542,6 +555,7 @@ void Game::proccessMessages(){
 			curteam->_state[pid].addCooldown(ACTIONGUNFIRE,3);
 			curteam->actions[pid] = CHAR_END;
 
+			engine._render.playSound("shot");
 		}else if(msg[1] == WRP_TIME_UP){
 			int pid = 0;
 			int xx = 0;
@@ -554,6 +568,7 @@ void Game::proccessMessages(){
 
 			curteam->actions[pid] = CHAR_END;
 
+			engine._render.playSound("time_up");
 		}else if(msg[1] == WRP_TIME_DOWN){
 			int pid = 0;
 			int xx = 0;
@@ -566,6 +581,7 @@ void Game::proccessMessages(){
 
 			curteam->actions[pid] = CHAR_END;
 
+			engine._render.playSound("time_down");
 		}else if(msg[1] == WRP_THROW){
 			int pid = 0;
 			int xi = 0;
@@ -599,6 +615,7 @@ void Game::proccessMessages(){
 
 			curteam->actions[pid] = CHAR_END;
 
+			engine._render.playSound("barrel");
 		}else if(msg[1] == WRP_ROPE){
 			int pid = 0;
 			int xx = 0;
@@ -617,6 +634,7 @@ void Game::proccessMessages(){
 			curteam->_state[pid].addCooldown(ACTIONSTUN,2);
 			curteam->actions[pid] = CHAR_END;
 
+			engine._render.playSound("rope");
 		}else if(msg[1] == WRP_DETONATE){
 			int pid = 0;
 
@@ -687,6 +705,8 @@ void Game::turnPlayer(int player){
 	}
 }
 void Game::turnField(){
+	bool exp = false;
+	bool gun = false;
 	vector<Actors*> hits;
 	//calc bomb to explode
 	for(int i=0;i<stage._bombs.size();++i){
@@ -696,6 +716,8 @@ void Game::turnField(){
 			b->addTurn(-1);
 			if(b->getTurn() < 1){
 				hits.push_back(b);
+				//engine._render.playSound("explosion");
+				exp = true;
 			}
 		}
 	}
@@ -710,6 +732,8 @@ void Game::turnField(){
 			continue;
 		stage.checkGunfire(&tbuf->getCharacter(j),hits);
 		//tbuf->_state[j].setState(ACTIONGUNFIRE,STATE_STAGE2);
+		//engine._render.playSound("gunfire");
+		gun = true;
 
 		if(tbuf->getCharacter(j)._dir == GUN_N){
 			tbuf->getCharacter(j).setState(ANIM_SHOT_U);
@@ -782,6 +806,11 @@ void Game::turnField(){
 		stage.encode(buf,len);
 		engine._com.send(buf,len);
 	}
+	if(exp)
+		engine._render.playSound("explosion");
+	if(gun)
+		engine._render.playSound("gunfire");
+
 }
 
 void Game::checkEnd(){

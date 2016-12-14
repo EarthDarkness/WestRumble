@@ -69,6 +69,7 @@ void button::setGUI(int x, int y, int w, int h){
 
 bool button::isPress(){
 	return _press == BUTTONCLICKER.getTime();
+
 }
 
 bool button::checkCollision(int mx, int my){

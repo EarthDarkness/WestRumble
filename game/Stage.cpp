@@ -504,17 +504,6 @@ void Stage::checkGunfire(Character* c, vector<Actors*>& out){
 		fx.setPos(xx, yy);
 		int ap = findActorsPos(fx,_vfx);
 		if(ap==-1){
-			/*
-			VFX_gunfire_down.txt
-			VFX_gunfire_left.txt
-			VFX_gunfire_right.txt
-			VFX_gunfire_up.txt
-			VFX_gunflare_down.txt
-			VFX_gunflare_left.txt
-			VFX_gunflare_right.txt
-			VFX_gunflare_up.txt
-			*/
-
 			_vfx.push_back(fx);
 			if(c->_dir == GUN_E){
 				_vfx.back().setAnimation(VFX_TABLE,VFX_ID_GUNFIRE,ANIM_IDLE_R);
@@ -526,23 +515,7 @@ void Stage::checkGunfire(Character* c, vector<Actors*>& out){
 				_vfx.back().setAnimation(VFX_TABLE,VFX_ID_GUNFIRE,ANIM_IDLE_D);
 			}
 			
-		}/*else if(strcmp(_vfx[ap].getAnimation().getState(),"gunfire")!=0){
-			//fx.setSprite("explosao.png");
-			_vfx.push_back(fx);
-			if(c->direction == GUN_E){
-				_vfx.back().getAnimation().loadAnim("resources/VFX_gunfire_right.txt");
-			}else if(c->direction == GUN_W){
-				_vfx.back().getAnimation().loadAnim("resources/VFX_gunfire_left.txt");
-			}else if(c->direction == GUN_N){
-				_vfx.back().getAnimation().loadAnim("resources/VFX_gunfire_up.txt");
-			}else if(c->direction == GUN_S){
-				_vfx.back().getAnimation().loadAnim("resources/VFX_gunfire_down.txt");
-			}else{
-				_vfx.back().getAnimation().loadAnim("resources/VFX_gunfire_right.txt");
-			}
-			//_vfx.back().getAnimation().loadAnim("resources/VFX_gunfire.txt");
-			_vfx.back().getAnimation().setState("gunfire");
-		}*/
+		}
 
 		Actors* buf = _tileMap.getActor(xx,yy);
 		if(buf != NULL){
@@ -553,6 +526,7 @@ void Stage::checkGunfire(Character* c, vector<Actors*>& out){
 				break;
 		}
 	}
+	
 
 }
 
