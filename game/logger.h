@@ -102,6 +102,65 @@ public:
 
 	}
 
+	int sample(int x, int y){
+		if(x >= _map.width() || x < 0)
+			return 0;
+		if(y >= _map.height() || y < 0)
+			return 0;
+		return _map.at(x,y);
+	}
+
+	void mult(int val){
+		for(int j=0;j<_map.height();++j){
+			for(int i=0;i<_map.width();++i){
+				_map.at(i,j) *= val;
+			}
+		}
+
+	}
+	void div(int val){
+		for(int j=0;j<_map.height();++j){
+			for(int i=0;i<_map.width();++i){
+				_map.at(i,j) /= val;
+			}
+		}
+
+	}
+
+	void smooth(int step){
+		matMN<int> buf;
+		buf.init(_map.width(),_map.height());
+		buf.fill(0);
+
+		for(int k=0;k<step;++k){
+			for(int j=0;j<_map.height();++j){
+				for(int i=0;i<_map.width();++i){
+					int acc = 0;
+					acc += 3*sample(i,j);
+					acc += 2*sample(i+1,j);
+					acc += 2*sample(i-1,j);
+					acc += 2*sample(i,j+1);
+					acc += 2*sample(i,j-1);
+					acc += 1*sample(i-1,j-1);
+					acc += 1*sample(i-1,j+1);
+					acc += 1*sample(i+1,j-1);
+					acc += 1*sample(i+1,j+1);
+					int val = acc / 17;
+					if(val == 0 && acc%17 > 11)
+						++val;
+
+					buf.at(i,j) = val;
+				}
+			}
+
+			for(int j=0;j<_map.height();++j){
+				for(int i=0;i<_map.width();++i){
+					_map.at(i,j) = buf.at(i,j);
+				}
+			}
+		}
+	}
+
 };
 
 

@@ -42,6 +42,7 @@
 *.vcproj
 *.filters
 *.vcxproj
+*.user
 
 #arquivo de log
 log.txt

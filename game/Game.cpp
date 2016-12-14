@@ -8,7 +8,7 @@ field _log;
 string _logFile;
 
 Game::Game(){
-	_logFile = "log.txt";
+	_logFile = "log1.txt";
 
 	selected = NULL;
 
@@ -40,7 +40,7 @@ void Game::init(){
 
 	_cam.setCam(&stage.getCamera());
 	_cam.setSpeed(1.0f/10.0f);
-
+	
 	_movie.init(&stage.getCamera());
 
 	loadResources();
@@ -155,8 +155,11 @@ void Game::update(){
 			}
 			_log.init(stage._tileMap);
 			_log.load(_logFile.c_str());
+			//_log.mult(8);
+			//_log.smooth(3);
+			//_log.div(2);
 			if(menu._net == 0 || menu._net == 1){
-				stage.polulate();
+				//stage.polulate();
 			}
 
 			stage.start(&A, &B);
@@ -369,10 +372,12 @@ void Game::render()
 void Game::renderStage(){
 
 	stage.renderMap(engine._render);
-
+//#define DISPLAY_LOG
 #ifdef DISPLAY_LOG
 	for(int j=0;j<_log._map.height();++j){
 		for(int i=0;i<_log._map.width();++i){
+			if(stage._tileMap._map.at(i,j).collision == 0)
+				continue;
 			_log._sprite.setState(_log._map.at(i,j));
 			engine._render.renderSpriteInMap(_log._sprite.get(),stage.getCamera(),i,j);
 		}

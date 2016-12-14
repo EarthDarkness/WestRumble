@@ -48,18 +48,18 @@
 44 tile_ground2_to_ground4_joint_right.png NULL 1
 45 tile_ground2_to_ground4_joint_top.png NULL 1
 46 tile_ground2_to_ground4_left.png NULL 1
-47 tile_ground2.png waterBox_5-8.png 1
+47 tile_ground2_to_ground4_left.png waterBox_5-8.png 1
 48 tile_ground2_to_ground4_right.png waterBox_3-8.png 1
 49 tile_ground2_to_ground4_right.png NULL 1
 50 tile_ground2_to_ground4_right.png Tile_cactus1_top.png 1
 51 tile_ground2_to_ground4_top.png NULL 1
-52 tile_ground2.png waterBox_8-8.png 1
+52 tile_ground2_to_ground4_top_left.png waterBox_8-8.png 1
 53 tile_ground2_to_ground4_top_right.png carroca3.png 1
 54 tile_ground2_to_ground4_top_right.png NULL 1
 55 tile_ground4.png NULL 1
 56 tile_ground4.png Tile_cactus1_top.png 1
 57 tile_ground4.png wind2.png 1
-58 tile_ground2.png waterBox_7-8.png 1
+58 tile_ground4.png waterBox_7-8.png 1
 59 tile_ground4.png sheriff_house16.png 1
 60 tile_ground4.png sheriff_house12.png 1
 61 tile_ground4.png sheriff_house_8_12.png 1
@@ -83,14 +83,14 @@
 21 21 21 21 21 55 55 55 59 55 66 0 9 0 19 55 67 67 55 55 
 21 21 21 21 21 55 55 55 55 60 62 20 0 18 14 55 65 55 55 55 
 21 21 21 21 21 55 55 55 55 61 63 0 16 0 12 64 55 8 5 55 
-21 21 21 21 21 55 55 55 73 51 51 15 17 11 13 51 53 7 6 55 
-21 21 21 21 21 55 55 55 46 36 52 36 36 36 36 36 49 4 3 55 
-21 21 21 21 21 56 55 55 46 58 36 35 36 36 36 36 49 55 55 55 
-21 21 21 21 21 55 67 55 46 36 47 42 38 37 37 43 44 54 55 55 
-21 22 21 21 21 55 55 55 46 36 36 48 55 70 55 46 36 50 55 55 
-21 21 24 21 21 55 56 55 46 36 36 49 68 69 55 46 42 41 67 55 
-21 21 21 25 21 55 55 67 46 36 36 49 55 55 55 46 49 55 55 55 
-21 21 21 21 26 55 55 55 46 36 36 44 51 51 51 45 49 55 55 55 
+21 21 21 21 21 55 55 55 55 73 51 15 36 11 13 51 53 7 6 55 
+21 21 21 21 21 55 55 55 52 45 36 36 36 36 36 36 49 4 3 55 
+21 21 21 21 21 56 55 58 46 35 36 36 36 36 36 36 49 55 55 55 
+21 21 21 21 21 55 67 55 47 42 38 37 37 43 36 36 44 54 55 55 
+21 22 21 21 21 55 55 55 46 48 55 70 55 46 36 36 36 50 55 55 
+21 21 24 21 21 55 56 55 46 49 68 69 55 46 36 36 42 41 67 55 
+21 21 21 25 21 55 55 67 46 49 55 55 55 46 36 36 49 55 55 55 
+21 21 21 21 26 55 55 55 46 44 51 51 51 45 36 36 49 55 55 55 
 21 21 21 21 21 57 55 55 46 36 36 36 36 36 36 36 49 55 56 55 
 21 21 21 21 21 55 71 72 40 37 37 37 39 37 37 37 41 55 55 67 
 21 21 21 21 21 55 55 55 55 55 55 55 55 67 55 55 55 55 55 55 

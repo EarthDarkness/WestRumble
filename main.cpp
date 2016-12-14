@@ -1,11 +1,10 @@
 #include "game\Game.h"
 
+
 int main(int argc, char** argv) {
 
 	Game gm;
 	gm.init();
-
-	//teste commit
 
 	while (gm.engine.isRunning()) {
 		gm.update();
@@ -13,6 +12,7 @@ int main(int argc, char** argv) {
 	}
 
 	_log.save(_logFile.c_str());
+
 
 	return 0;
 }
