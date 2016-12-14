@@ -228,31 +228,27 @@ void Stage::renderActors(renderer& renderer){
 			if(ptr->getClass() == ACTOR_BLOCK || ptr->getClass() == ACTOR_POWUP){
 				renderer.renderActorInMapCenter(*ptr,_camera,0,-15);
 			}else if(ptr->getClass() == ACTOR_CHAR){
-				if(ptr->getIndex() != -2)
+				if(ptr->getIndex() == -2)
+					continue;
+
+				bool mod = true;
+				int pid = _teams[_turn]->isMember(ptr->getCharacter());
+				if(pid == -1)
+					mod = false;
+				if(mod)
+					if(_teams[_turn]->actions[pid] != CHAR_END)
+						mod = false;
+
+				if(mod){
+					renderer.renderActorInMapCenterMod(*ptr,_camera,0,-30,120,120,120);
+				}else{
 					renderer.renderActorInMapCenter(*ptr,_camera,0,-30);
+				}
 			}else{
 				renderer.renderActorInMapCenter(*ptr,_camera);
 			}
-			/*if(ptr->getClass() == ACTOR_BOMB){
-				if(ptr->getBomb()->getTurn() >= 0)
-					renderer.renderTextInMapCenter(i_to_str(ptr->getBomb()->getTurn()).c_str(),_camera,*_font,ptr->getX(),ptr->getY());
-			}*/
 		}
 	}
-
-	/*for(list<bomb>::iterator it = bombs.begin();it != bombs.end();++it){
-		renderer.renderActorInMapCenter(*it,_camera);
-	}
-	for(list<block>::iterator it = blocks.begin();it != blocks.end();++it){
-		renderer.renderActorInMapCenter(*it,_camera);
-	}
-	for(list<PowerUp>::iterator it = power_ups.begin();it != power_ups.end();++it){
-		renderer.renderActorInMapCenter(*it,_camera);
-	}
-	for(int i=0;i<5;++i){
-		renderer.renderActorInMapCenter(_teams[0]->getCharacter(i),_camera);
-		renderer.renderActorInMapCenter(_teams[1]->getCharacter(i),_camera);
-	}*/
 
 	for(int i=0;i<_vfx.size();++i){
 		if(_vfx[i].getAnimation().getState() == ANIM_IDLE_R){

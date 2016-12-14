@@ -77,6 +77,22 @@ void renderer::renderActorInMapCenter(Actors& entry, camera& cam, int offX, int 
 
 	SDL_RenderCopy(engRenderer,buf,NULL,&pos);
 }
+void renderer::renderActorInMapCenterMod(Actors& entry, camera& cam, int offX, int offY, int red, int green, int blue){
+	SDL_Rect pos;
+	SDL_Texture* buf = NULL;
+
+	matToWin(entry.getX(),entry.getY(),cam.getX(),cam.getY(),cam.getScale(),pos.x,pos.y);
+
+	buf = _res->getImage(entry.getSprite());
+	SDL_QueryTexture(buf,NULL,NULL,&pos.w,&pos.h);
+
+	pos.x += (cam.getScale()-pos.w)/2 + offX;
+	pos.y += (cam.getScale()/2-pos.h)/2 + offY;
+
+	SDL_SetTextureColorMod(buf,red,green,blue);
+	SDL_RenderCopy(engRenderer,buf,NULL,&pos);
+	SDL_SetTextureColorMod(buf,255,255,255);
+}
 void renderer::renderSprite(int index, int x, int y, int w, int h){
 	SDL_Texture* buf = _res->getImage(index);
 	if(buf == NULL)

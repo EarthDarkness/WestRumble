@@ -135,6 +135,8 @@ struct IMG_GFX{
 	static int win2;
 	static int tie;
 
+	static int icons[11];
+
 
 	IMG_GFX(){
 		memset(this,0,sizeof(IMG_GFX));

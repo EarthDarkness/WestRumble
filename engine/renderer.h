@@ -24,6 +24,7 @@ public:
 	void renderActor(Actors& entry, int x, int y, int w = -1, int h = -1);//unused
 	void renderActorInMap(Actors& entry, camera& cam, int w = -1, int h = -1);//unised
 	void renderActorInMapCenter(Actors& entry, camera& cam, int offX = 0, int offY = 0);
+	void renderActorInMapCenterMod(Actors& entry, camera& cam, int offX, int offY, int red, int green, int blue);
 	void renderSprite(int index, int x, int y, int w = -1, int h = -1);
 	void renderSprite(int index, SDL_Rect rect);
 	void renderSpriteInMap(int index, camera& cam, int x, int y);

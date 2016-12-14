@@ -9,6 +9,8 @@
 
 using namespace std;
 
+#define ICONDELAY 60
+
 class userInterface
 {
 private:
@@ -26,6 +28,9 @@ private:
 
 	vector<Actors> _overlay;
 	Actors _ohi;//Over Head Icon
+
+	int _icon;
+	int _delay;
 
 	button* _endturn;
 	int _player;

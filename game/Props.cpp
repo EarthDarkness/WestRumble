@@ -119,6 +119,8 @@ int IMG_GFX::win1 = 0;
 int IMG_GFX::win2 = 0;
 int IMG_GFX::tie = 0;
 
+int IMG_GFX::icons[11] = {0,0,0,0,0,0,0,0,0,0,0};
+
 
 int IMG_OL::bomb = 0;
 int IMG_OL::barrel = 0;
@@ -284,6 +286,7 @@ void intLoadImages(resources& res){
 	IMG_ACT::timedown = pushAnimation(res.loadImage("resources/image/GFX_ACT_timerdown.png"));
 	IMG_ACT::timeup = pushAnimation(res.loadImage("resources/image/GFX_ACT_timerup.png"));
 
+
 	IMG_BLK::box = pushAnimation(res.loadImage("resources/image/BLK_box.png"));
 	IMG_BLK::barrel = pushAnimation(res.loadImage("resources/image/BLK_barrel.png"));
 
@@ -295,6 +298,20 @@ void intLoadImages(resources& res){
 	IMG_GFX::gunpowder = pushAnimation(res.loadImage("resources/image/GFX_UI_gunpowder.png"));
 	IMG_GFX::boot = pushAnimation(res.loadImage("resources/image/GFX_UI_boot.png"));
 	IMG_GFX::timer = pushAnimation(res.loadImage("resources/image/GFX_UI_timer.png"));
+
+
+	IMG_GFX::icons[0] = 1;
+	IMG_GFX::icons[1] = IMG_GFX::bomb;
+	IMG_GFX::icons[2] = IMG_GFX::gunpowder;
+	IMG_GFX::icons[3] = IMG_GFX::boot;
+	IMG_GFX::icons[4] = 1;
+	IMG_GFX::icons[5] = 1;
+	IMG_GFX::icons[6] = IMG_GFX::timer;
+	IMG_GFX::icons[7] = IMG_ACT::launch;
+	IMG_GFX::icons[8] = IMG_ACT::barrel;
+	IMG_GFX::icons[9] = IMG_ACT::stun;
+	IMG_GFX::icons[10] = IMG_ACT::detonate;
+
 
 	IMG_GFX::char_black = pushAnimation(res.loadImage("resources/image/UI_char_black.png"));
 	IMG_GFX::char_white = pushAnimation(res.loadImage("resources/image/UI_char_white.png"));

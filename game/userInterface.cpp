@@ -15,6 +15,9 @@ userInterface::userInterface(){
 	_tracked = NULL;
 	_font = NULL;
 
+	_icon = POWUP_END;
+	_delay = ICONDELAY;
+
 	_player = 0;
 }
 userInterface::~userInterface(){
@@ -39,6 +42,9 @@ void userInterface::init(Stage* stg){
 	_teams[0] = &(_stg->getTeam(0));
 	_teams[1] = &(_stg->getTeam(1));
 	_ohi.getAnimation().init(UI_action);
+
+	_icon = POWUP_END;
+	_delay = ICONDELAY;
 }
 
 
@@ -564,16 +570,43 @@ void userInterface::renderIcons(renderer& ren, camera& cam){
 		int y = -10;
 		if(_tracked->getClass() == ACTOR_CHAR){
 			ren.renderSprite(IMG_GFX::bomb,x,y);
-			ren.renderText(i_to_str(_tracked->getCharacter()->getBombs()).c_str(),*_font,x+70,y+22);
-			ren.renderSprite(IMG_GFX::boot,x,y+40);
-			ren.renderText(i_to_str(_tracked->getCharacter()->getSpeed()).c_str(),*_font,x+70,y+62);
-			ren.renderSprite(IMG_GFX::gunpowder,x,y+80);	
-			ren.renderText(i_to_str(_tracked->getCharacter()->getFire()).c_str(),*_font,x+70,y+102);
+			ren.renderText(i_to_str(_tracked->getCharacter()->getBombs()).c_str(),*_font,x+80,y+24);
+			y += 40;
+			ren.renderSprite(IMG_GFX::boot,x,y);
+			ren.renderText(i_to_str(_tracked->getCharacter()->getSpeed()).c_str(),*_font,x+80,y+24);
+			y += 40;
+			ren.renderSprite(IMG_GFX::gunpowder,x,y);
+			ren.renderText(i_to_str(_tracked->getCharacter()->getFire()).c_str(),*_font,x+80,y+24);
+			y += 40;
+
+			if(_delay <= 0){
+				_delay = ICONDELAY;
+
+				do{
+					if(_icon >= POWUP_END)
+						_icon = POWUP_ACTIVE;
+
+					++_icon;
+
+					if(_tracked->getCharacter()->queryPowerUp(_icon)){
+						break;
+					}
+				}while(_icon != POWUP_END);
+
+			}
+			if(_icon != POWUP_END){
+				ren.renderSprite(IMG_GFX::icons[_icon],x,y);
+				y += 40;
+			}
+			--_delay;
 		}else if(_tracked->getClass() == ACTOR_BOMB){
 			ren.renderSprite(IMG_GFX::gunpowder,x,y);
+			ren.renderText(i_to_str(_tracked->getBomb()->getFire()).c_str(),*_font,x+80,y+24);	
+			y += 40;		
 			if(_tracked->getBomb()->getTurn()>0){
-				ren.renderSprite(IMG_GFX::timer,x,y+40);
-				ren.renderText(i_to_str(_tracked->getBomb()->getTurn()).c_str(),*_font,x+70,y+62);
+				ren.renderSprite(IMG_GFX::timer,x,y);
+				ren.renderText(i_to_str(_tracked->getBomb()->getTurn()).c_str(),*_font,x+80,y+24);
+				y += 40;
 			}
 		}
 	}
