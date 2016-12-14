@@ -86,7 +86,7 @@ public:
 	matMN<Tile>& getTileMap();
 	camera& getCamera();
 
-	void polulate();
+	void populate();
 	void spawn(int x, int y);
 
 	Actors* getActorAt(int x, int y);

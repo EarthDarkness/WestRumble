@@ -3,6 +3,10 @@
 #include "../engine/translator.h"
 #include "Props.h"
 
+#include <stack>
+
+using namespace std;
+
 
 userInterface::userInterface(){
 	_stg = NULL;
@@ -23,7 +27,67 @@ userInterface::userInterface(){
 userInterface::~userInterface(){
 }
 
+void userInterface::floodMove(int xi, int yi, int range){
+	int x;
+	int y;
+	int d;
 
+	int moves = sqrtf(powf((float)range,2.0f)+powf((float)range,2.0f));
+
+	_flood.fill(false);// =3
+	stack<tuple<int,int,int>> cells;
+	cells.push(tuple<int,int,int>(xi,yi,0));
+
+	_flood.at(xi,yi) = true;
+
+	while(!cells.empty()){
+		x = get<0>(cells.top());//cells.top().first;
+		y = get<1>(cells.top());//cells.top().second;
+		d = get<2>(cells.top());
+		cells.pop();
+
+		if(d > 0)
+			pushOvelay(x,y,ANIM_MOVE);
+
+		for(int j=-1;j<=1;j+=1){
+			for(int i=-1;i<=1;i+=1){
+				if(i != 0 && j != 0)
+					continue;
+				if(i == 0 && j == 0)
+					continue;
+
+				int xx = x+i;
+				int yy = y+j;
+
+				if(xx < 0 || xx >= _flood.width() || yy < 0 || yy >= _flood.height())
+					continue;
+
+				if(_flood.at(xx,yy))
+					continue;
+
+				if(_tileMap->getGround(xx,yy) != 1)
+					continue;
+
+				if(d >= moves)
+					continue;
+
+				if(sqrtf(powf((float)(xx-xi),2.0f)+powf((float)(yy-yi),2.0f)) > (float)range)
+					continue;
+
+				Actors* buf = _tileMap->getActor(xx,yy);
+				if(buf != NULL){
+					if(buf->getClass() != ACTOR_POWUP){
+						continue;
+					}
+				}
+
+				cells.push(tuple<int,int,int>(xx,yy,d+1));
+				_flood.at(xx,yy) = true;
+			}
+		}
+	}
+
+}
 
 void userInterface::pushOvelay(int x, int y, int ol){
 	_overlay.push_back(Actors());
@@ -42,6 +106,9 @@ void userInterface::init(Stage* stg){
 	_teams[0] = &(_stg->getTeam(0));
 	_teams[1] = &(_stg->getTeam(1));
 	_ohi.getAnimation().init(UI_action);
+
+	_flood.init(_tileMap->_map.width(),_tileMap->_map.height());
+	_flood.fill(false); // =3
 
 	_icon = POWUP_END;
 	_delay = ICONDELAY;
@@ -342,7 +409,9 @@ void userInterface::markWalk(Character* entry){
 	if(!_tileMap->inBound(entry->getX(),entry->getY()))
 		return;
 
-	for(int j = -entry->getSpeed();j<=entry->getSpeed();++j){
+	floodMove(entry->getX(),entry->getY(),entry->getSpeed());
+
+	/*for(int j = -entry->getSpeed();j<=entry->getSpeed();++j){
 		for(int i = -entry->getSpeed();i<=entry->getSpeed();++i){
 
 			//if(abs(j)+abs(i) > entry->getSpeed())
@@ -364,7 +433,7 @@ void userInterface::markWalk(Character* entry){
 
 			pushOvelay(xx,yy,ANIM_MOVE);
 		}
-	}
+	}*/
 }
 void userInterface::markBomb(Character* entry){
 	if(!_tileMap->inBound(entry->getX(),entry->getY()))

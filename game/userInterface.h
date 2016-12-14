@@ -25,6 +25,7 @@ private:
 	Actors* _tracked;
 	font* _font;
 
+	matMN<bool> _flood;
 
 	vector<Actors> _overlay;
 	Actors _ohi;//Over Head Icon
@@ -35,6 +36,7 @@ private:
 	button* _endturn;
 	int _player;
 
+	void floodMove(int xi, int yi, int range);
 	void pushOvelay(int x, int y, int ol);
 	
 public:

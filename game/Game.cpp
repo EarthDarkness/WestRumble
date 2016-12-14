@@ -159,7 +159,7 @@ void Game::update(){
 			//_log.smooth(3);
 			//_log.div(2);
 			if(menu._net == 0 || menu._net == 1){
-				//stage.polulate();
+				stage.populate();
 			}
 
 			stage.start(&A, &B);

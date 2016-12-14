@@ -350,7 +350,7 @@ camera& Stage::getCamera(){
 }
 
 
-void Stage::polulate(){
+void Stage::populate(){
 	vector<int> pos;
 	int w = getTileMap().width();
 	int h = getTileMap().height();
