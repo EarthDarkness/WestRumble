@@ -85,14 +85,22 @@ extern int IMG_TRANSPARENT;
 struct IMG_UI{
 	static int endturn;
 	static int move;
-	static int play;
-	static int server;
-	static int client;
+	static int playlocal;
+	static int playlan;
 	static int tutorial;
 	static int credits;
+	static int server;
+	static int client;
+	static int ok;
+	static int back;
+	static int prev;
+	static int next;
 	static int exit;
 	static int num[10];
-	static int stgthumb0;
+	static int boxempty;
+	static int boxselect;
+	static int stgselect;
+	static int stgthumb[4];
 	static int heat[16];
 
 	IMG_UI(){
@@ -142,6 +150,7 @@ struct IMG_OL{
 	static int launch;
 	static int walk;
 	static int marker;
+	static int detonate;
 
 	IMG_OL(){
 		memset(this,0,sizeof(IMG_OL));

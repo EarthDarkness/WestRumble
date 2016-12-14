@@ -64,6 +64,8 @@ public:
 	button _exit;
 
 	//stage select
+	int _map;
+	button _stgSelect;
 	button _stgThumb[4];
 	button _stgNext;
 	button _stgPrev;
@@ -79,7 +81,8 @@ public:
 	//multiplayer
 	button _mpServer;
 	button _mpClient;
-	button _mpIp;
+	button _mpSelect;
+	button _mpIp[4];
 	button _mpLeft;
 	button _mpRight;
 	button _mpPool;

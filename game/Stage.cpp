@@ -233,10 +233,10 @@ void Stage::renderActors(renderer& renderer){
 			}else{
 				renderer.renderActorInMapCenter(*ptr,_camera);
 			}
-			if(ptr->getClass() == ACTOR_BOMB){
+			/*if(ptr->getClass() == ACTOR_BOMB){
 				if(ptr->getBomb()->getTurn() >= 0)
 					renderer.renderTextInMapCenter(i_to_str(ptr->getBomb()->getTurn()).c_str(),_camera,*_font,ptr->getX(),ptr->getY());
-			}
+			}*/
 		}
 	}
 
@@ -275,6 +275,15 @@ void Stage::renderActors(renderer& renderer){
 	}
 
 	renderer.renderMap(_tileMap, _camera, true);
+	for(int i=0;i<_bombs.size();++i){
+		bomb* bmb = _bombs[i];
+		if(!bmb->isActive())
+			continue;
+		if(!bmb->getTurn() == -1)
+			continue;
+
+		renderer.renderTextInMapCenter(i_to_str(bmb->getTurn()).c_str(),_camera,*_font,bmb->getX(),bmb->getY());
+	}
 }
 
 void Stage::clear(){

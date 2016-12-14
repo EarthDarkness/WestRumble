@@ -62,8 +62,8 @@ void store::setGUI(int width, int height){
 	int xv = width<height?0:spa*2+ww;
 	int yv = width<height?spa*2+hh:0;
 
-	_exit._sprite.loadAnim(IMG_UI::exit);
-	_exit.setGUI(width-aa-spa,height-aa-spa,aa,aa);
+	_exit._sprite.loadAnim(IMG_UI::ok);
+	_exit.setGUI(width-aa-spa-((1.3f*(float)aa)-aa),height-aa-spa,1.3f*(float)aa,aa);
 
 	for(int i=0;i<5;++i){
 		//_player[i].image_id = "NULL";

@@ -21,6 +21,8 @@ Menu::Menu(){
 
 	_done = false;
 
+	_map = 0;
+
 	_page = 0;
 
 	_net = 0;//0 no, 1 server, 2 client
@@ -39,15 +41,11 @@ void Menu::setupDisplay(){
 
 	//title
 	p=-1;
-	ptrArr[++p] = &_logo;		_logo.init(0.5f,0.25f,0.75f,0.4f,true);
-	ptrArr[++p] = &_play;		_play.init(0.5f,0.5f,0.3f,0.1f,true);
-
+	ptrArr[++p] = &_logo;			_logo.init(0.5f,0.25f,0.75f,0.4f,true);
+	ptrArr[++p] = &_play;			_play.init(0.5f,0.5f,0.3f,0.1f,true);
 	ptrArr[++p] = &_multiplayer;	_multiplayer.init(0.5f,0.6f,0.3f,0.1f,true);
-	//ptrArr[++p] = &_server;		_server.init(0.35f,0.6f,0.3f,0.1f,true);
-	//ptrArr[++p] = &_client;		_client.init(0.65f,0.6f,0.3f,0.1f,true);
-
-	ptrArr[++p] = &_tutorial;	_tutorial.init(0.5f,0.7f,0.3f,0.1f,true);
-	ptrArr[++p] = &_credits;	_credits.init(0.5f,0.8f,0.3f,0.1f,true);
+	ptrArr[++p] = &_tutorial;		_tutorial.init(0.5f,0.7f,0.3f,0.1f,true);
+	ptrArr[++p] = &_credits;		_credits.init(0.5f,0.8f,0.3f,0.1f,true);
 
 	_display[MAIN_MENU].init(p+1,ptrArr);
 
@@ -58,9 +56,9 @@ void Menu::setupDisplay(){
 	ptrArr[++p] = &_stgThumb[2];
 	ptrArr[++p] = &_stgThumb[3];
 
-	ptrArr[++p] = new panel(2,2,0.25f,0.25f,ptrArr);	ptrArr[p]->init(0.5f,0.4f,0.7f,0.7f,true);
-	ptrArr[++p] = &_stgNext;							_stgNext.init(0.35f,0.8f,0.3f,0.1f,true);
-	ptrArr[++p] = &_stgPrev;							_stgPrev.init(0.65f,0.8f,0.3f,0.1f,true);
+	ptrArr[++p] = new panel(2,2,0.25f,0.25f,ptrArr);	ptrArr[p]->init(0.2f,0.05f,0.7f,0.7f);
+	ptrArr[++p] = &_stgNext;							_stgNext.init(0.35f,0.8f,0.13f,0.1f,true);
+	ptrArr[++p] = &_stgPrev;							_stgPrev.init(0.65f,0.8f,0.13f,0.1f,true);
 
 	_display[STAGE_MENU].init(3,ptrArr+4);
 
@@ -77,14 +75,16 @@ void Menu::setupDisplay(){
 	ptrArr[++p] = &_mpServer;						_mpServer.init(0.35f,0.1f,0.3f,0.1f,true);
 	ptrArr[++p] = &_mpClient;						_mpClient.init(0.65f,0.1f,0.3f,0.1f,true);
 
-	ptrArr[++p] = &_mpLeft;							_mpLeft.init(0.15f,0.25f,0.1f,0.1f,true);
-	ptrArr[++p] = &_mpIp;							_mpIp.init(0.5f,0.25f,0.5f,0.1f,true);
-	ptrArr[++p] = &_mpRight;						_mpRight.init(0.85f,0.25f,0.1f,0.1f,true);
+	ptrArr[++p] = &_mpLeft;							_mpLeft.init(0.12f,0.25f,0.13f,0.1f,true);
+	for(int i=0;i<4;++i){
+		ptrArr[++p] = &_mpIp[i];					_mpIp[i].init(0.25f+(float)i*0.125,0.2f,0.125f,0.1f);
+	}
+	ptrArr[++p] = &_mpRight;						_mpRight.init(0.88f,0.25f,0.13f,0.1f,true);
 
 	ptrArr[++p] = &_mpPool;							_mpPool.init(0.7f,0.6f,0.4f,0.45f,true);
 
-	ptrArr[++p] = &_mpNext;							_mpNext.init(0.35f,0.9f,0.3f,0.1f,true);
-	ptrArr[++p] = &_mpPrev;							_mpPrev.init(0.65f,0.9f,0.1f,0.1f,true);
+	ptrArr[++p] = &_mpNext;							_mpNext.init(0.35f,0.9f,0.13f,0.1f,true);
+	ptrArr[++p] = &_mpPrev;							_mpPrev.init(0.65f,0.9f,0.13f,0.1f,true);
 
 	_display[MULTIPLAYER_MENU].init(9,ptrArr+12);
 
@@ -106,6 +106,7 @@ void Menu::init(){
 	_itemTable[MAIN_MENU].push_back(&_tutorial);
 	_itemTable[MAIN_MENU].push_back(&_credits);
 
+	_itemTable[STAGE_MENU].push_back(&_stgSelect);
 	_itemTable[STAGE_MENU].push_back(&_stgThumb[0]);
 	_itemTable[STAGE_MENU].push_back(&_stgThumb[1]);
 	_itemTable[STAGE_MENU].push_back(&_stgThumb[2]);
@@ -116,7 +117,8 @@ void Menu::init(){
 	_itemTable[MULTIPLAYER_MENU].push_back(&_mpServer);
 	_itemTable[MULTIPLAYER_MENU].push_back(&_mpClient);
 	_itemTable[MULTIPLAYER_MENU].push_back(&_mpPool);
-	_itemTable[MULTIPLAYER_MENU].push_back(&_mpIp);
+	for(int i=0;i<4;++i)
+		_itemTable[MULTIPLAYER_MENU].push_back(&_mpIp[i]);
 	_itemTable[MULTIPLAYER_MENU].push_back(&_mpLeft);
 	_itemTable[MULTIPLAYER_MENU].push_back(&_mpRight);
 	for(int i=0;i<10;++i)
@@ -127,40 +129,38 @@ void Menu::init(){
 	_itemTable[TUTORIAL_MENU].push_back(&_next);
 	_itemTable[TUTORIAL_MENU].push_back(&_prev);
 	_itemTable[TUTORIAL_MENU].push_back(&_back);
-
-	//for(int i=0;i<10;++i)
-	//	_itemTable[MULTIPLAYER_MENU].push_back(&(_numpad._nums[i]));
-
+	
 	_logo._sprite.loadAnim(IMG_GFX::logo);
 
-	_play._sprite.loadAnim(IMG_UI::play);
-	_multiplayer._sprite.loadAnim(IMG_UI::server);
-	//_server._sprite.loadAnim(IMG_UI::server;
-	//_client._sprite.loadAnim(IMG_UI::client;
+	_play._sprite.loadAnim(IMG_UI::playlocal);
+	_multiplayer._sprite.loadAnim(IMG_UI::playlan);
 	_tutorial._sprite.loadAnim(IMG_UI::tutorial);
 	_credits._sprite.loadAnim(IMG_UI::credits);
 
-	_stgThumb[0]._sprite.loadAnim(IMG_UI::stgthumb0);
-	_stgThumb[1]._sprite.loadAnim(IMG_UI::stgthumb0);
-	_stgThumb[2]._sprite.loadAnim(IMG_UI::stgthumb0);
-	_stgThumb[3]._sprite.loadAnim(IMG_UI::stgthumb0);
-	_stgNext._sprite.loadAnim(IMG_UI::play);
-	_stgPrev._sprite.loadAnim(IMG_UI::exit);
+	_stgSelect._sprite.loadAnim(IMG_UI::stgselect);
+	_stgThumb[0]._sprite.loadAnim(IMG_UI::stgthumb[0]);
+	_stgThumb[1]._sprite.loadAnim(IMG_UI::stgthumb[1]);
+	_stgThumb[2]._sprite.loadAnim(IMG_UI::stgthumb[2]);
+	_stgThumb[3]._sprite.loadAnim(IMG_UI::stgthumb[3]);
+	_stgNext._sprite.loadAnim(IMG_UI::ok);
+	_stgPrev._sprite.loadAnim(IMG_UI::back);
 
 	_mpServer._sprite.loadAnim(IMG_UI::server);
 	_mpClient._sprite.loadAnim(IMG_UI::client);
 	_mpPool._sprite.loadAnim(IMG_UI::move);
-	_mpIp._sprite.loadAnim(IMG_UI::move);
-	_mpLeft._sprite.loadAnim(IMG_UI::move);
-	_mpRight._sprite.loadAnim(IMG_UI::move);
+	_mpSelect._sprite.loadAnim(IMG_UI::boxselect);
+	for(int i=0;i<4;++i)
+		_mpIp[i]._sprite.loadAnim(IMG_UI::boxempty);
+	_mpLeft._sprite.loadAnim(IMG_UI::prev);
+	_mpRight._sprite.loadAnim(IMG_UI::next);
 	for(int i=0;i<10;++i)
 		_mpNumpad[i]._sprite.loadAnim(IMG_UI::num[i]);
-	_mpNext._sprite.loadAnim(IMG_UI::play);
-	_mpPrev._sprite.loadAnim(IMG_UI::exit);
+	_mpNext._sprite.loadAnim(IMG_UI::ok);
+	_mpPrev._sprite.loadAnim(IMG_UI::back);
 
-	_next._sprite.loadAnim(IMG_UI::move);
-	_prev._sprite.loadAnim(IMG_UI::move);
-	_back._sprite.loadAnim(IMG_UI::exit);
+	_next._sprite.loadAnim(IMG_UI::next);
+	_prev._sprite.loadAnim(IMG_UI::prev);
+	_back._sprite.loadAnim(IMG_UI::ok);
 
 	_info[0]._sprite.loadAnim(IMG_TUT::objectives);
 	_info[1]._sprite.loadAnim(IMG_TUT::controls);
@@ -317,6 +317,12 @@ void Menu::udpdate(int mx, int my){
 			}
 			_net = 0;
 		}
+		for(int i=0;i<4;++i){
+			if(_stgThumb[i].isPress()){
+				_map = i;
+				break;
+			}
+		}
 	}else if(_state == TUTORIAL_MENU){
 		if(_next.isPress()){
 			++_page;
@@ -334,11 +340,16 @@ void Menu::render(renderer& ren, font& fon){
 		ren.renderSprite(ptr->getSprite(),ptr->_rect);
 	}
 	if(_state == MULTIPLAYER_MENU){
-		char buf[20];
-		sprintf_s(buf,"%3d.%3d.%3d.%3d",(_mpIpAddr>>0)&0xFF,(_mpIpAddr>>8)&0xFF,(_mpIpAddr>>16)&0xFF,(_mpIpAddr>>24)&0xFF);
-		ren.renderText(buf,fon,_mpIp._rect.x,_mpIp._rect.y);
-		int xx = _mpIp._rect.x+(int)((float)_mpLeft._rect.w*(4.0f/3.0f))*_mpIpPos;
-		ren.renderSprite(_mpLeft.getSprite(),xx,_mpIp._rect.y,_mpLeft._rect.w,_mpLeft._rect.h);
+		char buf[4];
+		for(int i=0;i<4;++i){
+			sprintf_s(buf,"%3d",(_mpIpAddr>>(i*8))&0xFF);
+			int xx = _mpIp[i]._rect.x + (_mpIp[i]._rect.w-(16*3))/2;
+			int yy = _mpIp[i]._rect.y + (_mpIp[i]._rect.h-(32))/2;
+			ren.renderText(buf,fon,xx,yy);
+		}
+		ren.renderSprite(_mpSelect.getSprite(),_mpIp[_mpIpPos]._rect);
+	}else if(_state == STAGE_MENU){
+		ren.renderSprite(_stgSelect.getSprite(),_stgThumb[_map]._rect);
 	}else if(_state == TUTORIAL_MENU){
 		ren.renderSprite(_prev.getSprite(),_prev._rect);
 		ren.renderSprite(_next.getSprite(),_next._rect);

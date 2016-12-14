@@ -76,16 +76,25 @@ animation UI_ovelay;
 int IMG_INVALID = 0;
 int IMG_TRANSPARENT = 1;
 
+
 int IMG_UI::endturn = 0;
 int IMG_UI::move = 0;
-int IMG_UI::play = 0;
-int IMG_UI::server = 0;
-int IMG_UI::client = 0;
+int IMG_UI::playlocal = 0;
+int IMG_UI::playlan = 0;
 int IMG_UI::tutorial = 0;
 int IMG_UI::credits = 0;
+int IMG_UI::server = 0;
+int IMG_UI::client = 0;
+int IMG_UI::ok = 0;
+int IMG_UI::back = 0;
+int IMG_UI::prev = 0;
+int IMG_UI::next = 0;
 int IMG_UI::exit = 0;
 int IMG_UI::num[10] = {0,0,0,0,0,0,0,0,0,0};
-int IMG_UI::stgthumb0 = 0;
+int IMG_UI::boxempty = 0;
+int IMG_UI::boxselect = 0;
+int IMG_UI::stgselect = 0;
+int IMG_UI::stgthumb[4] = {0,0,0,0};
 int IMG_UI::heat[16] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
 int IMG_TUT::objectives = 0;
@@ -120,6 +129,7 @@ int IMG_OL::rope = 0;
 int IMG_OL::launch = 0;
 int IMG_OL::walk = 0;
 int IMG_OL::marker = 0;
+int IMG_OL::detonate = 0;
 
 
 int IMG_ACT::bomb = 0;
@@ -200,11 +210,18 @@ void intLoadImages(resources& res){
 	IMG_GFX::logo = pushAnimation(res.loadImage("resources/image/GFX_logo.png"));
 	IMG_GFX::wood = pushAnimation(res.loadImage("resources/image/BGN_title.png"));
 
-	IMG_UI::play = pushAnimation(res.loadImage("resources/image/UI_play.png"));
-	IMG_UI::server = pushAnimation(res.loadImage("resources/image/UI_server.png"));
-	IMG_UI::client = pushAnimation(res.loadImage("resources/image/UI_client.png"));
+	IMG_UI::endturn = pushAnimation(res.loadImage("resources/image/UI_endturn.png"));
+	IMG_UI::move = pushAnimation(res.loadImage("resources/image/UI_move.png"));
+	IMG_UI::playlocal = pushAnimation(res.loadImage("resources/image/UI_local.png"));
+	IMG_UI::playlan = pushAnimation(res.loadImage("resources/image/UI_lan.png"));
 	IMG_UI::tutorial = pushAnimation(res.loadImage("resources/image/UI_tutorial.png"));
 	IMG_UI::credits = pushAnimation(res.loadImage("resources/image/UI_credits.png"));
+	IMG_UI::server = pushAnimation(res.loadImage("resources/image/UI_server.png"));
+	IMG_UI::client = pushAnimation(res.loadImage("resources/image/UI_client.png"));
+	IMG_UI::ok = pushAnimation(res.loadImage("resources/image/UI_ok.png"));
+	IMG_UI::back = pushAnimation(res.loadImage("resources/image/UI_back.png"));
+	IMG_UI::prev = pushAnimation(res.loadImage("resources/image/UI_prev.png"));
+	IMG_UI::next = pushAnimation(res.loadImage("resources/image/UI_next.png"));
 	IMG_UI::num[0] = pushAnimation(res.loadImage("resources/image/UI_num_0.png"));
 	IMG_UI::num[1] = pushAnimation(res.loadImage("resources/image/UI_num_1.png"));
 	IMG_UI::num[2] = pushAnimation(res.loadImage("resources/image/UI_num_2.png"));
@@ -215,7 +232,13 @@ void intLoadImages(resources& res){
 	IMG_UI::num[7] = pushAnimation(res.loadImage("resources/image/UI_num_7.png"));
 	IMG_UI::num[8] = pushAnimation(res.loadImage("resources/image/UI_num_8.png"));
 	IMG_UI::num[9] = pushAnimation(res.loadImage("resources/image/UI_num_9.png"));
-	IMG_UI::stgthumb0 = pushAnimation(res.loadImage("resources/image/UI_STG_thumb_0.png"));
+	IMG_UI::boxempty = pushAnimation(res.loadImage("resources/image/UI_small_blank.png"));
+	IMG_UI::boxselect = pushAnimation(res.loadImage("resources/image/UI_small_select.png"));
+	IMG_UI::stgselect = pushAnimation(res.loadImage("resources/image/UI_STG_select.png"));
+	IMG_UI::stgthumb[0] = pushAnimation(res.loadImage("resources/image/UI_STG_thumb_0.png"));
+	IMG_UI::stgthumb[1] = pushAnimation(res.loadImage("resources/image/UI_STG_thumb_no.png"));
+	IMG_UI::stgthumb[2] = pushAnimation(res.loadImage("resources/image/UI_STG_thumb_no.png"));
+	IMG_UI::stgthumb[3] = pushAnimation(res.loadImage("resources/image/UI_STG_thumb_no.png"));
 	IMG_UI::heat[0] = pushAnimation(res.loadImage("resources/image/UI_heat_0.png"));
 	IMG_UI::heat[1] = pushAnimation(res.loadImage("resources/image/UI_heat_1.png"));
 	IMG_UI::heat[2] = pushAnimation(res.loadImage("resources/image/UI_heat_2.png"));
@@ -238,8 +261,6 @@ void intLoadImages(resources& res){
 	IMG_TUT::objectives = pushAnimation(res.loadImage("resources/image/TUT_objectives.png"));
 	IMG_TUT::rules = pushAnimation(res.loadImage("resources/image/TUT_rules.png"));
 
-	IMG_UI::move = pushAnimation(res.loadImage("resources/image/UI_move.png"));
-	IMG_UI::endturn = pushAnimation(res.loadImage("resources/image/UI_endturn.png"));
 
 	IMG_OL::bomb = pushAnimation(res.loadImage("resources/image/OL_bomb.png"));
 	IMG_OL::barrel = pushAnimation(res.loadImage("resources/image/OL_barrel.png"));
@@ -250,6 +271,7 @@ void intLoadImages(resources& res){
 	IMG_OL::launch = pushAnimation(res.loadImage("resources/image/OL_throw.png"));
 	IMG_OL::walk = pushAnimation(res.loadImage("resources/image/OL_walk.png"));
 	IMG_OL::marker = pushAnimation(res.loadImage("resources/image/OL_marker.png"));
+	IMG_OL::detonate = pushAnimation(res.loadImage("resources/image/OL_detonate.png"));
 
 	IMG_ACT::barrel = pushAnimation(res.loadImage("resources/image/GFX_ACT_barrel.png"));
 	IMG_ACT::bomb = pushAnimation(res.loadImage("resources/image/GFX_ACT_bomb.png"));
@@ -278,7 +300,6 @@ void intLoadImages(resources& res){
 	IMG_GFX::char_white = pushAnimation(res.loadImage("resources/image/UI_char_white.png"));
 	IMG_GFX::select = pushAnimation(res.loadImage("resources/image/select.png"));
 
-	IMG_UI::exit = pushAnimation(res.loadImage("resources/image/exit.png"));
 
 }
 void intLoadAnimations(resources& res){
@@ -392,6 +413,7 @@ void intLoadAnimations(resources& res){
 	loadAnimation(IMG_OL::launch,UI_ovelay,ANIM_LAUNCH,res);
 	loadAnimation(IMG_OL::barrel,UI_ovelay,ANIM_BARREL,res);
 	loadAnimation(IMG_OL::rope,UI_ovelay,ANIM_STUN,res);
+	loadAnimation(IMG_OL::detonate,UI_ovelay,ANIM_DETOANTE,res);
 
 
 }
