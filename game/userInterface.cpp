@@ -68,7 +68,7 @@ void userInterface::floodMove(int xi, int yi, int range){
 				if(_tileMap->getGround(xx,yy) != 1)
 					continue;
 
-				if(d >= moves)
+				if(d > moves)
 					continue;
 
 				if(sqrtf(powf((float)(xx-xi),2.0f)+powf((float)(yy-yi),2.0f)) > (float)range)
