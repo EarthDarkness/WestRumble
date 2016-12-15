@@ -19,6 +19,8 @@ Game::Game(){
 	width_screen = 1024;
 	height_screen = 768;
 	title = "West Rumble!!!";
+
+	_stageName[0] = "stage1.txt";
 }
 Game::~Game(){
 
@@ -161,43 +163,56 @@ void Game::update(){
 		}
 		menu.udpdate(engine._input.getX(),engine._input.getY());
 		if(menu.isDone()){
-			if (stage.loadStage("resources/stage/stage1.txt", engine._res)){
-				cout << "stage1.txt loaded" << endl;
-			}
-			_log.init(stage._tileMap);
-			_log.load(_logFile.c_str());
-			//_log.mult(8);
-			//_log.smooth(3);
-			//_log.div(2);
-			if(menu._net == 0 || menu._net == 1){
-				stage.populate();
-			}
+			string path = "resources/stage/";
+			path += _stageName[menu._map];
 
-			stage.start(&A, &B);
-			centerTeam(0);
-
-
-			if(menu._net != 0){
-				state = STATEGAME;
-
-				_ui.init(&stage);
-
-				if(menu._net == 1){
-					engine._com._hear = 1;
-					//sync map
-					char buf[LEN] = "\0";
-					int len;
-					stage.encode(buf,len);
-					engine._com.send(buf,len);
-
+			if(_stageName[menu._map].empty()){
+				//reset
+				reset();
+				if(menu._net != 0){
+					engine._com.close();
 				}
+				menu.reset();
+				state = STATEMENU;
 			}else{
-				state = STATESHOP_A;
+				//if(stage.loadStage("resources/stage/stage1.txt", engine._res)){
+				if(stage.loadStage(path.c_str(), engine._res)){
+					cout << "stage1.txt loaded" << endl;
+				}
+				_log.init(stage._tileMap);
+				_log.load(_logFile.c_str());
+				//_log.mult(8);
+				//_log.smooth(3);
+				//_log.div(2);
+				if(menu._net == 0 || menu._net == 1){
+					stage.populate();
+				}
 
-				shop.init(&A,0);  
+				stage.start(&A, &B);
+				centerTeam(0);
+
+
+				if(menu._net != 0){
+					state = STATEGAME;
+
+					_ui.init(&stage);
+
+					if(menu._net == 1){
+						engine._com._hear = 1;
+						//sync map
+						char buf[LEN] = "\0";
+						int len;
+						stage.encode(buf,len);
+						engine._com.send(buf,len);
+
+					}
+				}else{
+					state = STATESHOP_A;
+
+					shop.init(&A,0);  
 				
+				}
 			}
-
 
 		}
 		break;

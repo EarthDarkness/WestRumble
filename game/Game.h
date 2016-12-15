@@ -43,6 +43,8 @@ private:
 	
 	Actors *special;
 
+	string _stageName[4];
+
 	//movieClipF<string>* _waitForAnim;
 	//movieClipF<
 	//bool _animDone;
