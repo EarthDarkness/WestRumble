@@ -1,5 +1,6 @@
 #include "Character.h"
 #include "..\engine\animation.h"
+#include "Props.h"
 
 extern animation CHR_char_P1;
 extern animation CHR_char_P2;
@@ -39,6 +40,8 @@ void Character::reset(){
 		_effects[i] = false;
 	for(int i=0;i<MAX_BOMBS;++i)
 		_bombs[i] = -1;
+
+	_sprite.setState(ANIM_IDLE_D);
 
 	_dir = GUN_NONE;
 }

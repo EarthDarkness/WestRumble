@@ -412,24 +412,17 @@ void Game::renderStage(){
 
 	_ui.renderOverlay(engine._render,stage.getCamera());
 	stage.renderActors(engine._render);
-	_ui.renderIcons(engine._render,stage.getCamera());
 
 
-
-	//render button right move
 	engine._render.renderSprite(button_move_right.getSprite(), button_move_right._rect);
-
-	//render button left move
 	engine._render.renderSprite(button_move_left.getSprite(), button_move_left._rect);
-
-	//render button up move
 	engine._render.renderSprite(button_move_up.getSprite(), button_move_up._rect);
-
-	//render button down move
 	engine._render.renderSprite(button_move_down.getSprite(), button_move_down._rect);
 
-	//render button end turn
+
 	engine._render.renderSprite(button_end_turn.getSprite(), button_end_turn._rect);
+
+	_ui.renderIcons(engine._render,stage.getCamera());
 
 	//if(!_movie.isDone())
 		//engine._render.renderSprite(_dummie.getSprite(),_dummie.getX(),_dummie.getY());

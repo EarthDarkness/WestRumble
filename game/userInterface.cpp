@@ -156,7 +156,7 @@ void userInterface::update(int xm, int ym, int player, int val){
 				_actionMsg.push(string(buf));
 
 			_selected = NULL;
-			clearOverlays();
+			clear();
 			clearCommands();
 
 			return;
@@ -276,8 +276,7 @@ void userInterface::updateCommand(int xm, int ym, int player){
 }
 void userInterface::initCommand(){
 	if(_commands.empty()){
-		clearOverlays();
-		setOHI(ANIM_NONE,0,0);
+		clear();
 		return;
 	}
 
@@ -636,7 +635,7 @@ void userInterface::renderIcons(renderer& ren, camera& cam){
 	ren.renderActorInMapCenter(_ohi,cam,-15,-75);
 	if(_tracked){
 		int x = -10;
-		int y = -10;
+		int y = -20;
 		if(_tracked->getClass() == ACTOR_CHAR){
 			ren.renderSprite(IMG_GFX::bomb,x,y);
 			ren.renderText(i_to_str(_tracked->getCharacter()->getBombs()).c_str(),*_font,x+80,y+24);
@@ -683,4 +682,5 @@ void userInterface::renderIcons(renderer& ren, camera& cam){
 }
 void userInterface::clear(){
 	_overlay.clear();
+	setOHI(ANIM_NONE,0,0);
 }
