@@ -130,6 +130,7 @@ struct IMG_GFX{
 	static int bomb;
 	static int gunpowder;
 	static int timer;
+	static int star;
 
 	static int win1;
 	static int win2;

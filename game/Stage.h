@@ -59,6 +59,8 @@ private:
 
 	vector<Actors> _vfx;
 
+	Actors _star;
+
 public:
 	int _turn;
 	TileMap _tileMap;	

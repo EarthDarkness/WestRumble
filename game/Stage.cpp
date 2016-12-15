@@ -129,11 +129,14 @@ int Stage::loadStage(const char* path, resources& res){
 
 	//polulate();
 
+
+	_star._sprite.loadAnim(IMG_GFX::star);
+
+
 	return 1;
 }
 
-void Stage::start(Team *teamA, Team *teamB)
-{
+void Stage::start(Team *teamA, Team *teamB){
 	_teams[0] = teamA;
 	_teams[1] = teamB;
 
@@ -231,6 +234,9 @@ void Stage::renderActors(renderer& renderer){
 				if(ptr->getIndex() == -2)
 					continue;
 
+				
+
+
 				bool mod = true;
 				int pid = _teams[_turn]->isMember(ptr->getCharacter());
 				if(pid == -1)
@@ -243,6 +249,11 @@ void Stage::renderActors(renderer& renderer){
 					renderer.renderActorInMapCenterMod(*ptr,_camera,0,-30,120,120,120);
 				}else{
 					renderer.renderActorInMapCenter(*ptr,_camera,0,-30);
+				}
+				
+				if(ptr->getCharacter()->getShield() > 0){
+					_star.setPos(ptr->getX(),ptr->getY());
+					renderer.renderActorInMapCenter(_star,_camera,10,-15);
 				}
 			}else{
 				renderer.renderActorInMapCenter(*ptr,_camera);

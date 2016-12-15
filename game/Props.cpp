@@ -114,6 +114,7 @@ int IMG_GFX::boot = 0;
 int IMG_GFX::bomb = 0;
 int IMG_GFX::gunpowder = 0;
 int IMG_GFX::timer = 0;
+int IMG_GFX::star = 0;
 
 int IMG_GFX::win1 = 0;
 int IMG_GFX::win2 = 0;
@@ -298,6 +299,7 @@ void intLoadImages(resources& res){
 	IMG_GFX::gunpowder = pushAnimation(res.loadImage("resources/image/GFX_UI_gunpowder.png"));
 	IMG_GFX::boot = pushAnimation(res.loadImage("resources/image/GFX_UI_boot.png"));
 	IMG_GFX::timer = pushAnimation(res.loadImage("resources/image/GFX_UI_timer.png"));
+	IMG_GFX::star = pushAnimation(res.loadImage("resources/image/GFX_UI_medal.png"));
 
 
 	IMG_GFX::icons[0] = 1;
